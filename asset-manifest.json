@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/agent-admin-v1/static/css/main.5ecd60fb.chunk.css",
+    "main.js": "/agent-admin-v1/static/js/main.1149c107.chunk.js",
+    "main.js.map": "/agent-admin-v1/static/js/main.1149c107.chunk.js.map",
+    "runtime-main.js": "/agent-admin-v1/static/js/runtime-main.80aef65f.js",
+    "runtime-main.js.map": "/agent-admin-v1/static/js/runtime-main.80aef65f.js.map",
+    "static/js/2.8e6068c6.chunk.js": "/agent-admin-v1/static/js/2.8e6068c6.chunk.js",
+    "static/js/2.8e6068c6.chunk.js.map": "/agent-admin-v1/static/js/2.8e6068c6.chunk.js.map",
+    "index.html": "/agent-admin-v1/index.html",
+    "precache-manifest.1ae226cc9e681041e58413769eaf48cd.js": "/agent-admin-v1/precache-manifest.1ae226cc9e681041e58413769eaf48cd.js",
+    "service-worker.js": "/agent-admin-v1/service-worker.js",
+    "static/css/main.5ecd60fb.chunk.css.map": "/agent-admin-v1/static/css/main.5ecd60fb.chunk.css.map",
+    "static/js/2.8e6068c6.chunk.js.LICENSE.txt": "/agent-admin-v1/static/js/2.8e6068c6.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.80aef65f.js",
+    "static/js/2.8e6068c6.chunk.js",
+    "static/css/main.5ecd60fb.chunk.css",
+    "static/js/main.1149c107.chunk.js"
+  ]
+}
