@@ -21,6 +21,9 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     alignItems: 'center',
   },
+  title: {
+    color: '#FFFFFF',
+  },
   form: {
     width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(1),
@@ -44,10 +47,12 @@ export default function SignIn() {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <img src={logo} />       
-        <Typography component="h1" variant="h5">
+        <img src={logo} />
+        <p>&nbsp;</p>
+        <Typography component="h1" variant="h5" className={classes.title}>
           Agent Lobby
         </Typography>
+         
         <form className={classes.form} noValidate>
           <TextField 
             className={classes.input}
