@@ -25,6 +25,10 @@ const useStyles = makeStyles((theme) => ({
     width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
+  input: {
+    color: '#000000',
+    backgroundColor: '#FFFFFF',
+  },
   submit: {
     margin: theme.spacing(3, 0, 2),
     color: '#000000',
@@ -45,7 +49,8 @@ export default function SignIn() {
           Agent Lobby
         </Typography>
         <form className={classes.form} noValidate>
-          <TextField
+          <TextField 
+            className={classes.input}
             variant="filled"
             margin="normal"
             required
@@ -56,6 +61,7 @@ export default function SignIn() {
             label="Username"
           />
           <TextField
+            className={classes.input}
             variant="filled"
             margin="normal"
             required
