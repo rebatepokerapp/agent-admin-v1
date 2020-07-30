@@ -9,16 +9,16 @@ import TableRow from '@material-ui/core/TableRow';
 import Title from './Title';
 
 // Generate Order Data
-function createData(id, date, name, shipTo, paymentMethod, amount) {
-  return { id, date, name, shipTo, paymentMethod, amount };
+function createData(player, monday, tuesday, wednesday, thursday, friday, saturday, sunday) {
+  return { player, monday, tuesday, wednesday, thursday, friday, saturday, sunday };
 }
 
 const rows = [
-  createData(0, '16 Mar, 2019', 'Elvis Presley', 'Tupelo, MS', 'VISA ⠀•••• 3719', 312.44),
-  createData(1, '16 Mar, 2019', 'Paul McCartney', 'London, UK', 'VISA ⠀•••• 2574', 866.99),
-  createData(2, '16 Mar, 2019', 'Tom Scholz', 'Boston, MA', 'MC ⠀•••• 1253', 100.81),
-  createData(3, '16 Mar, 2019', 'Michael Jackson', 'Gary, IN', 'AMEX ⠀•••• 2000', 654.39),
-  createData(4, '15 Mar, 2019', 'Bruce Springsteen', 'Long Branch, NJ', 'VISA ⠀•••• 5919', 212.79),
+  createData('Canazo', 0, 0, 0, 0, 0, 0, 0),
+  createData('Chris', 0, 0, 0, 0, 0, 0, 0),
+  createData('Jona', 0, 0, 0, 0, 0, 0, 0),
+  createData('Leo', 0, 0, 0, 0, 0, 0, 0),
+  createData('Scott', 0, 0, 0, 0, 0, 0, 0),
 ];
 
 function preventDefault(event) {
@@ -35,31 +35,37 @@ export default function Orders() {
   const classes = useStyles();
   return (
     <React.Fragment>
-      <Title>Recent Orders</Title>
+      <Title>Rake Figures</Title>
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell>Date</TableCell>
-            <TableCell>Name</TableCell>
-            <TableCell>Ship To</TableCell>
-            <TableCell>Payment Method</TableCell>
-            <TableCell align="right">Sale Amount</TableCell>
+            <TableCell>&nbsp;</TableCell>
+            <TableCell>Monday</TableCell>
+            <TableCell>Tuesday</TableCell>
+            <TableCell>Wednesday</TableCell>
+            <TableCell>Thursday</TableCell>
+            <TableCell>Friday</TableCell>
+            <TableCell>Saturday</TableCell>
+            <TableCell>Sunday</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {rows.map((row) => (
             <TableRow key={row.id}>
-              <TableCell>{row.date}</TableCell>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.shipTo}</TableCell>
-              <TableCell>{row.paymentMethod}</TableCell>
-              <TableCell align="right">{row.amount}</TableCell>
+              <TableCell>{row.player}</TableCell>
+              <TableCell align="right">{row.monday}</TableCell>
+              <TableCell align="right">{row.tuesday}</TableCell>
+              <TableCell align="right">{row.wednesday}</TableCell>
+              <TableCell align="right">{row.thursday}</TableCell>
+              <TableCell align="right">{row.friday}</TableCell>
+              <TableCell align="right">{row.saturday}</TableCell>
+              <TableCell align="right">{row.sunday}</TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
       <div className={classes.seeMore}>
-        <Link color="primary" href="#" onClick={preventDefault}>
+        <Link style={{color:'#009900'}} href="#" onClick={preventDefault}>
           See more orders
         </Link>
       </div>
