@@ -14,31 +14,31 @@ export const mainListItems = (
   <div>
     <ListItem button>
       <ListItemIcon>
-        <DashboardIcon />
+        <DashboardIcon style={{color:'#FFA900'}}/>
       </ListItemIcon>
       <ListItemText primary="Rake Figures" />
     </ListItem>
     <ListItem button>
       <ListItemIcon>
-        <ShoppingCartIcon />
+        <ShoppingCartIcon style={{color:'#FFA900'}}/>
       </ListItemIcon>
       <ListItemText primary="Agents" />
     </ListItem>
     <ListItem button>
       <ListItemIcon>
-        <PeopleIcon />
+        <PeopleIcon style={{color:'#FFA900'}}/>
       </ListItemIcon>
       <ListItemText primary="Players" />
     </ListItem>
     <ListItem button>
       <ListItemIcon>
-        <BarChartIcon />
+        <BarChartIcon style={{color:'#FFA900'}}/>
       </ListItemIcon>
       <ListItemText primary="Transactions" />
     </ListItem>
     <ListItem button>
       <ListItemIcon>
-        <LayersIcon />
+        <LayersIcon style={{color:'#FFA900'}}/>
       </ListItemIcon>
       <ListItemText primary="Accounting" />
     </ListItem>
@@ -49,13 +49,13 @@ export const secondaryListItems = (
   <div>
     <ListItem button>
       <ListItemIcon>
-        <AssignmentIcon />
+        <AssignmentIcon style={{color:'#FFA900'}}/>
       </ListItemIcon>
       <ListItemText primary="Settings" />
     </ListItem>
     <ListItem button>
       <ListItemIcon>
-        <AssignmentIcon />
+        <AssignmentIcon style={{color:'#FFA900'}}/>
       </ListItemIcon>
       <ListItemText primary="Logout" />
     </ListItem>

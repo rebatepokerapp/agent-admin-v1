@@ -27,7 +27,7 @@ function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
+      <Link color="inherit" href="http://www.rebatepokerclub.com/">
         RebatePokerClub.com
       </Link>{' '}
       {new Date().getFullYear()}
@@ -49,6 +49,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
+    color: '#FFA900',
     padding: '0 8px',
     ...theme.mixins.toolbar,
   },
@@ -58,6 +59,8 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
+    background: 'linear-gradient(45deg, #333333 30%, #000000 90%)',
+    color: '#FFFFFF',
   },
   appBarShift: {
     marginLeft: drawerWidth,
@@ -75,6 +78,7 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+    color: '#FFFFFF',
   },
   drawerPaper: {
     position: 'relative',
@@ -84,6 +88,8 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
+    background: 'linear-gradient(45deg, #000000 30%, #333333 90%)',
+    color: '#FFFFFF',
   },
   drawerPaperClose: {
     overflowX: 'hidden',
@@ -145,11 +151,6 @@ export default function Dashboard() {
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             Agent Lobby
           </Typography>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -160,7 +161,7 @@ export default function Dashboard() {
         open={open}
       >
         <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
+          <IconButton onClick={handleDrawerClose} className={classes.toolbarIcon}>
             <ChevronLeftIcon />
           </IconButton>
         </div>
