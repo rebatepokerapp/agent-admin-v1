@@ -6,7 +6,7 @@ import SignIn from './components/Signin';
 
 ReactDOM.render(
   <React.StrictMode>    
-    <Dashboard />
+    <SignIn />
   </React.StrictMode>,
   document.getElementById('root')
 );
