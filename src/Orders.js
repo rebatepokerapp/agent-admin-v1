@@ -64,11 +64,7 @@ export default function Orders() {
           ))}
         </TableBody>
       </Table>
-      <div className={classes.seeMore}>
-        <Link style={{color:'#009900'}} href="#" onClick={preventDefault}>
-          See more orders
-        </Link>
-      </div>
+      <div className={classes.seeMore}></div>
     </React.Fragment>
   );
 }
