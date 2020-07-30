@@ -27,7 +27,7 @@ export default function Deposits() {
       </Typography>
       <div>
         <Link href="#" style={{color:'#009900'}} onClick={preventDefault}>
-          View figures
+          More figures
         </Link>
       </div>
     </React.Fragment>
