@@ -1,12 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import Dashboard from './Dashboard';
-import SignIn from './components/Signin';
+import Routes from './Routes'
 
 ReactDOM.render(
   <React.StrictMode>    
-    <SignIn />
+    <Routes />
   </React.StrictMode>,
   document.getElementById('root')
 );

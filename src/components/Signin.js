@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,7 +12,9 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import logo from './logo-icon-small.png'; 
+import logo from '../images/logo-icon-small.png'; 
+import { signin, authenticate, isAuthenticated } from '../core/apiCore';
+import { Redirect } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -43,6 +45,44 @@ const useStyles = makeStyles((theme) => ({
 export default function SignIn() {
   const classes = useStyles();
 
+  const [values, setValues] = useState({
+    username: '',
+    password: '',
+    error: '',
+    success: false,
+    redirectToReferrer: false
+  });
+
+  const {username, password, loading, error, redirectToReferrer} = values;
+
+  const handleChange = name => event => {
+    setValues({...values, error: false, [name]: event.target.value})
+  }
+
+  const clickSubmit = (event) => {
+    event.preventDefault()
+    setValues({...values, error: false, loading:true})
+    signin({username, password})
+      .then(data => {
+        if (data.error){          
+          setValues({...values, error: data.error, loading: false});
+        }else{
+          console.log(data);
+          authenticate(
+            data, () => {
+              setValues({...values, redirectToReferrer: true});
+            }
+          ) 
+        }
+      })
+  }
+
+  const redirectUser = () => {
+    if(redirectToReferrer) {
+      return <Redirect to="/dashboard" />
+    }
+  }
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -53,7 +93,7 @@ export default function SignIn() {
           Agent Lobby
         </Typography>
          
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate onSubmit={clickSubmit}>
           <TextField 
             className={classes.input}
             variant="filled"
@@ -64,6 +104,8 @@ export default function SignIn() {
             name="username"
             autoFocus
             label="Username"
+            onChange={handleChange('username')}
+            value={username}
           />
           <TextField
             className={classes.input}
@@ -75,6 +117,8 @@ export default function SignIn() {
             type="password"
             id="password"
             label="Password"
+            onChange={handleChange('password')}
+            value={password}
           />
           <Button
             type="submit"
@@ -85,6 +129,7 @@ export default function SignIn() {
             Sign In
           </Button>
         </form>
+        {redirectUser()}
       </div>
     </Container>
   );

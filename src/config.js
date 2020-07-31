@@ -1,0 +1,1 @@
+export const API_AGENT_URL = process.env.API_AGENT_URL;
