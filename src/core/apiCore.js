@@ -2,7 +2,7 @@ import { API_AGENT_URL } from '../config';
 
 export const signin = user => {
   console.log(API_AGENT_URL);
-  return fetch (`http://localhost:4025/`, {
+  return fetch (`${API_AGENT_URL}/loginagent`, {
     method: "POST",
     headers: {
       Accept: 'application/json',
@@ -19,21 +19,20 @@ export const signin = user => {
 }
 
 export const authenticate = (data, next) => {
-  /* if(typeof window !== 'undefined'){
+  if(typeof window !== 'undefined'){
     localStorage.setItem('jwt', JSON.stringify(data));
     next();
-  } */
+  } 
   next();
 }
 
 export const isAuthenticated = () => {
-  /*if(typeof window == 'undefined') {
+  if(typeof window == 'undefined') {
     return false;
   }
   if (localStorage.getItem('jwt')) {
     return JSON.parse(localStorage.getItem('jwt'));
     //return localStorage.getItem('jwt');
   }
-    return false;*/
-  return true;
+    return false;
 }

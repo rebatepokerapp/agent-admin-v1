@@ -14,7 +14,7 @@ import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 
 export const mainListItems = (
   <div>
-    <ListItem button>
+    <ListItem button component="a" href="/rakefigures">
       <ListItemIcon>
         <TrendingUpIcon style={{color:'#FFA900'}}/>
       </ListItemIcon>

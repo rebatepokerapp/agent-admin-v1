@@ -1,20 +1,15 @@
 import React, { useState } from 'react';
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import logo from '../images/logo-icon-small.png'; 
 import { signin, authenticate, isAuthenticated } from '../core/apiCore';
 import { Redirect } from 'react-router-dom';
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -53,7 +48,9 @@ export default function SignIn() {
     redirectToReferrer: false
   });
 
-  const {username, password, loading, error, redirectToReferrer} = values;
+  const {username, password, error, redirectToReferrer} = values;
+
+  const {agent} = isAuthenticated();
 
   const handleChange = name => event => {
     setValues({...values, error: false, [name]: event.target.value})
@@ -64,10 +61,10 @@ export default function SignIn() {
     setValues({...values, error: false, loading:true})
     signin({username, password})
       .then(data => {
+        console.log(data);
         if (data.error){          
           setValues({...values, error: data.error, loading: false});
-        }else{
-          console.log(data);
+        }else{          
           authenticate(
             data, () => {
               setValues({...values, redirectToReferrer: true});
@@ -77,11 +74,22 @@ export default function SignIn() {
       })
   }
 
+  //Aca se puede redirigir a otro menu o dashboard de acuerdo a los permisos
   const redirectUser = () => {
     if(redirectToReferrer) {
-      return <Redirect to="/dashboard" />
+      if (agent.role === 'master'){
+        return <Redirect to="/dashboard" />
+      }      
     }
   }
+
+  //Se utiliza para mostrar un error en el login 
+  const showError = () => (
+    <Alert severity="warning" style={{display: error ? '': 'none'}}>
+      <AlertTitle>Warning</AlertTitle>
+        {error} — <strong>check it out!</strong>
+    </Alert>
+  )
 
   return (
     <Container component="main" maxWidth="xs">
@@ -129,6 +137,7 @@ export default function SignIn() {
             Sign In
           </Button>
         </form>
+        {showError()}
         {redirectUser()}
       </div>
     </Container>
