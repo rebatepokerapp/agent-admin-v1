@@ -49,17 +49,5 @@ export const mainListItems = (
 
 export const secondaryListItems = (
   <div>
-    <ListItem button>
-      <ListItemIcon>
-        <SettingsIcon style={{color:'#FFA900'}}/>
-      </ListItemIcon>
-      <ListItemText primary="Settings" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <ExitToAppIcon style={{color:'#FFA900'}}/>
-      </ListItemIcon>
-      <ListItemText primary="Logout" />
-    </ListItem>
   </div>
 );
