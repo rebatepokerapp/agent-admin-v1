@@ -23,7 +23,7 @@ function Routes () {
     <Router>
       <Switch>        
         <Route path="/dashboard">
-          <Dashboard />
+          <Players />
         </Route>
         <Route path="/" exact>
           <Signin />
