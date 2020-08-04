@@ -6,10 +6,13 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import logo from '../images/logo-icon-small.png'; 
-import { signin, authenticate, isAuthenticated } from '../core/apiCore';
-import { Redirect } from 'react-router-dom';
+import { signin, authenticate } from '../core/apiCore';
+import { withRouter } from 'react-router-dom';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
+import { useUserDispatch } from "./UserContext";
+
+import { useForm } from 'react-hook-form';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -37,53 +40,45 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignIn() {
+function SignIn (props) {
+  console.log('ENTRO A SIGNIN')
   const classes = useStyles();
 
-  const [values, setValues] = useState({
-    username: '',
-    password: '',
-    error: '',
-    success: false,
-    redirectToReferrer: false
-  });
+  var userDispatch = useUserDispatch();
 
-  const {username, password, error, redirectToReferrer} = values;
+  const {register, errors, handleSubmit} =  useForm();
 
-  const {agent} = isAuthenticated();
+  const [error, setError] = useState(false);
 
-  const handleChange = name => event => {
-    setValues({...values, error: false, [name]: event.target.value})
-  }
+  const onSubmit = (data, e) => {
+    e.preventDefault();
+    console.log('DATA EN SUBMIT ',data);
 
-  const clickSubmit = (event) => {
-    event.preventDefault()
-    setValues({...values, error: false, loading:true})
-    signin({username, password})
-      .then(data => {
-        console.log(data);
-        if (data.error){          
-          setValues({...values, error: data.error, loading: false});
-        }else{          
-          authenticate(
-            data, () => {
-              setValues({...values, redirectToReferrer: true});
-            }
-          ) 
+    signin(data)
+    .then(data => {
+      console.log('DATA AFTER LOGIN: ', data)
+      if (data.error) {
+        setError(data.error);
+      } else {
+        console.log('Autentico 1');
+        const auth = authenticate (data);
+        if (auth) {
+          console.log(props);
+          userDispatch({ type: 'LOGIN_SUCCESS' });
+          props.history.push('/app/dashboard');
+        } else {
+          userDispatch({ type: 'LOGIN_FAILURE' })
+          console.log('VALIDACION MALISIMA');
         }
-      })
+      }
+    })    
+    .catch(error => {
+      setError(error);
+    })
+
+    e.target.reset();
   }
 
-  //Aca se puede redirigir a otro menu o dashboard de acuerdo a los permisos
-  const redirectUser = () => {
-    if(redirectToReferrer) {
-      if (agent.role === 'master'){
-        return <Redirect to="/dashboard" />
-      }      
-    }
-  }
-
-  //Se utiliza para mostrar un error en el login 
   const showError = () => (
     <Alert severity="warning" style={{display: error ? '': 'none'}}>
       <AlertTitle>Warning</AlertTitle>
@@ -101,7 +96,7 @@ export default function SignIn() {
           Agent Lobby
         </Typography>
          
-        <form className={classes.form} noValidate onSubmit={clickSubmit}>
+        <form className={classes.form} noValidate onSubmit={handleSubmit(onSubmit)}>
           <TextField 
             className={classes.input}
             variant="filled"
@@ -112,9 +107,15 @@ export default function SignIn() {
             name="username"
             autoFocus
             label="Username"
-            onChange={handleChange('username')}
-            value={username}
+            inputRef={
+              register({
+                required: {value: true, message:'Require field'}
+              })
+            }
           />
+          <span className="text-danger text-small d-block mb-2">
+            {errors?.username?.message}
+          </span>
           <TextField
             className={classes.input}
             variant="filled"
@@ -125,9 +126,15 @@ export default function SignIn() {
             type="password"
             id="password"
             label="Password"
-            onChange={handleChange('password')}
-            value={password}
+            inputRef={
+              register({
+                required: {value: true, message:'Require field'}
+              })
+            }
           />
+          <span className="text-danger text-small d-block mb-2">
+            {errors?.password?.message}
+          </span>
           <Button
             type="submit"
             fullWidth
@@ -137,9 +144,9 @@ export default function SignIn() {
             Sign In
           </Button>
         </form>
-        {showError()}
-        {redirectUser()}
       </div>
     </Container>
   );
 }
+
+export default withRouter(SignIn);

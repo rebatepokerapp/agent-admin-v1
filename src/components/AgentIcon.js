@@ -9,6 +9,7 @@ import MessageIcon from '@material-ui/icons/Message';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Divider from '@material-ui/core/Divider';
+import { useUserDispatch, signOut } from "./UserContext";
 
 const useStyles = makeStyles((theme) => ({
     topIcon: {
@@ -31,9 +32,11 @@ const useStyles = makeStyles((theme) => ({
     }, 
 }));
 
-export default function AgentMenu() {
+export default function AgentMenu(props) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
+
+  var userDispatch = useUserDispatch();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -55,7 +58,7 @@ export default function AgentMenu() {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem className={classes.menuText}>Agent: Canazo</MenuItem>
+        <MenuItem className={classes.menuText}>Agent: {props.agent.username}</MenuItem>
         <MenuItem disabled>&nbsp;</MenuItem>
         <Divider />
         <MenuItem onClick={handleClose}><MessageIcon className={classes.menuIcon}/>&nbsp;&nbsp;&nbsp;<font className={classes.menuText}>Messages</font></MenuItem>
@@ -63,7 +66,7 @@ export default function AgentMenu() {
         <MenuItem onClick={handleClose}><SettingsIcon className={classes.menuIcon}/>&nbsp;&nbsp;&nbsp;<font className={classes.menuText}>Settings</font></MenuItem>
         <MenuItem disabled>&nbsp;</MenuItem>
         <Divider />
-        <MenuItem onClick={handleClose}><ExitToAppIcon className={classes.menuIcon}/>&nbsp;&nbsp;&nbsp;<font className={classes.menuText}>Logout</font></MenuItem>
+        <MenuItem onClick={() => signOut(userDispatch, props.history)}><ExitToAppIcon className={classes.menuIcon}/>&nbsp;&nbsp;&nbsp;<font className={classes.menuText}>Logout</font></MenuItem>
       </Menu>
     </div>
   );

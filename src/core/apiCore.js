@@ -18,12 +18,13 @@ export const signin = user => {
     })
 }
 
-export const authenticate = (data, next) => {
+export const authenticate = (data) => {
   if(typeof window !== 'undefined'){
     localStorage.setItem('jwt', JSON.stringify(data));
-    next();
+    console.log('SE INSERTO EL TOKEN');
+    return true;
   } 
-  next();
+  return false;
 }
 
 export const isAuthenticated = () => {

@@ -19,7 +19,23 @@ import AgentMenu from './AgentIcon';
 import Copyright from './Copyright';
 import MainDash from './MainDash';
 
+import Agents from './Agents';
+import Players from './Players';
+import Transactions from './Transactions';
+import Accounting from './Accounting';
+import Settings from './Settings';
+import Logout from './Logout';
+import RakeFigures from './RakeFigures';
 
+import { isAuthenticated } from '../core/apiCore';
+
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  NavLink
+} from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -121,7 +137,9 @@ export default function Dashboard() {
   };
   const handleDrawerClose = () => {
     setOpen(false);
-  };  
+  };
+  
+  const { agent } = isAuthenticated();
 
   return (
     <div className={classes.root}>
@@ -140,7 +158,7 @@ export default function Dashboard() {
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             Agent Lobby
           </Typography>
-          <AgentMenu />
+          <AgentMenu agent={agent} />
         </Toolbar>
       </AppBar>
       <Drawer
@@ -163,7 +181,18 @@ export default function Dashboard() {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
-          <MainDash />
+          <Router>
+            <Switch>            
+              <Route path="/app/dashboard" component={MainDash} />      
+              <Route path="/app/rakefigures" component={RakeFigures} />
+              <Route path="/app/agents" component={Agents} />
+              <Route path="/app/players" component={Players} agent={agent}/>
+              <Route path="/app/transactions" component={Transactions} /> 
+              <Route path="/app/accounting"  component={Accounting} />
+              <Route path="/app/settings" component={Settings} />
+              <Route path="/app/logout" component={Logout} />
+            </Switch>
+          </Router>
           <Box pt={4}>
             <Copyright />
           </Box>
