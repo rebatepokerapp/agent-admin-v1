@@ -14,8 +14,8 @@ import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems, secondaryListItems } from './listItems';
+import AgentMenu from './AgentIcon';
 import Copyright from './Copyright';
 import MainDash from './MainDash';
 
@@ -26,6 +26,14 @@ const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
+  },
+  topIcon: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    color: '#FFFFFF',
+    padding: '0 8px',
+    ...theme.mixins.toolbar,
   },
   toolbar: {
     paddingRight: 24, // keep right padding when drawer closed
@@ -132,6 +140,7 @@ export default function Dashboard() {
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             Agent Lobby
           </Typography>
+          <AgentMenu />
         </Toolbar>
       </AppBar>
       <Drawer
