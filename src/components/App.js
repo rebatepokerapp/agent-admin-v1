@@ -11,8 +11,6 @@ function App() {
   // global
   var { isAuthenticated } = useUserState();
 
-  console.log('AUTENTICACION',isAuthenticated);
-
   return (
     <BrowserRouter>
       <Switch> 
@@ -29,9 +27,6 @@ function App() {
   );
 
   function PrivateRoute({ component, ...rest }) {
-    console.log('AUTENTICACION',isAuthenticated);
-    console.log('PRIVATE COMPONENTEEEEE ',component);
-    console.log('PRIVATE RESTTTTTTTTTTTTTT  ',rest);
     return (
       <Route
         {...rest}
@@ -54,9 +49,6 @@ function App() {
   }
 
   function PublicRoute({ component, ...rest }) {
-    console.log('AUTENTICACION',isAuthenticated);
-    console.log('PUBLIC COMPONENTEEEEE ',component);
-    console.log('PUBLIC RESTTTTTTTTTTTTTT  ',rest);
     return (
       <Route
         {...rest}

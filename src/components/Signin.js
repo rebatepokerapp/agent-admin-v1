@@ -64,7 +64,7 @@ function SignIn (props) {
         const auth = authenticate (data);
         if (auth) {
           console.log(props);
-          userDispatch({ type: 'LOGIN_SUCCESS' });
+          userDispatch({ type: 'LOGIN_SUCCESS', data });
           props.history.push('/app/dashboard');
         } else {
           userDispatch({ type: 'LOGIN_FAILURE' })

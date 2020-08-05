@@ -18,6 +18,18 @@ export const signin = user => {
     })
 }
 
+export const getPlayersByAgent = (agent) => {
+  return fetch(`${API_AGENT_URL}/playerbyagent/${agent.id}`, {
+    method: 'GET'
+  })
+    .then(response => {      
+      return response.json();
+    })
+    .catch(err => {
+      console.log(err);
+    })
+}
+
 export const authenticate = (data) => {
   if(typeof window !== 'undefined'){
     localStorage.setItem('jwt', JSON.stringify(data));
@@ -27,7 +39,7 @@ export const authenticate = (data) => {
   return false;
 }
 
-export const isAuthenticated = () => {
+export const isAuthenticate = () => {
   if(typeof window == 'undefined') {
     return false;
   }

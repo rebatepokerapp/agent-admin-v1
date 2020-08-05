@@ -6,10 +6,9 @@ var UserDispatchContext = React.createContext();
 function userReducer(state, action) {
   switch (action.type) {
     case "LOGIN_SUCCESS":
-      return { ...state, isAuthenticated: true };
+      return { ...state, isAuthenticated: true, agent: action.data.agent };
     case "SIGN_OUT_SUCCESS":
-      console.log('ENTRO AL REDUCER DEL SIGNOUT')
-      return { ...state, isAuthenticated: false };
+      return { ...state, isAuthenticated: false, agent: null };
     default: {
       throw new Error(`Unhandled action type: ${action.type}`);
     }
@@ -19,9 +18,10 @@ function userReducer(state, action) {
 function UserProvider({ children }) {
   var [state, dispatch] = React.useReducer(userReducer, {
     isAuthenticated: !! localStorage.getItem("jwt"),
+    agent: localStorage.getItem("jwt") ? JSON.parse(localStorage.getItem("jwt")).agent : {},
   });
 
-  return (
+  return (    
     <UserStateContext.Provider value={state}>
       <UserDispatchContext.Provider value={dispatch}>
         {children}
@@ -31,7 +31,6 @@ function UserProvider({ children }) {
 }
 
 function useUserState() {
-  console.log('USER SATATEEEE ', UserStateContext);
   var context = React.useContext(UserStateContext);
   if (context === undefined) {
     throw new Error("useUserState must be used within a UserProvider");

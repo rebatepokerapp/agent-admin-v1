@@ -27,7 +27,7 @@ import Settings from './Settings';
 import Logout from './Logout';
 import RakeFigures from './RakeFigures';
 
-import { isAuthenticated } from '../core/apiCore';
+import { isAuthenticate } from '../core/apiCore';
 
 import {
   BrowserRouter as Router,
@@ -139,7 +139,7 @@ export default function Dashboard() {
     setOpen(false);
   };
   
-  const { agent } = isAuthenticated();
+  const { agent } = isAuthenticate();
 
   return (
     <div className={classes.root}>

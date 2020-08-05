@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -11,7 +11,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Button from '@material-ui/core/Button';
 import MenuOpenIcon from '@material-ui/icons/MenuOpen';
-import { getPlayerList } from '../core/apiCore';
+// context
+import { useUserState } from "./UserContext";
+
+import { getPlayersByAgent } from '../core/apiCore';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -45,9 +48,31 @@ function Players(props) {
 
   const classes = useStyles();
 
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);  
+  const [playersList, setPlayersList] = useState([]);
+  const [error, setError] = useState(false);
 
-  console.log('PROPPPPPSSSSSSS PLAYER',props);
+  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);    
+
+  // global
+  const { agent } = useUserState();
+
+  const loadPlayers = () => {
+    getPlayersByAgent(agent).then(data => {
+      if (data.error) {
+        setError(data.error);
+      } else { 
+        const lst = data.data;       
+        setPlayersList(lst);
+        console.log('RESPUESTAAAAAAAAAAA', lst);
+        console.log(data.data);
+      }
+      
+    })
+  }
+
+  useEffect(() => {
+    loadPlayers();
+  }, [])
 
   return (
       <Grid container spacing={3}>
@@ -65,12 +90,12 @@ function Players(props) {
                 </TableRow>
                 </TableHead>
                 <TableBody>
-                {rows.map((row) => (
-                    <TableRow key={row.id}>
-                    <TableCell>{row.playerid}</TableCell>
+                {playersList.map((row) => (
+                    <TableRow key={row.uniqId}>
+                    <TableCell>{row.uniqId}</TableCell>
                     <TableCell>{row.username}</TableCell>
-                    <TableCell>{row.agentname}</TableCell>
-                    <TableCell>{row.balance}</TableCell>
+                    <TableCell>{row.agentName}</TableCell>
+                    <TableCell>{row.chips}</TableCell>
                     <TableCell><Button className={classes.button} onClick={() => { alert('Player') }}><MenuOpenIcon /></Button></TableCell>
                     </TableRow>
                 ))}
