@@ -96,7 +96,7 @@ function Players(props) {
                     <TableCell>{row.username}</TableCell>
                     <TableCell>{row.agentName}</TableCell>
                     <TableCell>{row.chips}</TableCell>
-                    <TableCell><Button className={classes.button} onClick={() => { alert('Player') }}><MenuOpenIcon /></Button></TableCell>
+                    <TableCell><Button className={classes.button} onClick={() => { alert(row.uniqId) }}><MenuOpenIcon /></Button></TableCell>
                     </TableRow>
                 ))}
                 </TableBody>
