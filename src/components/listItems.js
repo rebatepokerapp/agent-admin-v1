@@ -39,18 +39,6 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Players" />
     </ListItem>
-    <ListItem button component="a" href="/app/transactions">
-      <ListItemIcon>
-        <LocalAtmIcon style={{color:'#FFA900'}}/>
-      </ListItemIcon>
-      <ListItemText primary="Transactions" />
-    </ListItem>
-    <ListItem button component="a" href="/app/accounting">
-      <ListItemIcon>
-        <LayersIcon style={{color:'#FFA900'}}/>
-      </ListItemIcon>
-      <ListItemText primary="Accounting" />
-    </ListItem>
   </div>
 );
 

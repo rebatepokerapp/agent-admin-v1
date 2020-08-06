@@ -1,14 +1,22 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/Button';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
 import PersonIcon from '@material-ui/icons/Person';
 import LocalAtmIcon from '@material-ui/icons/LocalAtm';
 import MessageIcon from '@material-ui/icons/Message';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import EditIcon from '@material-ui/icons/Edit';
+import HistoryIcon from '@material-ui/icons/History';
+import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
+import GpsFixedIcon from '@material-ui/icons/GpsFixed';
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import Divider from '@material-ui/core/Divider';
+import { withStyles } from '@material-ui/core/styles';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 import { useUserDispatch, signOut } from "./UserContext";
 
 const useStyles = makeStyles((theme) => ({
@@ -23,6 +31,15 @@ const useStyles = makeStyles((theme) => ({
     menu: {
         backgroundColor: '#333333',
     },
+    menuheader:{
+      color: '#000000',
+      fontSize: 'medium',
+    },
+    menuheaderbold:{
+      color: '#000000',
+      fontWeight: '700',
+      fontSize: 'large',
+    },
     menuIcon: {
         textAlign: 'left',
         color: '#666666',
@@ -31,6 +48,37 @@ const useStyles = makeStyles((theme) => ({
         color: '#333333',
     }, 
 }));
+
+const StyledMenu = withStyles({
+  paper: {
+    border: '1px solid #d3d4d5',
+  },
+  })((props) => (
+  <Menu
+    elevation={0}
+    getContentAnchorEl={null}
+    anchorOrigin={{
+      vertical: 'bottom',
+      horizontal: 'left',
+    }}
+    transformOrigin={{
+      vertical: 'top',
+      horizontal: 'left',
+    }}
+    {...props}
+  />
+));
+
+const StyledMenuItem = withStyles((theme) => ({
+  root: {
+    '&:focus': {
+      backgroundColor: '#669933',
+      '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
+        color: '#FFFFFF',
+      },
+    },
+  },
+}))(MenuItem);
 
 export default function AgentMenu(props) {
   const classes = useStyles();
@@ -48,26 +96,46 @@ export default function AgentMenu(props) {
 
   return (
     <div>
-      <IconButton className={classes.topIcon} aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+      <IconButton className={classes.topIcon} aria-controls="customized-menu" aria-haspopup="true" onClick={handleClick}>
           <PersonIcon />
       </IconButton>
-      <Menu
-        id="simple-menu"
+      <StyledMenu
+        id="customized-menu"
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem className={classes.menuText}>Agent: {props.agent.username}</MenuItem>
-        <MenuItem disabled>&nbsp;</MenuItem>
+        <center><span className={classes.menuheader}>Agent:</span>&nbsp;<span className={classes.menuheaderbold}>{props.agent.username}</span></center>
+        <StyledMenuItem disabled>&nbsp;</StyledMenuItem>
         <Divider />
-        <MenuItem onClick={handleClose}><MessageIcon className={classes.menuIcon}/>&nbsp;&nbsp;&nbsp;<font className={classes.menuText}>Messages</font></MenuItem>
-        <MenuItem onClick={handleClose}><LocalAtmIcon className={classes.menuIcon}/>&nbsp;&nbsp;&nbsp;<font className={classes.menuText}>Payments</font></MenuItem>
-        <MenuItem onClick={handleClose}><SettingsIcon className={classes.menuIcon}/>&nbsp;&nbsp;&nbsp;<font className={classes.menuText}>Settings</font></MenuItem>
-        <MenuItem disabled>&nbsp;</MenuItem>
+        <StyledMenuItem>
+          <ListItemIcon>
+            <MessageIcon className={classes.menuIcon}/>
+          </ListItemIcon>
+          <ListItemText primary="Messages" />
+        </StyledMenuItem>
+        <StyledMenuItem>
+          <ListItemIcon>
+          <LocalAtmIcon className={classes.menuIcon}/>
+          </ListItemIcon>
+          <ListItemText primary="Payments" />
+        </StyledMenuItem>
+        <StyledMenuItem>
+          <ListItemIcon>
+            <SettingsIcon className={classes.menuIcon}/>
+          </ListItemIcon>
+          <ListItemText primary="Settings" />
+        </StyledMenuItem>
+        <StyledMenuItem disabled>&nbsp;</StyledMenuItem>
         <Divider />
-        <MenuItem onClick={() => signOut(userDispatch, props.history)}><ExitToAppIcon className={classes.menuIcon}/>&nbsp;&nbsp;&nbsp;<font className={classes.menuText}>Logout</font></MenuItem>
-      </Menu>
+        <StyledMenuItem>
+          <ListItemIcon>
+            <ExitToAppIcon className={classes.menuIcon}/>
+          </ListItemIcon>
+          <ListItemText onClick={() => signOut(userDispatch, props.history)} primary="Logout" />
+        </StyledMenuItem>
+      </StyledMenu>
     </div>
   );
 }
