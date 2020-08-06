@@ -50,6 +50,10 @@ const useStyles = makeStyles((theme) => ({
   },
   menuheader:{
     color: '#000000',
+    fontSize: 'medium',
+  },
+  menuheaderbold:{
+    color: '#000000',
     fontWeight: '700',
     fontSize: 'large',
   },
@@ -197,7 +201,8 @@ function Players(props) {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <center><span className={classes.menuheader} >Player: {row.username}</span></center>
+                <center><span className={classes.menuheader} >Player:</span>&nbsp;<span className={classes.menuheaderbold} >{row.username}</span></center>
+                <StyledMenuItem disabled>&nbsp;</StyledMenuItem>
                 <Divider />
                 <StyledMenuItem>
                   <ListItemIcon>
