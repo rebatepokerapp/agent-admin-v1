@@ -61,6 +61,7 @@ const StyledMenuItem = withStyles((theme) => ({
   },
 }))(MenuItem);
 
+//Crea el componente de menu para los player en el player list
 const PlayerMenuEdit = (props) => {
 
   const classes = useStyles();
