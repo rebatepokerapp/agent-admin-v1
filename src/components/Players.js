@@ -1,5 +1,4 @@
-import React, { useState, useEffect, Component } from 'react'
-import ReactDOM from "react-dom";
+import React, { useState, useEffect } from 'react'
 import MaterialTable from "material-table";
 import { forwardRef } from 'react';
 import AddBox from '@material-ui/icons/AddBox';
@@ -17,78 +16,17 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
-import { makeStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
-import Button from '@material-ui/core/Button';
-import MenuOpenIcon from '@material-ui/icons/MenuOpen';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import EditIcon from '@material-ui/icons/Edit';
-import HistoryIcon from '@material-ui/icons/History';
-import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
-import GpsFixedIcon from '@material-ui/icons/GpsFixed';
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import Divider from '@material-ui/core/Divider';
-import { withStyles } from '@material-ui/core/styles';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-
-
-
-import { useUserDispatch, signOut } from "./UserContext";
+import PlayerMenuEdit from './PlayerMenuEdit';
 // context
 import { useUserState } from "./UserContext";
 
 import { getPlayersByAgent } from '../core/apiCore';
-import { SettingsApplications, CenterFocusStrong } from '@material-ui/icons';
 
-const useStyles = makeStyles((theme) => ({
-  button:{
-      color: '#FFFFFF',
-      backgroundColor: '#669933',
-      fontWeight: '700',
-  },
-  menuheader:{
-    color: '#000000',
-    fontSize: 'medium',
-  },
-  menuheaderbold:{
-    color: '#000000',
-    fontWeight: '700',
-    fontSize: 'large',
-  },
-}));
 
-const StyledMenu = withStyles({
-  paper: {
-    border: '1px solid #d3d4d5',
-  },
-  })((props) => (
-  <Menu
-    elevation={0}
-    getContentAnchorEl={null}
-    anchorOrigin={{
-      vertical: 'top',
-      horizontal: 'left',
-    }}
-    transformOrigin={{
-      vertical: 'top',
-      horizontal: 'left',
-    }}
-    {...props}
-  />
-));
 
-const StyledMenuItem = withStyles((theme) => ({
-  root: {
-    '&:focus': {
-      backgroundColor: '#669933',
-      '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
-        color: '#FFFFFF',
-      },
-    },
-  },
-}))(MenuItem);
+
+
+
 
 
 const tableIcons = {
@@ -111,47 +49,22 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
-function PlayerMenu(playerid) {
-  alert(playerid);
-}
 
-
-function Players(props) {
-
-  const classes = useStyles();
-
+function Players() {
   const [playersList, setPlayersList] = useState([]);
-  const [error, setError] = useState(false);
-
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);    
-
+  const [error, setError] = useState(false);  
   // global
   const { agent } = useUserState();
-
-  const [anchorEl, setAnchorEl] = React.useState(null);
-
-  var userDispatch = useUserDispatch();
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
   
 
-  const loadPlayers = () => {
+  function loadPlayers () {
     getPlayersByAgent(agent).then(data => {
       if (data.error) {
         setError(data.error);
       } else { 
         const lst = data.data;       
         setPlayersList(lst);
-        console.log('RESPUESTAAAAAAAAAAA', lst);
-        console.log(data.data);
-      }
-      
+      }      
     })
   }
 
@@ -184,52 +97,7 @@ function Players(props) {
             title: 'Action',
             field: 'action',
             render: row => (
-              <div>
-              <Button 
-                className={classes.button} 
-                aria-haspopup="true" 
-                onClick={handleClick}
-                aria-controls="customized-menu"
-                variant="contained"
-                >
-                  <ArrowForwardIosIcon />
-              </Button>
-              <StyledMenu
-                id="customized-menu"
-                anchorEl={anchorEl}
-                keepMounted
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                <center><span className={classes.menuheader} >Player:</span>&nbsp;<span className={classes.menuheaderbold} >{row.username}</span></center>
-                <StyledMenuItem disabled>&nbsp;</StyledMenuItem>
-                <Divider />
-                <StyledMenuItem>
-                  <ListItemIcon>
-                    <EditIcon fontSize="small" />
-                  </ListItemIcon>
-                  <ListItemText primary="Edit Player" />
-                </StyledMenuItem>
-                <StyledMenuItem>
-                  <ListItemIcon>
-                    <HistoryIcon fontSize="small" />
-                  </ListItemIcon>
-                  <ListItemText primary="Game History" />
-                </StyledMenuItem>
-                <StyledMenuItem>
-                  <ListItemIcon>
-                    <SwapHorizIcon fontSize="small" />
-                  </ListItemIcon>
-                  <ListItemText primary="Transaction History" />
-                </StyledMenuItem>
-                <StyledMenuItem>
-                  <ListItemIcon>
-                    <GpsFixedIcon fontSize="small" />
-                  </ListItemIcon>
-                  <ListItemText primary="IP List" />
-                </StyledMenuItem>
-              </StyledMenu>
-              </div>
+              <PlayerMenuEdit player={row.username} id={row._id}/>
             ),
           },
         ]}

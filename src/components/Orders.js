@@ -20,10 +20,6 @@ const rows = [
   createData('Scott', 0, 0, 0, 0, 0, 0, 0),
 ];
 
-function preventDefault(event) {
-  event.preventDefault();
-}
-
 const useStyles = makeStyles((theme) => ({
   seeMore: {
     marginTop: theme.spacing(3),

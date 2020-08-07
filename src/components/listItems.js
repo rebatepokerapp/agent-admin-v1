@@ -3,10 +3,6 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import PeopleIcon from '@material-ui/icons/People';
-import LocalAtmIcon from '@material-ui/icons/LocalAtm';
-import LayersIcon from '@material-ui/icons/Layers';
-import SettingsIcon from '@material-ui/icons/Settings';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import WorkIcon from '@material-ui/icons/Work';
 import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 import { Home as HomeIcon } from '@material-ui/icons'

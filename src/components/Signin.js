@@ -90,7 +90,7 @@ function SignIn (props) {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <img src={logo} />
+        <img src={logo} alt={logo} />
         <p>&nbsp;</p>
         <Typography component="h1" variant="h5" className={classes.title}>
           Agent Lobby
@@ -144,6 +144,7 @@ function SignIn (props) {
             Sign In
           </Button>
         </form>
+        {showError()}
       </div>
     </Container>
   );

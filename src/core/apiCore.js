@@ -18,8 +18,8 @@ export const signin = user => {
     })
 }
 
-export const getPlayersByAgent = (agent) => {
-  return fetch(`${API_AGENT_URL}/playerbyagent/${agent.id}`, {
+export const getPlayersByAgent = async (agent) => {
+  return await fetch(`${API_AGENT_URL}/playerbyagent/${agent.id}`, {
     method: 'GET'
   })
     .then(response => {      
