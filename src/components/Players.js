@@ -86,16 +86,16 @@ function Players() {
           exportButton: true,
           padding: false,
           paging: false,
+          filtering: true,
 
         }}
         columns={[
-          { title: "PlayerID", field: "uniqId" },
-          { title: "Username", field: "username" },
-          { title: "Agent", field: "agentName"},
-          { title: "Balance", field: "chips"},
-          {
-            title: 'Action',
-            field: 'action',
+          { title: "PlayerID", field: "uniqId", filtering: false},
+          { title: "Username", field: "username", filtering: false},
+          { title: "Agent", field: "agentName", filtering: false},
+          { title: "Balance", field: "chips", filtering: false},
+          { title: "Status", field: "status", filtering: true},
+          { title: 'Action', field: 'action', filtering: false,
             render: row => (
               <PlayerMenuEdit player={row.username} id={row._id}/>
             ),
