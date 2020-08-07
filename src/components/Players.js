@@ -89,6 +89,7 @@ function Players() {
           filtering: true,
 
         }}
+        title="Players"
         columns={[
           { title: "PlayerID", field: "uniqId", filtering: false},
           { title: "Username", field: "username", filtering: false},
@@ -102,7 +103,6 @@ function Players() {
           },
         ]}
         data={playersList}
-        title="Players"
       />
     </div>
   )

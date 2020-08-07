@@ -38,7 +38,7 @@ import { useUserDispatch, signOut } from "./UserContext";
 // context
 import { useUserState } from "./UserContext";
 
-import { getPlayersByAgent } from '../core/apiCore';
+import { getSubsByAgent } from '../core/apiCore';
 
 const useStyles = makeStyles((theme) => ({
   button:{
@@ -114,11 +114,11 @@ function PlayerMenu(playerid) {
 }
 
 
-function Players(props) {
+function Agents(props) {
 
   const classes = useStyles();
 
-  const [playersList, setPlayersList] = useState([]);
+  const [subsList, setsubsList] = useState([]);
   const [error, setError] = useState(false);
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);    
@@ -139,22 +139,20 @@ function Players(props) {
   };
   
 
-  const loadPlayers = () => {
-    getPlayersByAgent(agent).then(data => {
+  const loadSubAgents = () => {
+    getSubsByAgent(agent).then(data => {
       if (data.error) {
         setError(data.error);
       } else { 
-        const lst = data.data;       
-        setPlayersList(lst);
-        console.log('RESPUESTAAAAAAAAAAA', lst);
-        console.log(data.data);
+        const lst = data.data;     
+        setsubsList(lst);
       }
       
     })
   }
 
   useEffect(() => {
-    loadPlayers();
+    loadSubAgents();
   }, [])
 
   return (
@@ -181,11 +179,11 @@ function Players(props) {
 
         }}
         columns={[
-          { title: "Agent ID", field: "uniqId", filtering: false},
+          { title: "Office ID", field: "officeId", filtering: false},
           { title: "Username", field: "username", filtering: false},
-          { title: "Email", field: "agentName", filtering: false},
-          { title: "Rake %", field: "chips", filtering: false},
-          { title: "Active", field: "active", lookup: { 1: 'yes', 0: 'no' }},
+          { title: "Email", field: "email", filtering: false},
+          { title: "Rake %", field: "commission", filtering: false},
+          { title: "Active", field: "status", lookup: { "active": 'yes', "Block": 'no' }},
           
           {
             title: '',field: '',filtering: false,
@@ -239,12 +237,12 @@ function Players(props) {
             ),
           },
         ]}
-        data={playersList}
+        data={subsList}
         title="Agents"
       />
     </div>
   )
 }
 
-export default Players;
+export default Agents;
 
