@@ -49,7 +49,7 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
-
+//Funcion que pinta la lista de players por agente
 function Players() {
   const [playersList, setPlayersList] = useState([]);
   const [error, setError] = useState(false);  
