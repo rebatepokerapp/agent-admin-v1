@@ -25,6 +25,7 @@ import Accounting from './Accounting';
 import Settings from './Settings';
 import Logout from './Logout';
 import RakeFigures from './RakeFigures';
+import PlayerGameHistory from './PlayerGameHistory';
 
 import { isAuthenticate } from '../core/apiCore';
 
@@ -179,7 +180,8 @@ export default function Dashboard() {
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Router>
-            <Switch>            
+            <Switch> 
+              <Route path="/app/gameHistory/:id" component={PlayerGameHistory} />             
               <Route path="/app/dashboard" component={MainDash} />      
               <Route path="/app/rakefigures" component={RakeFigures} />
               <Route path="/app/agents" component={Agents} />
@@ -187,7 +189,6 @@ export default function Dashboard() {
               <Route path="/app/transactions" component={Transactions} /> 
               <Route path="/app/accounting"  component={Accounting} />
               <Route path="/app/settings" component={Settings} />
-              <Route path="/app/logout" component={Logout} />
             </Switch>
           </Router>
           <Box pt={4}>

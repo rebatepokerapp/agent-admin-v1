@@ -61,3 +61,21 @@ export const isAuthenticate = () => {
   }
     return false;
 }
+
+export const getPlayerGameHistory = async (player) => {
+  const query =  {
+    start: 1591052309,
+    length:40,
+    search: ''
+  }
+  console.log(`${API_AGENT_URL}/player/gameHistory/${player}`)
+  return await fetch(`${API_AGENT_URL}/player/gameHistory/${player}?start=0&length=0&search=''`, {
+    method: 'GET'
+  })
+    .then(response => {      
+      return response.json();
+    })
+    .catch(err => {
+      console.log(err);
+    })
+}

@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react'
-import MaterialTable from "material-table";
+import React, { useState, useEffect, Fragment } from 'react'
+import { useParams } from 'react-router-dom'
 import { forwardRef } from 'react';
+import MaterialTable from "material-table";
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import Check from '@material-ui/icons/Check';
@@ -16,12 +17,8 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
-import PlayerMenuEdit from './PlayerMenuEdit';
-// context
-import { useUserState } from "./UserContext";
-
-import { getPlayersByAgent } from '../core/apiCore';
-
+import { getPlayerGameHistory } from '../core/apiCore';
+import GameDetail from './GameDetail';
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -43,29 +40,27 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
-//Funcion que pinta la lista de players por agente
-function Players() {
-  const [playersList, setPlayersList] = useState([]);
+const PlayerGameHistory = () => {
+  const { id } = useParams();
 
-  // global
-  const { agent } = useUserState();
-  
+  const [gamehistorylist, setGameHistoryList] = useState([]);
 
-  function loadPlayers () {
-    getPlayersByAgent(agent).then(data => {
+  function loadGameHistory () {    
+    getPlayerGameHistory(id).then(data => {
       if (data.error) {
         console.log('ERROR ',data.error)
-      } else { 
-        const lst = data.data;      
-        setPlayersList(lst);
+      } else {
+        const lst = data.data;
+        console.log('GAME HISTORYYYYYYYYY ',lst)      
+        setGameHistoryList(lst);
       }      
     })
   }
 
   useEffect(() => {
-    loadPlayers();
+    loadGameHistory();
   }, [])
-
+  
   return (
 
     <div style={{ maxWidth: "100%" }}>
@@ -83,24 +78,38 @@ function Players() {
           filtering: true,
 
         }}
-        title="Players"
+        title={`Game History: `}
         columns={[
-          { title: "PlayerID", field: "uniqId", filtering: false},
-          { title: "Username", field: "username", filtering: false},
-          { title: "Agent", field: "agentName", filtering: false},
-          { title: "Balance", field: "chips", filtering: false},
-          { title: "Status", field: "status", filtering: true},
-          { title: 'Action', field: 'action', filtering: false,
-            render: row => (
-              <PlayerMenuEdit player={row.username} id={row._id}/>
-            ),
-          },
+          { title: "Id", field: "gameNumber", filtering: false},
+          { title: "Small Blind", field: "smallBlind", filtering: false},
+          { title: "Big Blind", field: "bigBlind", filtering: false},
+          { title: "Status", field: "status", filtering: false},
+          { title: "Pot", field: "pot", filtering: true},
+          { title: "Date", field: "createdAt", filtering: true},
+          { title: 'Action', field: 'action', filtering: false}
         ]}
-        data={playersList}
+        data={gamehistorylist}
+        detailPanel={rowData => {
+          return (
+            <Fragment>
+              {rowData.players.map( (row, index) => {
+                return(
+                <div key={index}>
+                  <div>
+                    {row.playerName}
+                  </div>
+                  <div>
+                    <img src={`/card/${row.cards[0]}.png`} width="50px"></img> - <img src={`/card/${row.cards[1]}.png`} width="50px"></img>
+                  </div>
+                </div>
+                )
+              })}              
+            </Fragment>
+          )
+        }}
       />
     </div>
   )
 }
 
-export default Players;
-
+export default PlayerGameHistory;

@@ -45,8 +45,8 @@ export default function Orders() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
+          {rows.map((row, index) => (
+            <TableRow key={index}>
               <TableCell>{row.player}</TableCell>
               <TableCell align="right">{row.monday}</TableCell>
               <TableCell align="right">{row.tuesday}</TableCell>

@@ -12,6 +12,7 @@ import Menu from '@material-ui/core/Menu';
 import { withStyles } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
+import { Redirect, Route } from 'react-router-dom';
 
 const StyledMenu = withStyles({
   paper: {
@@ -72,8 +73,12 @@ const PlayerMenuEdit = (props) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleClose = (from,id) => {    
     setAnchorEl(null);
+    if(from === 'GH'){
+      var urlred = `/app/gameHistory/${id}`
+      window.location.href=urlred;
+    }           
   };  
 
   return (
@@ -92,30 +97,30 @@ const PlayerMenuEdit = (props) => {
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}
-        onClose={handleClose}
+        onClose={() => handleClose}
       >
         <center><span className={classes.menuheader} >Player:</span>&nbsp;<span className={classes.menuheaderbold} >{props.player}</span></center>
         <StyledMenuItem disabled>&nbsp;</StyledMenuItem>
         <Divider />
-        <StyledMenuItem onClick={handleClose}>
+        <StyledMenuItem onClick={() => handleClose}>
           <ListItemIcon>
             <EditIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText primary="Edit Player"/>
         </StyledMenuItem>
-        <StyledMenuItem onClick={handleClose}>
+        <StyledMenuItem onClick={() => handleClose('GH',props.id)}>
           <ListItemIcon>
             <HistoryIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText primary="Game History" />
         </StyledMenuItem>
-        <StyledMenuItem onClick={handleClose}>
+        <StyledMenuItem onClick={() => handleClose}>
           <ListItemIcon>
             <SwapHorizIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText primary="Transaction History" />
         </StyledMenuItem>
-        <StyledMenuItem onClick={handleClose}>
+        <StyledMenuItem onClick={() => handleClose}>
           <ListItemIcon>
             <GpsFixedIcon fontSize="small" />
           </ListItemIcon>
