@@ -1,5 +1,4 @@
-import React, { useState, useEffect, Component } from 'react'
-import ReactDOM from "react-dom";
+import React, { useEffect } from 'react'
 import MaterialTable from "material-table";
 import { forwardRef } from 'react';
 import AddBox from '@material-ui/icons/AddBox';
@@ -18,7 +17,6 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import { makeStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -32,13 +30,8 @@ import { withStyles } from '@material-ui/core/styles';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 
-
-
-import { useUserDispatch, signOut } from "./UserContext";
-// context
-import { useUserState } from "./UserContext";
-
-import { getSubsByAgent } from '../core/apiCore';
+import {useDispatch, useSelector} from 'react-redux';
+import {getSubsByAgent} from '../redux/AgentDucks';
 
 const useStyles = makeStyles((theme) => ({
   button:{
@@ -109,26 +102,23 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
-function PlayerMenu(playerid) {
-  alert(playerid);
-}
-
-
-function Agents(props) {
+function Agents() {
 
   const classes = useStyles();
 
-  const [subsList, setsubsList] = useState([]);
-  const [error, setError] = useState(false);
+  const dispatch = useDispatch();
+  
 
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);    
+  useEffect(() => {
+    const fetchData = () => {
+      dispatch(getSubsByAgent())
+    }
+    fetchData();
+  }, [dispatch])
 
-  // global
-  const { agent } = useUserState();
+  const subsList = useSelector(store => store.agent.subagents).data;
 
   const [anchorEl, setAnchorEl] = React.useState(null);
-
-  var userDispatch = useUserDispatch();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -137,25 +127,8 @@ function Agents(props) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  
 
-  const loadSubAgents = () => {
-    getSubsByAgent(agent).then(data => {
-      if (data.error) {
-        setError(data.error);
-      } else { 
-        const lst = data.data;     
-        setsubsList(lst);
-      }
-      
-    })
-  }
-
-  useEffect(() => {
-    loadSubAgents();
-  }, [])
-
-  return (
+  return  subsList ? (
 
     <div style={{ maxWidth: "100%" }}>
       <MaterialTable
@@ -173,7 +146,6 @@ function Agents(props) {
           },
           search: true,
           exportButton: true,
-          padding: false,
           paging: false,
           filtering: true,
 
@@ -241,7 +213,7 @@ function Agents(props) {
         title="Agents"
       />
     </div>
-  )
+  ) : null
 }
 
 export default Agents;

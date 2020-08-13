@@ -2,10 +2,12 @@ import React from 'react'
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Deposits from './Deposits';
-import Orders from './Orders';
+import Figures from './Figures';
 import Chart from './Chart';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
+import { useSelector} from 'react-redux';
+
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -22,6 +24,8 @@ const useStyles = makeStyles((theme) => ({
 function MainDash() {
 
   const classes = useStyles();
+
+  const agent = useSelector(store => store.agent);
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);  
 
@@ -43,7 +47,7 @@ function MainDash() {
         {/* Recent Orders */}
         <Grid item xs={12}>
           <Paper className={classes.paper}>
-            <Orders />
+            <Figures agent={agent}/>
           </Paper>
         </Grid>
       </Grid>

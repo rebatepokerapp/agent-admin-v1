@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
-import MaterialTable from "material-table";
+import { useParams } from 'react-router-dom'
 import { forwardRef } from 'react';
+import MaterialTable from "material-table";
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import Check from '@material-ui/icons/Check';
@@ -16,10 +17,8 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
-import PlayerMenuEdit from './PlayerMenuEdit';
-
 import {useDispatch, useSelector} from 'react-redux';
-import {getPlayersByAgent} from '../redux/AgentDucks';
+import { setPlayerInfo, getPlayerIpLoginHistory } from '../redux/PlayerDucks';
 
 
 const tableIcons = {
@@ -42,22 +41,30 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
-//Funcion que pinta la lista de players por agente
-function Players() {
+const PlayerIpLoginHistory = () => {
+  const { id } = useParams();
+
+  const params = id.split('&');
+
+  const idreal = params[0];
+  const username = params[1];
 
   const dispatch = useDispatch();
-  
 
   useEffect(() => {
+    const fetchPlayerInfo = () => {
+      dispatch(setPlayerInfo(idreal,username))
+    }    
     const fetchData = () => {
-      dispatch(getPlayersByAgent())
+      dispatch(getPlayerIpLoginHistory())
     }
+    fetchPlayerInfo();
     fetchData();
   }, [dispatch])
 
-  const playersList = useSelector(store => store.agent.players).data;
+  const ipplayerloginhistorylist = useSelector(store => store.player.iplist).data;
 
-  return (
+  return ipplayerloginhistorylist ? (
 
     <div style={{ maxWidth: "100%" }}>
       <MaterialTable
@@ -74,24 +81,17 @@ function Players() {
           filtering: true,
 
         }}
-        title="Players"
+        title={`Login Ip History: ${username.toUpperCase()}`}
         columns={[
-          { title: "PlayerID", field: "uniqId", filtering: false},
-          { title: "Username", field: "username", filtering: false},
-          { title: "Agent", field: "agentName", filtering: false},
-          { title: "Balance", field: "chips", filtering: false},
-          { title: "Status", field: "status", filtering: true},
-          { title: 'Action', field: 'action', filtering: false,
-            render: row => (
-              <PlayerMenuEdit player={row.username} id={row._id}/>
-            ),
-          },
+          { title: "IP", field: "ip", filtering: false},
+          { title: "Client", field: "client", filtering: false},
+          { title: "Action", field: "flag", filtering: false},
+          { title: "Date", field: "date", filtering: false}
         ]}
-        data={playersList}
+        data={ipplayerloginhistorylist}        
       />
     </div>
-  )
+  ) : null;
 }
 
-export default Players;
-
+export default PlayerIpLoginHistory;

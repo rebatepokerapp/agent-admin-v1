@@ -1,5 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react'
-import { useParams } from 'react-router-dom'
+import React, { useEffect, Fragment } from 'react'
 import { forwardRef } from 'react';
 import MaterialTable from "material-table";
 import AddBox from '@material-ui/icons/AddBox';
@@ -17,8 +16,9 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
-import { getPlayerGameHistory } from '../core/apiCore';
-import GameDetail from './GameDetail';
+import {useDispatch, useSelector} from 'react-redux';
+import { setPlayerInfo, getPlayerGameHistory } from '../redux/PlayerDucks';
+import { useParams } from 'react-router-dom';
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -40,28 +40,31 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
-const PlayerGameHistory = () => {
+const PlayerGameHistory = () => { 
+
   const { id } = useParams();
 
-  const [gamehistorylist, setGameHistoryList] = useState([]);
+  const params = id.split('&');
 
-  function loadGameHistory () {    
-    getPlayerGameHistory(id).then(data => {
-      if (data.error) {
-        console.log('ERROR ',data.error)
-      } else {
-        const lst = data.data;
-        console.log('GAME HISTORYYYYYYYYY ',lst)      
-        setGameHistoryList(lst);
-      }      
-    })
-  }
+  const idreal = params[0];
+  const username = params[1];
 
-  useEffect(() => {
-    loadGameHistory();
-  }, [])
+  const dispatch = useDispatch();
   
-  return (
+  useEffect(() => {
+    const fetchPlayerInfo = () => {
+      dispatch(setPlayerInfo(idreal,username))
+    }    
+    const fetchData = () => {
+      dispatch(getPlayerGameHistory())
+    }
+    fetchPlayerInfo();
+    fetchData();
+  }, [dispatch])
+
+  const gamehistorylist = useSelector(store => store.player.gamehistory).data;
+  
+  return gamehistorylist ? (
 
     <div style={{ maxWidth: "100%" }}>
       <MaterialTable
@@ -78,7 +81,7 @@ const PlayerGameHistory = () => {
           filtering: true,
 
         }}
-        title={`Game History: `}
+        title={`Game History: ${username.toUpperCase()}`}
         columns={[
           { title: "Id", field: "gameNumber", filtering: false},
           { title: "Small Blind", field: "smallBlind", filtering: false},
@@ -99,7 +102,7 @@ const PlayerGameHistory = () => {
                     {row.playerName}
                   </div>
                   <div>
-                    <img src={`/card/${row.cards[0]}.png`} width="50px"></img> - <img src={`/card/${row.cards[1]}.png`} width="50px"></img>
+                    <img src={`/card/${row.cards[0]}.png`} width="50px" alt=""></img> - <img src={`/card/${row.cards[1]}.png`} width="50px" alt=""></img>
                   </div>
                 </div>
                 )
@@ -109,7 +112,7 @@ const PlayerGameHistory = () => {
         }}
       />
     </div>
-  )
+  ) : null;
 }
 
 export default PlayerGameHistory;

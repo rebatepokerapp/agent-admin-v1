@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -6,11 +6,11 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import logo from '../images/logo-icon-small.png'; 
-import { signin, authenticate } from '../core/apiCore';
 import { withRouter } from 'react-router-dom';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
-import { useUserDispatch } from "./UserContext";
+import { signIn } from "../redux/AgentDucks";
+import {useDispatch, useSelector} from 'react-redux'
 
 import { useForm } from 'react-hook-form';
 
@@ -41,41 +41,22 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function SignIn (props) {
-  console.log('ENTRO A SIGNIN')
   const classes = useStyles();
-
-  var userDispatch = useUserDispatch();
 
   const {register, errors, handleSubmit} =  useForm();
 
-  const [error, setError] = useState(false);
+  const dispatch = useDispatch();
+
+  const isAuthenticated = useSelector(store => store.agent.isAuthenticated);
+  const error = useSelector(store => store.agent.error);
+
+  if (isAuthenticated){
+    props.history.push('/app/dashboard');
+  }
 
   const onSubmit = (data, e) => {
     e.preventDefault();
-    console.log('DATA EN SUBMIT ',data);
-
-    signin(data)
-    .then(data => {
-      console.log('DATA AFTER LOGIN: ', data)
-      if (data.error) {
-        setError(data.error);
-      } else {
-        console.log('Autentico 1');
-        const auth = authenticate (data);
-        if (auth) {
-          console.log(props);
-          userDispatch({ type: 'LOGIN_SUCCESS', data });
-          props.history.push('/app/dashboard');
-        } else {
-          userDispatch({ type: 'LOGIN_FAILURE' })
-          console.log('VALIDACION MALISIMA');
-        }
-      }
-    })    
-    .catch(error => {
-      setError(error);
-    })
-
+    dispatch(signIn(data));
     e.target.reset();
   }
 

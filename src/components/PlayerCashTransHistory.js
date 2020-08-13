@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
-import MaterialTable from "material-table";
+import { useParams } from 'react-router-dom'
 import { forwardRef } from 'react';
+import MaterialTable from "material-table";
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import Check from '@material-ui/icons/Check';
@@ -16,10 +17,8 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
-import PlayerMenuEdit from './PlayerMenuEdit';
-
 import {useDispatch, useSelector} from 'react-redux';
-import {getPlayersByAgent} from '../redux/AgentDucks';
+import { setPlayerInfo, getPlayerTransCashHistory } from '../redux/PlayerDucks';
 
 
 const tableIcons = {
@@ -42,22 +41,31 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
-//Funcion que pinta la lista de players por agente
-function Players() {
+const PlayerCashTransHistory = () => {
+  const { id } = useParams();
+
+  const params = id.split('&');
+
+  const idreal = params[0];
+  const username = params[1];
 
   const dispatch = useDispatch();
-  
 
   useEffect(() => {
+    const fetchPlayerInfo = () => {
+      dispatch(setPlayerInfo(idreal,username))
+    }    
     const fetchData = () => {
-      dispatch(getPlayersByAgent())
+      dispatch(getPlayerTransCashHistory())
     }
+    fetchPlayerInfo();
     fetchData();
   }, [dispatch])
 
-  const playersList = useSelector(store => store.agent.players).data;
-
-  return (
+  const transcashhistorylist = useSelector(store => store.player.transactions).data;
+  
+  
+  return transcashhistorylist ? (
 
     <div style={{ maxWidth: "100%" }}>
       <MaterialTable
@@ -74,24 +82,19 @@ function Players() {
           filtering: true,
 
         }}
-        title="Players"
+        title={`Player Cash Transaction History: ${username.toUpperCase()}`}
         columns={[
-          { title: "PlayerID", field: "uniqId", filtering: false},
-          { title: "Username", field: "username", filtering: false},
-          { title: "Agent", field: "agentName", filtering: false},
-          { title: "Balance", field: "chips", filtering: false},
+          { title: "Tx.Number", field: "transactionNumber", filtering: false},
+          { title: "Chips", field: "chips", filtering: false},
+          { title: "Before Balance", field: "beforeBalance", filtering: false},
+          { title: "After Balance", field: "afterBalance", filtering: false},
           { title: "Status", field: "status", filtering: true},
-          { title: 'Action', field: 'action', filtering: false,
-            render: row => (
-              <PlayerMenuEdit player={row.username} id={row._id}/>
-            ),
-          },
+          { title: "Date", field: "createdAt", filtering: true},
         ]}
-        data={playersList}
+        data={transcashhistorylist}        
       />
     </div>
-  )
+  ) : null;
 }
 
-export default Players;
-
+export default PlayerCashTransHistory;

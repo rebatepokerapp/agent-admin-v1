@@ -12,7 +12,8 @@ import Divider from '@material-ui/core/Divider';
 import { withStyles } from '@material-ui/core/styles';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import { useUserDispatch, signOut } from "./UserContext";
+import { signOut } from "../redux/AgentDucks";
+import {useDispatch} from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
     topIcon: {
@@ -79,7 +80,7 @@ export default function AgentMenu(props) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
-  var userDispatch = useUserDispatch();
+  const dispatch = useDispatch()
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -128,7 +129,7 @@ export default function AgentMenu(props) {
           <ListItemIcon>
             <ExitToAppIcon className={classes.menuIcon}/>
           </ListItemIcon>
-          <ListItemText onClick={() => signOut(userDispatch, props.history)} primary="Logout" />
+          <ListItemText onClick={() => dispatch(signOut())} primary="Logout" />
         </StyledMenuItem>
       </StyledMenu>
     </div>

@@ -12,7 +12,6 @@ import Menu from '@material-ui/core/Menu';
 import { withStyles } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
-import { Redirect, Route } from 'react-router-dom';
 
 const StyledMenu = withStyles({
   paper: {
@@ -63,22 +62,30 @@ const StyledMenuItem = withStyles((theme) => ({
 }))(MenuItem);
 
 //Crea el componente de menu para los player en el player list
-const PlayerMenuEdit = (props) => {
+const PlayerMenuEdit = ({ id, player }) => {
 
-  const classes = useStyles();
+  const classes = useStyles(); 
 
   const [anchorEl, setAnchorEl] = useState(null);
 
-  const handleClick = (event) => {    
-    setAnchorEl(event.currentTarget);
+  const handleClick = (event) => { 
+    if (event.currentTarget)   {
+      setAnchorEl(event.currentTarget);
+    }    
   };
 
-  const handleClose = (from,id) => {    
+  const handleClose = (from,id,player) => {    
     setAnchorEl(null);
     if(from === 'GH'){
-      var urlred = `/app/gameHistory/${id}`
+      var urlred = `/app/gameHistory/${id}&${player}`
       window.location.href=urlred;
-    }           
+    } else if(from === 'CT') {
+      urlred = `/app/cashtransactionhistory/${id}&${player}`
+      window.location.href=urlred;
+    } else if(from === 'IP') {
+      urlred = `/app/playeriphistory/${id}&${player}`
+      window.location.href=urlred;
+    }        
   };  
 
   return (
@@ -97,9 +104,9 @@ const PlayerMenuEdit = (props) => {
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}
-        onClose={() => handleClose}
+        onClose={handleClose}
       >
-        <center><span className={classes.menuheader} >Player:</span>&nbsp;<span className={classes.menuheaderbold} >{props.player}</span></center>
+        <center><span className={classes.menuheader} >Player:</span>&nbsp;<span className={classes.menuheaderbold} >{player}</span></center>
         <StyledMenuItem disabled>&nbsp;</StyledMenuItem>
         <Divider />
         <StyledMenuItem onClick={() => handleClose}>
@@ -108,19 +115,19 @@ const PlayerMenuEdit = (props) => {
           </ListItemIcon>
           <ListItemText primary="Edit Player"/>
         </StyledMenuItem>
-        <StyledMenuItem onClick={() => handleClose('GH',props.id)}>
+        <StyledMenuItem onClick={() => handleClose('GH',id,player)}>
           <ListItemIcon>
             <HistoryIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText primary="Game History" />
         </StyledMenuItem>
-        <StyledMenuItem onClick={() => handleClose}>
+        <StyledMenuItem onClick={() => handleClose('CT',id,player)}>
           <ListItemIcon>
             <SwapHorizIcon fontSize="small" />
           </ListItemIcon>
-          <ListItemText primary="Transaction History" />
+          <ListItemText primary="Cash Transaction History" />
         </StyledMenuItem>
-        <StyledMenuItem onClick={() => handleClose}>
+        <StyledMenuItem onClick={() => handleClose('IP',id,player)}>
           <ListItemIcon>
             <GpsFixedIcon fontSize="small" />
           </ListItemIcon>

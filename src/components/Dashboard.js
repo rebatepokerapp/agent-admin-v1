@@ -23,17 +23,18 @@ import Players from './Players';
 import Transactions from './Transactions';
 import Accounting from './Accounting';
 import Settings from './Settings';
-import Logout from './Logout';
 import RakeFigures from './RakeFigures';
 import PlayerGameHistory from './PlayerGameHistory';
-
-import { isAuthenticate } from '../core/apiCore';
+import PlayerCashTransHistory from './PlayerCashTransHistory';
+import PlayerIpLoginHistory from './PlayerIpLoginHistory';
 
 import {
   BrowserRouter as Router,
   Switch,
   Route
 } from "react-router-dom";
+
+import { useSelector} from 'react-redux';
 
 const drawerWidth = 240;
 
@@ -129,6 +130,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Dashboard() {
   const classes = useStyles();
+
   const [open, setOpen] = useState(false);
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -136,8 +138,8 @@ export default function Dashboard() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  
-  const { agent } = isAuthenticate();
+
+  const agent = useSelector(store => store.agent);
 
   return (
     <div className={classes.root}>
@@ -148,7 +150,7 @@ export default function Dashboard() {
             edge="start"
             color="inherit"
             aria-label="open drawer"
-            onClick={handleDrawerOpen}
+            onClick={() => handleDrawerOpen()}
             className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
           >
             <MenuIcon />
@@ -167,7 +169,7 @@ export default function Dashboard() {
         open={open}
       >
         <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose} className={classes.toolbarIcon}>
+          <IconButton onClick={() => handleDrawerClose()} className={classes.toolbarIcon}>
             <ChevronLeftIcon />
           </IconButton>
         </div>
@@ -180,8 +182,10 @@ export default function Dashboard() {
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Router>
-            <Switch> 
-              <Route path="/app/gameHistory/:id" component={PlayerGameHistory} />             
+            <Switch>                   
+              <Route path="/app/playeriphistory/:id" component={PlayerIpLoginHistory} />      
+              <Route path="/app/cashtransactionhistory/:id" component={PlayerCashTransHistory} /> 
+              <Route path="/app/gamehistory/:id" component={PlayerGameHistory} />            
               <Route path="/app/dashboard" component={MainDash} />      
               <Route path="/app/rakefigures" component={RakeFigures} />
               <Route path="/app/agents" component={Agents} />
