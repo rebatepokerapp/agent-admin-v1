@@ -19,6 +19,7 @@ import ViewColumn from '@material-ui/icons/ViewColumn';
 import {useDispatch, useSelector} from 'react-redux';
 import { setPlayerInfo, getPlayerGameHistory } from '../redux/PlayerDucks';
 import { useParams } from 'react-router-dom';
+import PlayerGameHistoryDetail from './PlayerGameHistoryDetail';
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -97,14 +98,7 @@ const PlayerGameHistory = () => {
             <Fragment>
               {rowData.players.map( (row, index) => {
                 return(
-                <div key={index}>
-                  <div>
-                    {row.playerName}
-                  </div>
-                  <div>
-                    <img src={`/card/${row.cards[0]}.png`} width="50px" alt=""></img> - <img src={`/card/${row.cards[1]}.png`} width="50px" alt=""></img>
-                  </div>
-                </div>
+                <PlayerGameHistoryDetail gameHistoryDetail={row}/>
                 )
               })}              
             </Fragment>
