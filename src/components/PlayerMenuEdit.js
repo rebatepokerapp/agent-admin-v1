@@ -82,6 +82,9 @@ const PlayerMenuEdit = ({ id, player }) => {
     } else if(from === 'CT') {
       urlred = `/app/cashtransactionhistory/${id}&${player}`
       window.location.href=urlred;
+    } else if(from === 'PO') {
+      urlred = `/app/playeroptions/${id}&${player}`
+      window.location.href=urlred;
     } else if(from === 'IP') {
       urlred = `/app/playeriphistory/${id}&${player}`
       window.location.href=urlred;
@@ -109,7 +112,7 @@ const PlayerMenuEdit = ({ id, player }) => {
         <center><span className={classes.menuheader} >Player:</span>&nbsp;<span className={classes.menuheaderbold} >{player}</span></center>
         <StyledMenuItem disabled>&nbsp;</StyledMenuItem>
         <Divider />
-        <StyledMenuItem onClick={() => handleClose}>
+        <StyledMenuItem onClick={() => handleClose('PO',id,player)}>
           <ListItemIcon>
             <EditIcon fontSize="small" />
           </ListItemIcon>

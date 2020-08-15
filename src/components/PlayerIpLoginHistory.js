@@ -62,7 +62,7 @@ const PlayerIpLoginHistory = () => {
     fetchData();
   }, [dispatch])
 
-  const ipplayerloginhistorylist = useSelector(store => store.player.iplist).data;
+  const ipplayerloginhistorylist = useSelector(store => store.player.iplist);
 
   return ipplayerloginhistorylist ? (
 

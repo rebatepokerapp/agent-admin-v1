@@ -27,6 +27,7 @@ import RakeFigures from './RakeFigures';
 import PlayerGameHistory from './PlayerGameHistory';
 import PlayerCashTransHistory from './PlayerCashTransHistory';
 import PlayerIpLoginHistory from './PlayerIpLoginHistory';
+import PlayerEditForm from './PlayerOptions';
 
 import {
   BrowserRouter as Router,
@@ -193,6 +194,7 @@ export default function Dashboard() {
               <Route path="/app/transactions" component={Transactions} /> 
               <Route path="/app/accounting"  component={Accounting} />
               <Route path="/app/settings" component={Settings} />
+              <Route path="/app/playeroptions/:id" component={PlayerEditForm} />
             </Switch>
           </Router>
           <Box pt={4}>

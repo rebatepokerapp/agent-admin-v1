@@ -4,6 +4,7 @@ import Paper from '@material-ui/core/Paper';
 import Deposits from './Deposits';
 import Figures from './Figures';
 import Chart from './Chart';
+import HistoricRakePerWeek from './HistoricRakePerWeek'
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import { useSelector} from 'react-redux';

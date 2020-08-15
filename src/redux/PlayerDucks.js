@@ -66,9 +66,10 @@ export const getPlayerGameHistory = () => async  (dispatch, getState) => {
     const id = getState().player.player;
     console.log('PLAYER ID', id)
     const res = await axios.get(`${API_AGENT_URL}/player/gameHistory/${id}?start=${query.start}&length=${query.length}&search=${query.search}`);
+    console.log('DATA', res.data)
     dispatch({
       type: PLAYER_GAME_HISTORY_SUCCESS,
-      payload: res.data
+      payload: res.data.data
     })
   } catch (error) {
     dispatch({
@@ -89,7 +90,7 @@ export const getPlayerTransCashHistory = () => async  (dispatch, getState) => {
     const res = await axios.get(`${API_AGENT_URL}/player/cashTransHistory/${id}?start=${query.start}&length=${query.length}&search=${query.search}`);
     dispatch({
       type: PLAYER_TRANSACTION_HISTORY_SUCCESS,
-      payload: res.data
+      payload: res.data.data
     })
   } catch (error) {
     dispatch({
@@ -110,7 +111,7 @@ export const getPlayerIpLoginHistory = () => async  (dispatch, getState) => {
     const res = await axios.get(`${API_AGENT_URL}/player/iploginhistory/${id}?start=${query.start}&length=${query.length}&search=${query.search}`);
     dispatch({
       type: PLAYER_IP_HISTORY_SUCCESS,
-      payload: res.data
+      payload: res.data.data
     })
   } catch (error) {
     dispatch({

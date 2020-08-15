@@ -62,7 +62,7 @@ const PlayerCashTransHistory = () => {
     fetchData();
   }, [dispatch])
 
-  const transcashhistorylist = useSelector(store => store.player.transactions).data;
+  const transcashhistorylist = useSelector(store => store.player.transactions);
   
   
   return transcashhistorylist ? (

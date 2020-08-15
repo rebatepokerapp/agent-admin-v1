@@ -63,7 +63,7 @@ const PlayerGameHistory = () => {
     fetchData();
   }, [dispatch])
 
-  const gamehistorylist = useSelector(store => store.player.gamehistory).data;
+  const gamehistorylist = useSelector(store => store.player.gamehistory);
   
   return gamehistorylist ? (
 
