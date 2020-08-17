@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -6,8 +6,6 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Title from './Title';
-import {useDispatch, useSelector} from 'react-redux';
-import {getFiguresByAgent} from '../redux/AgentDucks';
 
 const useStyles = makeStyles((theme) => ({
   seeMore: {
@@ -15,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Figures(props) {
+export default function Figures({ figuresList }) {
 
   let monday = 0;
   let tuesday = 0;
@@ -23,19 +21,7 @@ export default function Figures(props) {
   let thursday = 0;
   let friday = 0;
   let saturday = 0;
-  let sunday = 0;
-
-  const dispatch = useDispatch();
-  
-
-  useEffect(() => {
-    const fetchData = () => {
-      dispatch(getFiguresByAgent())
-    }
-    fetchData();
-  }, [dispatch])
-
-  const figuresList = useSelector(store => store.agent.figures).data;
+  let sunday = 0;  
   
   const classes = useStyles();
   return figuresList ? (

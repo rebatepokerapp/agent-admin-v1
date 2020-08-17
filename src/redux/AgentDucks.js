@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { API_AGENT_URL } from '../config';
+import moment from 'moment';
 
 //constantes o variables de estado del agente
 const agentData = {
@@ -8,6 +9,7 @@ const agentData = {
   players:[],
   subagents: [],
   figures: [],
+  totalrake:0,
   error: null,
   token: null
 }
@@ -37,7 +39,7 @@ export default function agentReducer(state = agentData, action){
     case GET_AGENT_SUBS_SUCCESS:
       return{...state, subagents: action.payload, error: null}
     case GET_AGENT_FIGURES_SUCCESS:
-      return{...state, figures: action.payload, error: null}
+      return{...state, figures: action.payload.data, totalrake:action.payload.totalrake, error: null}
     case AGENT_LOGIN_ERROR:
       return{...state, error: action.payload}
     case AGENT_LOGOUT_ERROR:
@@ -110,12 +112,12 @@ export const getPlayersByAgent = () => async  (dispatch, getState) => {
 export const getSubsByAgent = () => async  (dispatch, getState) => {
   try {
     const query =  {
-      start_date: "2020-06-23",
-      end_date: "2020-06-28",
-      is_datefilter:'1'
+      start: 0,
+      length: 20,
+      search:''
     }
     const { id } = getState().agent.agent;
-    const res = await axios.get(`${API_AGENT_URL}/subsbyagent/${id}?start_date=${query.start_date}&end_date=${query.end_date}&is_datefilter=${query.is_datefilter}`);
+    const res = await axios.get(`${API_AGENT_URL}/subsbyagent/${id}?start=${query.start}&length=${query.length}&search=${query.search}`);
     dispatch({
       type: GET_AGENT_SUBS_SUCCESS,
       payload: res.data
@@ -131,8 +133,8 @@ export const getSubsByAgent = () => async  (dispatch, getState) => {
 export const getFiguresByAgent = () => async  (dispatch, getState) => {
   try {
     const query =  {
-      start_date: "2020-06-23",
-      end_date: "2020-06-28",
+      start_date: moment.utc().day(1).startOf('day')._d,
+      end_date: moment.utc().day(7).endOf('day')._d,
       is_datefilter:'1'
     }
 
@@ -141,7 +143,10 @@ export const getFiguresByAgent = () => async  (dispatch, getState) => {
 
     dispatch({
       type: GET_AGENT_FIGURES_SUCCESS,
-      payload: res.data
+      payload: {
+        data: res.data.data,
+        totalrake: res.data.totalRack
+      }
     })
   } catch (error) {
     dispatch({

@@ -1,13 +1,14 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import Deposits from './Deposits';
+import TotalRakeInfo from './TotalRakeInfo';
 import Figures from './Figures';
 import Chart from './Chart';
 import HistoricRakePerWeek from './HistoricRakePerWeek'
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
-import { useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {getFiguresByAgent} from '../redux/AgentDucks';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -30,13 +31,26 @@ function MainDash() {
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);  
 
+  const dispatch = useDispatch();
+  
+
+  useEffect(() => {
+    const fetchData = () => {
+      dispatch(getFiguresByAgent())
+    }
+    fetchData();
+  }, [dispatch])
+
+  const figuresList = useSelector(store => store.agent.figures);
+  const totalRake = useSelector(store => store.agent.totalrake);
+
   return (
     <>
       <Grid container spacing={3}>
         {/* Recent Deposits */}
         <Grid item xs={12} md={4} lg={3}>
           <Paper className={fixedHeightPaper}>
-            <Deposits />
+            <TotalRakeInfo totalRake={totalRake}/>
           </Paper>
         </Grid>
         {/* Chart */}
@@ -48,7 +62,7 @@ function MainDash() {
         {/* Recent Orders */}
         <Grid item xs={12}>
           <Paper className={classes.paper}>
-            <Figures agent={agent}/>
+            <Figures figuresList={figuresList}/>
           </Paper>
         </Grid>
       </Grid>

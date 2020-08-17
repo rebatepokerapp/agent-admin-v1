@@ -14,6 +14,7 @@
     "dotenv": "^8.2.0",
     "material-table": "^1.68.0",
     "material-ui-advanced-table": "^0.3.1",
+    "moment": "^2.27.0",
     "react": "^16.13.1",
     "react-devtools": "^4.8.2",
     "react-dom": "^16.13.1",

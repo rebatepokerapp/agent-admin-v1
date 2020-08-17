@@ -84,11 +84,11 @@ const PlayerGameHistory = () => {
         }}
         title={`Game History: ${username.toUpperCase()}`}
         columns={[
-          { title: "Id", field: "gameNumber", filtering: false},
+          { title: "Id", field: "gameNumber", filtering: true},
           { title: "Small Blind", field: "smallBlind", filtering: false},
           { title: "Big Blind", field: "bigBlind", filtering: false},
           { title: "Status", field: "status", filtering: false},
-          { title: "Pot", field: "pot", filtering: true},
+          { title: "Pot", field: "pot", filtering: false},
           { title: "Date", field: "createdAt", filtering: true},
           { title: 'Action', field: 'action', filtering: false}
         ]}
