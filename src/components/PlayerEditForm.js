@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
   input: {
     color: '#000000',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFFFF'
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
@@ -81,6 +81,7 @@ function PlayerEditForm (props) {
             name="username"
             autoFocus
             label="Username"
+            size='small'
             inputRef={
               register({
                 required: {value: true, message:'Require field'}
@@ -97,6 +98,7 @@ function PlayerEditForm (props) {
             name="firstname"
             autoFocus
             label="First Name"
+            size='small'
             inputRef={
               register({
                 required: {value: true, message:'Require field'}
@@ -113,6 +115,7 @@ function PlayerEditForm (props) {
             name="lastname"
             autoFocus
             label="Last Name"
+            size='small'
             inputRef={
               register({
                 required: {value: true, message:'Require field'}
@@ -132,6 +135,7 @@ function PlayerEditForm (props) {
             type="email"
             id="email"
             label="Email"
+            size='small'
             inputRef={
               register({
                 required: {value: true, message:'Require field'}

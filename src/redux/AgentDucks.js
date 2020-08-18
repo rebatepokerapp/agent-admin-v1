@@ -10,6 +10,7 @@ const agentData = {
   subagents: [],
   figures: [],
   totalrake:0,
+  totalperday:[],
   error: null,
   token: null
 }
@@ -39,7 +40,7 @@ export default function agentReducer(state = agentData, action){
     case GET_AGENT_SUBS_SUCCESS:
       return{...state, subagents: action.payload, error: null}
     case GET_AGENT_FIGURES_SUCCESS:
-      return{...state, figures: action.payload.data, totalrake:action.payload.totalrake, error: null}
+      return{...state, figures: action.payload.data, totalrake:action.payload.totalrake, totalperday: action.payload.totalperday, error: null}
     case AGENT_LOGIN_ERROR:
       return{...state, error: action.payload}
     case AGENT_LOGOUT_ERROR:
@@ -145,7 +146,8 @@ export const getFiguresByAgent = () => async  (dispatch, getState) => {
       type: GET_AGENT_FIGURES_SUCCESS,
       payload: {
         data: res.data.data,
-        totalrake: res.data.totalRack
+        totalrake: res.data.totalRack,
+        totalperday: res.data.totalperday
       }
     })
   } catch (error) {

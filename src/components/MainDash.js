@@ -3,7 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import TotalRakeInfo from './TotalRakeInfo';
 import Figures from './Figures';
-import Chart from './Chart';
+import ChartFiguresPerWeek from './ChartFiguresPerWeek';
 import HistoricRakePerWeek from './HistoricRakePerWeek'
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
@@ -43,6 +43,7 @@ function MainDash() {
 
   const figuresList = useSelector(store => store.agent.figures);
   const totalRake = useSelector(store => store.agent.totalrake);
+  const totalperday = useSelector(store => store.agent.totalperday);
 
   return (
     <>
@@ -56,7 +57,7 @@ function MainDash() {
         {/* Chart */}
         <Grid item xs={12} md={8} lg={9}>
           <Paper className={fixedHeightPaper}>
-            <Chart />
+            <ChartFiguresPerWeek totalperday={totalperday}/>
           </Paper>
         </Grid>
         {/* Recent Orders */}

@@ -89,22 +89,26 @@ function PlayerEditForm (props) {
             name="chips"
             autoFocus
             label="Chips"
+            size='small'
             inputRef={
               register({
                 required: {value: true, message:'Require field'}
               })
             }
           />
-          <TextareaAutosize 
-            rowsMax={6}
+          <TextField 
+            className={classes.input}
+            variant="filled"
             margin="normal"
+            required
+            fullWidth
             id="note"
             name="note"
             autoFocus
-            minWidth="300"
-            minHeight="600"
-            placeholder="Note"
-            aria-label="maximum height"
+            label="Note"
+            size='small'
+            multiline
+            rows='4'
             inputRef={
               register({
                 required: {value: true, message:'Require field'}
@@ -121,14 +125,7 @@ function PlayerEditForm (props) {
               className={classes.submitopt}
             >
               Add
-            </Button>
-            <Button
-              type="submit"            
-              variant="contained"
-              className={classes.submitopt}
-            >
-              Deduct
-            </Button>
+            </Button>            
           </div>
           
         </form>

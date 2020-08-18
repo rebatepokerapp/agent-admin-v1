@@ -8,17 +8,48 @@ function createData(time, amount) {
   return { time, amount };
 }
 
-const data = [
-  createData('Monday', 0),
-  createData('Tuesday', 300),
-  createData('Wednesday', 600),
-  createData('Thursday', 800),
-  createData('Friday', 1500),
-  createData('Saturday', 2000),
-  createData('Sunday', 2400)
-];
+export default function ChartFiguresPerWeek({ totalperday }) {
 
-export default function Chart() {
+  let day1=0;
+  let day2=0;
+  let day3=0;
+  let day4=0;
+  let day5=0;
+  let day6=0;
+  let day7=0;
+
+  if(totalperday){
+    totalperday.map((row) => {
+      if(row._id.day === 1){
+        day1=row.total;
+      } else if(row._id.day === 2){
+        day2=row.total;
+      } else if(row._id.day === 3){
+        day3=row.total;
+      } else if(row._id.day === 4){
+        day4=row.total;
+      } else if(row._id.day === 5){
+        day5=row.total;
+      } else if(row._id.day === 6){
+        day6=row.total;
+      } else if(row._id.day === 7){
+        day7=row.total;
+      }
+    })
+  }
+  
+  console.log('TOTAL POR DIA',totalperday);
+
+  const data = [
+    createData('Monday', day1),
+    createData('Tuesday', day2),
+    createData('Wednesday', day3),
+    createData('Thursday', day4),
+    createData('Friday', day5),
+    createData('Saturday', day6),
+    createData('Sunday', day7)
+  ];
+
   const theme = useTheme();
 
   return (
