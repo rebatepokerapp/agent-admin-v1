@@ -17,8 +17,8 @@ const Copyright = () => {
   return (
     <Typography variant="body2" className={classes.copyright} align="center">
       {'Copyright © '}
-      <Link className={classes.link} href="http://www.rebatepokerclub.com/">
-        RebatePokerClub.com
+      <Link className={classes.link} href="http://rebate.poker/">
+        Rebate.Poker
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}

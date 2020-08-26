@@ -64,8 +64,11 @@ export const getPlayerGameHistory = () => async  (dispatch, getState) => {
       search: ''
     }
     const id = getState().player.player;
+    const agent = JSON.stringify(getState().agent.agent);
+    const token = getState().agent.agent.jwt_token;
+    const AuthStr = 'Bearer '.concat(token);
     console.log('PLAYER ID', id)
-    const res = await axios.get(`${API_AGENT_URL}/player/gameHistory/${id}?start=${query.start}&length=${query.length}&search=${query.search}`);
+    const res = await axios.get(`${API_AGENT_URL}/player/gameHistory/${id}?start=${query.start}&length=${query.length}&search=${query.search}`,{ headers: { 'Origin': '', 'Host': 'http://agent.rebate.poker', Authorization: AuthStr, agent: agent }});
     console.log('DATA', res.data)
     dispatch({
       type: PLAYER_GAME_HISTORY_SUCCESS,
@@ -87,7 +90,10 @@ export const getPlayerTransCashHistory = () => async  (dispatch, getState) => {
       search: ''
     }
     const id = getState().player.player;
-    const res = await axios.get(`${API_AGENT_URL}/player/cashTransHistory/${id}?start=${query.start}&length=${query.length}&search=${query.search}`);
+    const agent = JSON.stringify(getState().agent.agent);
+    const token = getState().agent.agent.jwt_token;
+    const AuthStr = 'Bearer '.concat(token);
+    const res = await axios.get(`${API_AGENT_URL}/player/cashTransHistory/${id}?start=${query.start}&length=${query.length}&search=${query.search}`,{ headers: { 'Origin': '', 'Host': 'http://agent.rebate.poker', Authorization: AuthStr, agent: agent }});
     dispatch({
       type: PLAYER_TRANSACTION_HISTORY_SUCCESS,
       payload: res.data.data
@@ -108,7 +114,11 @@ export const getPlayerIpLoginHistory = () => async  (dispatch, getState) => {
       search: ''
     }
     const id = getState().player.player;
-    const res = await axios.get(`${API_AGENT_URL}/player/iploginhistory/${id}?start=${query.start}&length=${query.length}&search=${query.search}`);
+    const agent = JSON.stringify(getState().agent.agent);
+    const token = getState().agent.agent.jwt_token;
+    const AuthStr = 'Bearer '.concat(token);
+    const res = await axios.get(`${API_AGENT_URL}/player/iploginhistory/${id}?start=${query.start}&length=${query.length}&search=${query.search}`,{ headers: { 'Origin': '', 'Host': 'http://agent.rebate.poker', Authorization: AuthStr, agent: agent }});
+    console.log(res.data.data);
     dispatch({
       type: PLAYER_IP_HISTORY_SUCCESS,
       payload: res.data.data
