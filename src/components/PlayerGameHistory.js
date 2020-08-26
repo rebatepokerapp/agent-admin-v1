@@ -64,6 +64,8 @@ const PlayerGameHistory = () => {
   }, [dispatch])
 
   const gamehistorylist = useSelector(store => store.player.gamehistory);
+
+  console.log('GAME HISTORY', gamehistorylist);
   
   return gamehistorylist ? (
 
@@ -93,14 +95,10 @@ const PlayerGameHistory = () => {
           { title: 'Action', field: 'action', filtering: false}
         ]}
         data={gamehistorylist}
-        detailPanel={rowData => {
+        detailPanel={ (rowData, index) => {
           return (
             <Fragment>
-              {rowData.players.map( (row, index) => {
-                return(
-                <PlayerGameHistoryDetail gameHistoryDetail={row}/>
-                )
-              })}              
+                <PlayerGameHistoryDetail gameHistoryDetail={rowData} key={index}/>         
             </Fragment>
           )
         }}

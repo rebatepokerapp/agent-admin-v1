@@ -54,7 +54,7 @@ export default function ChartFiguresPerWeek({ totalperday }) {
 
   return (
     <React.Fragment>
-      <Title>Today</Title>
+      <Title>Rake Figures</Title>
       <ResponsiveContainer>
         <LineChart
           data={data}

@@ -15,18 +15,11 @@ export default function Deposits({ totalRake }) {
   const classes = useStyles();
   return (
     <React.Fragment>
-      <Title>Todays profit</Title>
-      <Typography component="p" variant="h4">
-        ${totalRake}
-      </Typography>
-      <Typography color="textSecondary" className={classes.depositContext}>
-        {moment().format("dddd, MMMM Do YYYY, hh:mm a")}
-      </Typography>
-      <div>
-        <Link href="/app/rakefigures" style={{color:'#009900'}}>
-          More figures
-        </Link>
-      </div>
+      <Title>{`Today's Rake: ${totalRake}`}</Title>
+      <Title>Today's Players: 12</Title>
+      <Title>Today's Tables: 122</Title>  
+      <Title>Online Players: 25</Title>
+      <Title>Online Tables: 18</Title>    
     </React.Fragment>
   );
 }
