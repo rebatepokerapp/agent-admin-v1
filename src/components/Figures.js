@@ -54,25 +54,25 @@ export default function Figures({ figuresList }) {
                 saturday=0;
                 sunday=0;
                 switch(day.day) {
-                  case 1:
+                  case 2:
                     monday=day.total;
                     break;
-                  case 2:
+                  case 3:
                     tuesday=day.total;
                     break;
-                  case 3:
+                  case 4:
                     wednesday=day.total;
                     break;
-                  case 4:
+                  case 5:
                     thursday=day.total;
                     break;
-                  case 5:
+                  case 6:
                     friday=day.total;
                     break;
-                  case 6:
+                  case 7:
                     saturday=day.total;
                     break;
-                  case 7:
+                  case 1:
                     sunday=day.total;
                     break;
                   default:
