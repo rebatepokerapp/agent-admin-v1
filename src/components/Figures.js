@@ -23,6 +23,7 @@ export default function Figures({ figuresList }) {
   let saturday = 0;
   let sunday = 0;
   let total = 0;  
+  let granTotal = 0;
 
   const backToCero = () => {
     total = 0;
@@ -54,6 +55,7 @@ export default function Figures({ figuresList }) {
 
               {row.days.map( day => {
                 total += day.total;
+                granTotal += day.total;
                 monday=0;
                 tuesday=0;
                 wednesday=0;
@@ -100,6 +102,15 @@ export default function Figures({ figuresList }) {
             </TableRow>
             
           ))}
+            <TableCell align="right">Gand Total</TableCell>
+            <TableCell align="right"></TableCell>
+            <TableCell align="right"></TableCell>
+            <TableCell align="right"></TableCell>
+            <TableCell align="right"></TableCell>
+            <TableCell align="right"></TableCell>
+            <TableCell align="right"></TableCell>
+            <TableCell align="right"></TableCell>
+            <TableCell align="right">{granTotal}</TableCell>
         </TableBody>
       </Table>
       <div className={classes.seeMore}></div>
