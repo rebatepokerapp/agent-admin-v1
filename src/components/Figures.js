@@ -102,7 +102,7 @@ export default function Figures({ figuresList }) {
             </TableRow>
             
           ))}
-            <TableCell align="right">Gand Total</TableCell>
+            <TableCell align="right">Total</TableCell>
             <TableCell align="right"></TableCell>
             <TableCell align="right"></TableCell>
             <TableCell align="right"></TableCell>
