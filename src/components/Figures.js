@@ -21,7 +21,12 @@ export default function Figures({ figuresList }) {
   let thursday = 0;
   let friday = 0;
   let saturday = 0;
-  let sunday = 0;  
+  let sunday = 0;
+  let total = 0;  
+
+  const backToCero = () => {
+    total = 0;
+  }
   
   const classes = useStyles();
   return figuresList ? (
@@ -38,14 +43,17 @@ export default function Figures({ figuresList }) {
             <TableCell align="right">Friday</TableCell>
             <TableCell align="right">Saturday</TableCell>
             <TableCell align="right">Sunday</TableCell>
+            <TableCell align="right">Total</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {figuresList.map((row, index) => (
+
             <TableRow key={index}>
               <TableCell>{row._id}</TableCell>
 
               {row.days.map( day => {
+                total += day.total;
                 monday=0;
                 tuesday=0;
                 wednesday=0;
@@ -87,7 +95,10 @@ export default function Figures({ figuresList }) {
               <TableCell align="right">{friday}</TableCell>
               <TableCell align="right">{saturday}</TableCell>
               <TableCell align="right">{sunday}</TableCell>
+              <TableCell align="right">{total}</TableCell> 
+              {backToCero()}             
             </TableRow>
+            
           ))}
         </TableBody>
       </Table>
