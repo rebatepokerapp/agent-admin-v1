@@ -20,19 +20,19 @@ export default function ChartFiguresPerWeek({ totalperday }) {
 
   if(totalperday){
     totalperday.map((row) => {
-      if(row._id.day === 1){
+      if(row._id.day === 2){
         day1=row.total;
-      } else if(row._id.day === 2){
-        day2=row.total;
       } else if(row._id.day === 3){
-        day3=row.total;
+        day2=row.total;
       } else if(row._id.day === 4){
-        day4=row.total;
+        day3=row.total;
       } else if(row._id.day === 5){
-        day5=row.total;
+        day4=row.total;
       } else if(row._id.day === 6){
-        day6=row.total;
+        day5=row.total;
       } else if(row._id.day === 7){
+        day6=row.total;
+      } else if(row._id.day === 1){
         day7=row.total;
       }
     })

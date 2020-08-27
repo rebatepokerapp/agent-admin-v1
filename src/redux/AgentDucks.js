@@ -101,7 +101,7 @@ export const getPlayersByAgent = () => async  (dispatch, getState) => {
     const agent = JSON.stringify(getState().agent.agent);
     const token = getState().agent.agent.jwt_token;
     const AuthStr = 'Bearer '.concat(token);
-    const res = await axios.get(`${API_AGENT_URL}/playerbyagent/${id}`,{ headers: { 'Origin': '', 'Host': 'http://agent.rebate.poker', Authorization: AuthStr, agent: agent }});
+    const res = await axios.get(`${API_AGENT_URL}/playerbyagent/${id}`,{ headers: { Authorization: AuthStr, agent: agent }});
     dispatch({
       type: GET_AGENT_PLAYERS_SUCCESS,
       payload: res.data
@@ -125,7 +125,7 @@ export const getSubsByAgent = () => async  (dispatch, getState) => {
     const agent = JSON.stringify(getState().agent.agent);
     const token = getState().agent.agent.jwt_token;
     const AuthStr = 'Bearer '.concat(token);
-    const res = await axios.get(`${API_AGENT_URL}/subsbyagent/${id}?start=${query.start}&length=${query.length}&search=${query.search}`,{ headers: { 'Origin': '', 'Host': 'http://agent.rebate.poker', Authorization: AuthStr, agent: agent }});
+    const res = await axios.get(`${API_AGENT_URL}/subsbyagent/${id}?start=${query.start}&length=${query.length}&search=${query.search}`,{ headers: { Authorization: AuthStr, agent: agent }});
     dispatch({
       type: GET_AGENT_SUBS_SUCCESS,
       payload: res.data
@@ -150,7 +150,7 @@ export const getFiguresByAgent = () => async  (dispatch, getState) => {
     const agent = JSON.stringify(getState().agent.agent);
     const token = getState().agent.agent.jwt_token;
     const AuthStr = 'Bearer '.concat(token);
-    const res = await axios.get(`${API_AGENT_URL}/figuresbyagent/${id}?start_date=${query.start_date}&end_date=${query.end_date}&is_datefilter=${query.is_datefilter}`,{ headers: { 'Origin': '', 'Host': 'http://agent.rebate.poker', Authorization: AuthStr, agent: agent }});
+    const res = await axios.get(`${API_AGENT_URL}/figuresbyagent/${id}?start_date=${query.start_date}&end_date=${query.end_date}&is_datefilter=${query.is_datefilter}`,{ headers: { Authorization: AuthStr, agent: agent }});
 
     dispatch({
       type: GET_AGENT_FIGURES_SUCCESS,
