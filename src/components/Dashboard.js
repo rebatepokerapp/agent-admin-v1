@@ -157,9 +157,9 @@ export default function Dashboard() {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Agent Lobby
+            {`${agent.agent.name.toUpperCase()} - Balance: $${agent.agent.rake_chips}`}
           </Typography>
-          <AgentMenu agent={agent} />
+          <AgentMenu agent={agent.agent} />
         </Toolbar>
       </AppBar>
       <Drawer

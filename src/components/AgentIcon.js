@@ -13,7 +13,7 @@ import { withStyles } from '@material-ui/core/styles';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { signOut } from "../redux/AgentDucks";
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
     topIcon: {
@@ -76,7 +76,7 @@ const StyledMenuItem = withStyles((theme) => ({
   },
 }))(MenuItem);
 
-export default function AgentMenu(props) {
+export default function AgentMenu({agent}) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -101,10 +101,8 @@ export default function AgentMenu(props) {
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleClose}
+        disableAutoFocusItem="true"
       >
-        <center><span className={classes.menuheader}>Agent:</span>&nbsp;<span className={classes.menuheaderbold}>{props.agent.username}</span></center>
-        <StyledMenuItem disabled>&nbsp;</StyledMenuItem>
-        <Divider />
         <StyledMenuItem>
           <ListItemIcon>
             <MessageIcon className={classes.menuIcon}/>
@@ -123,7 +121,6 @@ export default function AgentMenu(props) {
           </ListItemIcon>
           <ListItemText primary="Settings" />
         </StyledMenuItem>
-        <StyledMenuItem disabled>&nbsp;</StyledMenuItem>
         <Divider />
         <StyledMenuItem>
           <ListItemIcon>
