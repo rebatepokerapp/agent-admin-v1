@@ -95,3 +95,8 @@ db.allUsersTransactionHistory.aggregate(
     
       next();
     });
+
+    db.agent.findOne({}).select('accessCode').sort({'accessCode' : -1}).limit(1).exec(function(err, doc){let max_code = doc[0].accessCode + 1;})
+    db.agent.findOne().where({accessCode: 1}).sort('-LAST_MOD').exec(function(err, doc){var max = doc.LAST_MOD + 1;})
+    db.agent.aggregate([{ "$group": {"_id": null,"max": { "$max": "$accessCode" }}}])
+    

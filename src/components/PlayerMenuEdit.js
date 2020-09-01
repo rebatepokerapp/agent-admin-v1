@@ -2,6 +2,7 @@ import React, { Fragment, useState } from 'react'
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import EditIcon from '@material-ui/icons/Edit';
+import PersonIcon from '@material-ui/icons/Person';
 import HistoryIcon from '@material-ui/icons/History';
 import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
 import GpsFixedIcon from '@material-ui/icons/GpsFixed';
@@ -88,7 +89,10 @@ const PlayerMenuEdit = ({ id, player }) => {
     } else if(from === 'IP') {
       urlred = `/app/playeriphistory/${id}&${player}`
       window.location.href=urlred;
-    }        
+    } else if(from === 'PP') {
+      urlred = `/app/playerprofile/${id}&${player}`
+      window.location.href=urlred;
+    }       
   };  
 
   return (
@@ -117,6 +121,12 @@ const PlayerMenuEdit = ({ id, player }) => {
             <EditIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText primary="Edit Player"/>
+        </StyledMenuItem>
+        <StyledMenuItem onClick={() => handleClose('PP',id,player)}>
+          <ListItemIcon>
+            <PersonIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primary="Player Profile"/>
         </StyledMenuItem>
         <StyledMenuItem onClick={() => handleClose('GH',id,player)}>
           <ListItemIcon>

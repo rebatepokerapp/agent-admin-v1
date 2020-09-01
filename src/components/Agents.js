@@ -1,5 +1,16 @@
 import React, { useEffect } from 'react'
 import MaterialTable from "material-table";
+import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import EditIcon from '@material-ui/icons/Edit';
+import HistoryIcon from '@material-ui/icons/History';
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import NotesIcon from '@material-ui/icons/Notes';
 import { forwardRef } from 'react';
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
@@ -16,19 +27,6 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import EditIcon from '@material-ui/icons/Edit';
-import HistoryIcon from '@material-ui/icons/History';
-import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
-import GpsFixedIcon from '@material-ui/icons/GpsFixed';
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import Divider from '@material-ui/core/Divider';
-import { withStyles } from '@material-ui/core/styles';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {getSubsByAgent} from '../redux/AgentDucks';
@@ -49,38 +47,6 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 'large',
   },
 }));
-
-const StyledMenu = withStyles({
-  paper: {
-    border: '1px solid #d3d4d5',
-  },
-  })((props) => (
-  <Menu
-    elevation={0}
-    getContentAnchorEl={null}
-    anchorOrigin={{
-      vertical: 'top',
-      horizontal: 'left',
-    }}
-    transformOrigin={{
-      vertical: 'top',
-      horizontal: 'left',
-    }}
-    {...props}
-  />
-));
-
-const StyledMenuItem = withStyles((theme) => ({
-  root: {
-    '&:focus': {
-      backgroundColor: '#669933',
-      '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
-        color: '#FFFFFF',
-      },
-    },
-  },
-}))(MenuItem);
-
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -147,11 +113,10 @@ function Agents() {
           search: true,
           exportButton: true,
           paging: false,
-          filtering: true,
-
+          filtering: true,        
         }}
         columns={[
-          { title: "Office ID", field: "officeId", filtering: false},
+          { title: "Access Code", field: "accessCode", filtering: false},
           { title: "Username", field: "username", filtering: false},
           { title: "Email", field: "email", filtering: false},
           { title: "Rake %", field: "commission", filtering: false},
@@ -170,41 +135,50 @@ function Agents() {
                 >
                   <ArrowForwardIosIcon />
               </Button>
-              <StyledMenu
+              <Menu
                 id="customized-menu"
                 anchorEl={anchorEl}
                 keepMounted
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <center><span className={classes.menuheader} >Player:</span>&nbsp;<span className={classes.menuheaderbold} >{row.username}</span></center>
-                <StyledMenuItem disabled>&nbsp;</StyledMenuItem>
-                <Divider />
-                <StyledMenuItem>
+                <MenuItem>
                   <ListItemIcon>
                     <EditIcon fontSize="small" />
                   </ListItemIcon>
-                  <ListItemText primary="Edit Player" />
-                </StyledMenuItem>
-                <StyledMenuItem>
+                  <ListItemText primary="Edit Agent" />
+                </MenuItem>
+                <MenuItem>
                   <ListItemIcon>
                     <HistoryIcon fontSize="small" />
                   </ListItemIcon>
-                  <ListItemText primary="Game History" />
-                </StyledMenuItem>
-                <StyledMenuItem>
+                  <ListItemText primary="Rake History" />
+                </MenuItem>
+                <MenuItem>
                   <ListItemIcon>
-                    <SwapHorizIcon fontSize="small" />
+                    <HistoryIcon fontSize="small" />
                   </ListItemIcon>
-                  <ListItemText primary="Transaction History" />
-                </StyledMenuItem>
-                <StyledMenuItem>
+                  <ListItemText primary="Cash History" />
+                </MenuItem>
+                <MenuItem>
                   <ListItemIcon>
-                    <GpsFixedIcon fontSize="small" />
+                    <AttachMoneyIcon fontSize="small" />
                   </ListItemIcon>
-                  <ListItemText primary="IP List" />
-                </StyledMenuItem>
-              </StyledMenu>
+                  <ListItemText primary="Transfer Chips" />
+                </MenuItem>
+                <MenuItem>
+                  <ListItemIcon>
+                    <AttachMoneyIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText primary="Request Cash" />
+                </MenuItem>
+                <MenuItem>
+                  <ListItemIcon>
+                    <NotesIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText primary="Edit Chips Notes" />
+                </MenuItem>
+              </Menu>
               </div>
             ),
           },

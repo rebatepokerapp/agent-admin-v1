@@ -19,6 +19,7 @@ import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import {useDispatch, useSelector} from 'react-redux';
 import { setPlayerInfo, getPlayerIpLoginHistory } from '../redux/PlayerDucks';
+import moment from 'moment';
 
 
 const tableIcons = {
@@ -86,7 +87,7 @@ const PlayerIpLoginHistory = () => {
           { title: "IP", field: "ip", filtering: false},
           { title: "Client", field: "client", filtering: false},
           { title: "Action", field: "flag", filtering: false},
-          { title: "Date", field: "date", filtering: false}
+          { title: "Date", field: "date", filtering: false, render: rowData => moment(rowData.date).format("YYYY/MM/DD hh:mm")}
         ]}
         data={ipplayerloginhistorylist}        
       />

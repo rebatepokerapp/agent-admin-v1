@@ -20,6 +20,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import { setPlayerInfo, getPlayerGameHistory } from '../redux/PlayerDucks';
 import { useParams } from 'react-router-dom';
 import PlayerGameHistoryDetail from './PlayerGameHistoryDetail';
+import moment from 'moment';
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -91,7 +92,7 @@ const PlayerGameHistory = () => {
           { title: "Big Blind", field: "bigBlind", filtering: false},
           { title: "Status", field: "status", filtering: false},
           { title: "Pot", field: "pot", filtering: false},
-          { title: "Date", field: "createdAt", filtering: true},
+          { title: "Date", field: "createdAt", filtering: true, render: rowData => moment(rowData.createdAt).format("YYYY/MM/DD hh:mm")},
           { title: 'Action', field: 'action', filtering: false}
         ]}
         data={gamehistorylist}

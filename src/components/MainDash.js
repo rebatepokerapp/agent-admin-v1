@@ -4,7 +4,6 @@ import Paper from '@material-ui/core/Paper';
 import TotalRakeInfo from './TotalRakeInfo';
 import Figures from './Figures';
 import ChartFiguresPerWeek from './ChartFiguresPerWeek';
-import HistoricRakePerWeek from './HistoricRakePerWeek'
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import {useDispatch, useSelector} from 'react-redux';
@@ -26,8 +25,6 @@ const useStyles = makeStyles((theme) => ({
 function MainDash() {
 
   const classes = useStyles();
-
-  const agent = useSelector(store => store.agent);
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);  
 

@@ -19,7 +19,7 @@ export default function ChartFiguresPerWeek({ totalperday }) {
   let day7=0;
 
   if(totalperday){
-    totalperday.map((row) => {
+    totalperday.forEach( row => {
       if(row._id.day === 2){
         day1=row.total;
       } else if(row._id.day === 3){
@@ -35,7 +35,7 @@ export default function ChartFiguresPerWeek({ totalperday }) {
       } else if(row._id.day === 1){
         day7=row.total;
       }
-    })
+    });
   }
   
   console.log('TOTAL POR DIA',totalperday);

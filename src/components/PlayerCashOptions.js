@@ -2,7 +2,6 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -29,8 +28,26 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
   },
   input: {
-    color: '#000000',
-    backgroundColor: '#FFFFFF',
+    display: 'block',
+    boxSizing: 'border-box',
+    width: '100%',
+    borderRadius: '4px',
+    border: '1px solid white',
+    padding: '10px 15px',
+    marginBottom: '10px',
+    fontSize: '14px',
+    backgroundColor: 'white'
+  },
+  inputtextarea: {
+    display: 'block',
+    boxSizing: 'border-box',
+    width: '100%',
+    borderRadius: '1px',
+    border: '1px solid white',
+    padding: '2px 2px',
+    marginBottom: '10px',
+    fontSize: '14px',
+    backgroundColor: 'white'
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
@@ -54,7 +71,6 @@ function PlayerEditForm (props) {
 
   const dispatch = useDispatch();
 
-  const isAuthenticated = useSelector(store => store.agent.isAuthenticated);
   const error = useSelector(store => store.agent.error);
 
   const onSubmit = (data, e) => {
@@ -79,25 +95,9 @@ function PlayerEditForm (props) {
         </Typography>
          
         <form className={classes.form} noValidate onSubmit={handleSubmit(onSubmit)}>
+          <input name="chips" className={classes.input} ref={register} placeholder='Chips'/>
           <TextField 
-            className={classes.input}
-            variant="filled"
-            margin="normal"
-            required
-            fullWidth
-            id="chips"
-            name="chips"
-            autoFocus
-            label="Chips"
-            size='small'
-            inputRef={
-              register({
-                required: {value: true, message:'Require field'}
-              })
-            }
-          />
-          <TextField 
-            className={classes.input}
+            className={classes.inputtextarea}
             variant="filled"
             margin="normal"
             required

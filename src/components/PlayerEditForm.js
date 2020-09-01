@@ -1,17 +1,17 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { withRouter } from 'react-router-dom';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
-import { signIn } from "../redux/AgentDucks";
+import ReactSelect from "react-select";
+import {editPlayerData} from '../redux/PlayerDucks';
 import {useDispatch, useSelector} from 'react-redux'
 
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -28,9 +28,20 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
   },
   input: {
-    color: '#000000',
-    backgroundColor: '#FFFFFF'
+    display: 'block',
+    boxSizing: 'border-box',
+    width: '100%',
+    borderRadius: '4px',
+    border: '1px solid white',
+    padding: '10px 15px',
+    marginBottom: '10px',
+    fontSize: '14px'
   },
+
+  inputcmb: {
+    marginTop: '10px'
+  },
+
   submit: {
     margin: theme.spacing(3, 0, 2),
     color: '#000000',
@@ -39,26 +50,52 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const genderOptions = [
+  {value:"male", label:"Male"},
+  {value:"female", label:"Female"}
+]
+
+const statusOptions = [
+  {value:"active", label:"Active"},
+  {value:"block", label:"Block"}
+]
+
 function PlayerEditForm (props) {
+
+  let {player} = props;
   const classes = useStyles();
 
-  const {register, errors, handleSubmit} =  useForm();
+  let showAlert = false;
 
   const dispatch = useDispatch();
 
-  const isAuthenticated = useSelector(store => store.agent.isAuthenticated);
-  const error = useSelector(store => store.agent.error);
+  const {register, errors, handleSubmit, control} =  useForm();  
+
+  const error = useSelector(store => store.player.error);
+  const messageupdate = useSelector(store => store.player.messageupdate);
+
+  if(error || messageupdate){
+    showAlert = true;
+  }else{
+    showAlert = false;
+  }
 
   const onSubmit = (data, e) => {
-    e.preventDefault();
-    dispatch(signIn(data));
-    e.target.reset();
+    e.preventDefault();    
+    dispatch(editPlayerData(data)).then(() => {
+      document.getElementById('alertmes').style.display='';
+    });
+    player.name = data.name;
+    player.lastname = data.lastname; 
+    setTimeout(() => {
+      document.getElementById('alertmes').style.display='none';
+    },3000);   
   }
 
   const showError = () => (
-    <Alert severity="warning" style={{display: error ? '': 'none'}}>
-      <AlertTitle>Warning</AlertTitle>
-        {error} — <strong>check it out!</strong>
+    <Alert severity={error ? 'warning' : 'success'} style={{display: (error || messageupdate) ? '': 'none'}} id="alertmes">
+      <AlertTitle>{error ? 'Warning' : 'Success'}</AlertTitle>
+        {error ? error : messageupdate}<strong>{error ? ' — Check it out!' : ''}</strong>        
     </Alert>
   )
 
@@ -71,80 +108,43 @@ function PlayerEditForm (props) {
         </Typography>
          
         <form className={classes.form} noValidate onSubmit={handleSubmit(onSubmit)}>
-          <TextField 
-            className={classes.input}
-            variant="filled"
-            margin="normal"
-            required
-            fullWidth
-            id="username"
-            name="username"
-            autoFocus
-            label="Username"
-            size='small'
-            inputRef={
-              register({
-                required: {value: true, message:'Require field'}
-              })
-            }
+          <input name="username" className={classes.input} ref={register} placeholder='Username' defaultValue={player.username} readOnly/>
+          <input name="firstname" className={classes.input} ref={register} placeholder='Firstname'defaultValue={player.firstname}/>
+          <input name="lastname" className={classes.input} ref={register} placeholder='Lastname'defaultValue={player.lastname}/>
+          <input name="email" className={classes.input} ref={register} placeholder='Email'defaultValue={player.email} readOnly/>          
+          <Controller
+            as={ReactSelect}
+            options={genderOptions}
+            name="gender"
+            isClearable
+            control={control}
+            placeholder='Gender'
+            defaultValue={() => {
+              if(player.gender === 'male'){
+                return {value: 'male', label: 'Male'};
+              }else if(player.gender === 'female'){
+                return {value: 'female', label: 'female'};
+              }else{
+                return null;
+              }
+            }}
           />
-          <TextField 
-            className={classes.input}
-            variant="filled"
-            margin="normal"
-            required
-            fullWidth
-            id="firstname"
-            name="firstname"
-            autoFocus
-            label="First Name"
-            size='small'
-            inputRef={
-              register({
-                required: {value: true, message:'Require field'}
-              })
-            }
+          <Controller
+            className={classes.inputcmb}
+            as={ReactSelect}
+            options={statusOptions}
+            name="status"
+            isClearable
+            control={control}
+            placeholder='Status'
+            defaultValue={() => {
+              if(player.status === 'active'){
+                return {value: 'active', label: 'Active'};
+              }else{
+                return {value: 'block', label: 'Block'}
+              }
+            }}
           />
-          <TextField 
-            className={classes.input}
-            variant="filled"
-            margin="normal"
-            required
-            fullWidth
-            id="lastname"
-            name="lastname"
-            autoFocus
-            label="Last Name"
-            size='small'
-            inputRef={
-              register({
-                required: {value: true, message:'Require field'}
-              })
-            }
-          />
-          <span className="text-danger text-small d-block mb-2">
-            {errors?.username?.message}
-          </span>
-          <TextField
-            className={classes.input}
-            variant="filled"
-            margin="normal"
-            required
-            fullWidth
-            name="email"
-            type="email"
-            id="email"
-            label="Email"
-            size='small'
-            inputRef={
-              register({
-                required: {value: true, message:'Require field'}
-              })
-            }
-          />
-          <span className="text-danger text-small d-block mb-2">
-            {errors?.password?.message}
-          </span>
           <Button
             type="submit"
             fullWidth

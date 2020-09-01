@@ -9,11 +9,10 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Divider from '@material-ui/core/Divider';
-import { withStyles } from '@material-ui/core/styles';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { signOut } from "../redux/AgentDucks";
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
     topIcon: {
@@ -45,37 +44,6 @@ const useStyles = makeStyles((theme) => ({
     }, 
 }));
 
-const StyledMenu = withStyles({
-  paper: {
-    border: '1px solid #d3d4d5',
-  },
-  })((props) => (
-  <Menu
-    elevation={0}
-    getContentAnchorEl={null}
-    anchorOrigin={{
-      vertical: 'bottom',
-      horizontal: 'left',
-    }}
-    transformOrigin={{
-      vertical: 'top',
-      horizontal: 'left',
-    }}
-    {...props}
-  />
-));
-
-const StyledMenuItem = withStyles((theme) => ({
-  root: {
-    '&:focus': {
-      backgroundColor: '#669933',
-      '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
-        color: '#FFFFFF',
-      },
-    },
-  },
-}))(MenuItem);
-
 export default function AgentMenu({agent}) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -95,40 +63,39 @@ export default function AgentMenu({agent}) {
       <IconButton className={classes.topIcon} aria-controls="customized-menu" aria-haspopup="true" onClick={handleClick}>
           <PersonIcon />
       </IconButton>
-      <StyledMenu
+      <Menu
         id="customized-menu"
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleClose}
-        disableAutoFocusItem="true"
       >
-        <StyledMenuItem>
+        <MenuItem>
           <ListItemIcon>
             <MessageIcon className={classes.menuIcon}/>
           </ListItemIcon>
           <ListItemText primary="Messages" />
-        </StyledMenuItem>
-        <StyledMenuItem>
+        </MenuItem>
+        <MenuItem>
           <ListItemIcon>
           <LocalAtmIcon className={classes.menuIcon}/>
           </ListItemIcon>
           <ListItemText primary="Payments" />
-        </StyledMenuItem>
-        <StyledMenuItem>
+        </MenuItem>
+        <MenuItem>
           <ListItemIcon>
             <SettingsIcon className={classes.menuIcon}/>
           </ListItemIcon>
           <ListItemText primary="Settings" />
-        </StyledMenuItem>
+        </MenuItem>
         <Divider />
-        <StyledMenuItem>
+        <MenuItem>
           <ListItemIcon>
             <ExitToAppIcon className={classes.menuIcon}/>
           </ListItemIcon>
           <ListItemText onClick={() => dispatch(signOut())} primary="Logout" />
-        </StyledMenuItem>
-      </StyledMenu>
+        </MenuItem>
+      </Menu>
     </div>
   );
 }

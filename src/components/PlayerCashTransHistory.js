@@ -19,6 +19,7 @@ import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import {useDispatch, useSelector} from 'react-redux';
 import { setPlayerInfo, getPlayerTransCashHistory } from '../redux/PlayerDucks';
+import moment from 'moment';
 
 
 const tableIcons = {
@@ -63,6 +64,8 @@ const PlayerCashTransHistory = () => {
   }, [dispatch])
 
   const transcashhistorylist = useSelector(store => store.player.transactions);
+
+  console.log('CASH TRANS', transcashhistorylist);
   
   
   return transcashhistorylist ? (
@@ -85,11 +88,13 @@ const PlayerCashTransHistory = () => {
         title={`Player Cash Transaction History: ${username.toUpperCase()}`}
         columns={[
           { title: "Tx.Number", field: "transactionNumber", filtering: false},
-          { title: "Chips", field: "chips", filtering: false},
-          { title: "Before Balance", field: "beforeBalance", filtering: false},
+          { title: "Provider Email/ID", field: "providerEmail", filtering: false},
+          { title: "Before Balance", field: "previousBalance", filtering: false},
           { title: "After Balance", field: "afterBalance", filtering: false},
-          { title: "Status", field: "status", filtering: true},
-          { title: "Date", field: "createdAt", filtering: true},
+          { title: "In", field: "chips", filtering: false, render: rowData => rowData.category === 'credit' ? rowData.chips : '-', cellStyle: {color:'green'}},
+          { title: "Out", field: "chips", filtering: false, render: rowData => rowData.category === 'debit' ? rowData.chips : '-', cellStyle: {color:'red'}},
+          { title: "Status", field: "status", filtering: false},
+          { title: "Date", field: "createdAt", filtering: true, render: rowData => moment(rowData.createdAt).format("YYYY/MM/DD hh:mm")},
         ]}
         data={transcashhistorylist}        
       />

@@ -146,6 +146,9 @@ export const getFiguresByAgent = () => async  (dispatch, getState) => {
       is_datefilter:'1'
     }
 
+    console.log('INICIO',query.start_date);
+    console.log('FIN',query.end_date);
+
     const { id } = getState().agent.agent;
     const agent = JSON.stringify(getState().agent.agent);
     const token = getState().agent.agent.jwt_token;

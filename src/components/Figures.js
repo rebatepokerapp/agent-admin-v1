@@ -24,6 +24,7 @@ export default function Figures({ figuresList }) {
   let sunday = 0;
   let total = 0;  
   let granTotal = 0;
+  let actualIndex = -1;
 
   const backToCero = () => {
     total = 0;
@@ -53,16 +54,19 @@ export default function Figures({ figuresList }) {
             <TableRow key={index}>
               <TableCell>{row._id}</TableCell>
 
-              {row.days.map( day => {
+              {row.days.forEach( day => {
                 total += day.total;
                 granTotal += day.total;
-                monday=0;
-                tuesday=0;
-                wednesday=0;
-                thursday=0;
-                friday=0;
-                saturday=0;
-                sunday=0;
+                if(actualIndex !== index){
+                  monday=0;
+                  tuesday=0;
+                  wednesday=0;
+                  thursday=0;
+                  friday=0;
+                  saturday=0;
+                  sunday=0;
+                  actualIndex=index;
+                }                
                 switch(day.day) {
                   case 2:
                     monday=day.total;
@@ -102,15 +106,17 @@ export default function Figures({ figuresList }) {
             </TableRow>
             
           ))}
-            <TableCell align="right">Total</TableCell>
-            <TableCell align="right"></TableCell>
-            <TableCell align="right"></TableCell>
-            <TableCell align="right"></TableCell>
-            <TableCell align="right"></TableCell>
-            <TableCell align="right"></TableCell>
-            <TableCell align="right"></TableCell>
-            <TableCell align="right"></TableCell>
-            <TableCell align="right">{granTotal}</TableCell>
+            <TableRow>
+              <TableCell align="right">Total</TableCell>
+              <TableCell align="right"></TableCell>
+              <TableCell align="right"></TableCell>
+              <TableCell align="right"></TableCell>
+              <TableCell align="right"></TableCell>
+              <TableCell align="right"></TableCell>
+              <TableCell align="right"></TableCell>
+              <TableCell align="right"></TableCell>
+              <TableCell align="right">{granTotal}</TableCell>
+            </TableRow>
         </TableBody>
       </Table>
       <div className={classes.seeMore}></div>
