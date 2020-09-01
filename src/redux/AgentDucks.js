@@ -4,7 +4,10 @@ import moment from 'moment';
 
 //constantes o variables de estado del agente
 const agentData = {
+  id: null,
+  username: '',
   agent: null,
+  data: null,
   isAuthenticated: JSON.parse(localStorage.getItem('jwt')),
   players:[],
   subagents: [],
@@ -12,7 +15,8 @@ const agentData = {
   totalrake:0,
   totalperday:[],
   error: null,
-  token: null
+  token: null,
+  messageupdate: null
 }
 
 const AGENT_LOGIN_SUCCESS = 'AGENT_LOGIN_SUCCESS';
@@ -25,7 +29,13 @@ const GET_AGENT_SUBS_SUCCESS = 'GET_AGENT_SUBS_SUCCESS';
 const GET_AGENT_SUBS_ERROR = 'GET_AGENT_SUBS_ERROR';
 const GET_AGENT_FIGURES_SUCCESS = 'GET_AGENT_FIGURES_SUCCESS';
 const GET_AGENT_FIGURES_ERROR = 'GET_AGENT_FIGURES_ERROR';
-
+const SET_AGENT_INFO_SUCCESSS = 'SET_AGENT_INFO_SUCCESSS'
+const SET_AGENT_INFO_ERROR = 'SET_AGENT_INFO_ERROR'
+const GET_AGENT_INFO_SUCCESS = 'GET_AGENT_INFO_SUCCESS'
+const GET_AGENT_INFO_ERROR = 'GET_AGENT_INFO_ERROR'
+const UPDATE_AGENT_INFO_SUCCESS = 'UPDATE_AGENT_INFO_SUCCESS'
+const UPDATE_AGENT_INFO_ERROR = 'UPDATE_AGENT_INFO_ERROR'
+ 
 
 //Reducer
 //Establece el seteo de los estados de acuerdo a la accion enviada
@@ -51,9 +61,31 @@ export default function agentReducer(state = agentData, action){
       return{...state, error: action.payload}
     case GET_AGENT_FIGURES_ERROR:
       return{...state, error: action.payload}
+    case SET_AGENT_INFO_SUCCESSS:
+      return{...state, id: action.payload.id, username: action.payload.username, data: null, error: null, messageupdate: null}
+    case SET_AGENT_INFO_ERROR:
+      return{...state, error: action.payload, messageupdate: null}
+    case GET_AGENT_INFO_SUCCESS:
+      return{...state, data: action.payload, error: null, messageupdate: null}
+    case GET_AGENT_INFO_ERROR:
+      return{...state, error: action.payload, messageupdate: null}
+    case UPDATE_AGENT_INFO_SUCCESS:
+      return{...state, messageupdate: action.payload.message, data: action.payload.agent, error: null}
+    case UPDATE_AGENT_INFO_ERROR:
+      return{...state, error: action.payload, messageupdate: null}
     default:
       return state
   }
+}
+
+export const setAgentInfo = (id,agent) => async (dispatch, getState) => {
+  dispatch({
+    type: SET_AGENT_INFO_SUCCESSS,
+    payload: {
+      id: id,
+      username: agent
+    }
+  })
 }
 
 export const signIn = (user) => async  (dispatch, getState) => {
@@ -71,7 +103,6 @@ export const signIn = (user) => async  (dispatch, getState) => {
       }
     })    
   } catch (error) {
-    console.log('ERRORRRRRRRRRRR ',error);
     dispatch({      
       type: AGENT_LOGIN_ERROR,
       payload: 'Wrong username or password'
@@ -167,6 +198,61 @@ export const getFiguresByAgent = () => async  (dispatch, getState) => {
     dispatch({
       type: GET_AGENT_FIGURES_ERROR,
       payload: 'Error loading figures by agent'
+    })
+  }
+}
+
+export const getAgentData = () => async  (dispatch, getState) => {
+  try {
+    const id = getState().agent.id;    
+    const agent = JSON.stringify(getState().agent.agent);
+    const token = getState().agent.agent.jwt_token;
+    const AuthStr = 'Bearer '.concat(token);
+    const res = await axios.get(`${API_AGENT_URL}/agent/edit/${id}`,{ headers: { Authorization: AuthStr, agent: agent }});
+    let agenttemp = null;
+
+    if(res.data.agent){
+      agenttemp = {
+        _id: res.data.agent._id,
+        username: res.data.agent.username,
+        firstname: res.data.agent.firstname,
+        lastname: res.data.agent.lastname,
+        email: res.data.agent.email,
+        commission: res.data.agent.commission,
+        status: res.data.agent.status
+      }
+    }
+
+    dispatch({
+      type: GET_AGENT_INFO_SUCCESS,
+      payload: agenttemp
+    })
+  } catch (error) {
+    dispatch({
+      type: GET_AGENT_INFO_ERROR,
+      payload: 'Error getting agent data'
+    })
+  }
+}
+
+export const editAgentData = (data) => async  (dispatch, getState) => {
+  try {
+    const id = getState().agent.id;    
+    const agent = JSON.stringify(getState().agent.agent);
+    const token = getState().agent.agent.jwt_token;
+    const AuthStr = 'Bearer '.concat(token);
+    const res = await axios.post(`${API_AGENT_URL}/agent/edit/${id}`, data, { headers: { Authorization: AuthStr, agent: agent }});
+    dispatch({
+      type: UPDATE_AGENT_INFO_SUCCESS,
+      payload: {
+        player:res.data.agent,
+        message: 'Agent data updated'
+      }
+    })
+  } catch (error) {
+    dispatch({
+      type: UPDATE_AGENT_INFO_ERROR,
+      payload: 'Error updating agent data'
     })
   }
 }

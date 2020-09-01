@@ -29,6 +29,7 @@ import PlayerCashTransHistory from './PlayerCashTransHistory';
 import PlayerIpLoginHistory from './PlayerIpLoginHistory';
 import PlayerEditForm from './PlayerOptions';
 import PlayerProfileInfo from './PlayerProfileInfo';
+import EditAgent from './EditAgent';
 
 import {
   BrowserRouter as Router,
@@ -196,7 +197,8 @@ export default function Dashboard() {
               <Route path="/app/accounting"  component={Accounting} />
               <Route path="/app/settings" component={Settings} />
               <Route path="/app/playeroptions/:id" component={PlayerEditForm} />
-              <Route path="/app/playerprofile/:id" component={PlayerProfileInfo} />
+              <Route path="/app/playerprofile/:id" component={PlayerProfileInfo} />              
+              <Route path="/app/editagent/:id" component={EditAgent} />
             </Switch>
           </Router>
           <Box pt={4}>

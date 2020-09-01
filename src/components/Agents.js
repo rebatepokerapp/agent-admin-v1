@@ -90,8 +90,27 @@ function Agents() {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleClose = (from,id,agent) => {    
     setAnchorEl(null);
+    if(from === 'EA'){
+      var urlred = `/app/editagent/${id}&${agent}`
+      window.location.href=urlred;
+    } else if(from === 'RH') {
+      urlred = `/app/rakehistory/${id}&${agent}`
+      window.location.href=urlred;
+    } else if(from === 'CH') {
+      urlred = `/app/cashhistory/${id}&${agent}`
+      window.location.href=urlred;
+    } else if(from === 'TC') {
+      urlred = `/app/transferchips/${id}&${agent}`
+      window.location.href=urlred;
+    } else if(from === 'RC') {
+      urlred = `/app/requestcash/${id}&${agent}`
+      window.location.href=urlred;
+    } else if(from === 'CN') {
+      urlred = `/app/chipsnotes/${id}&${agent}`
+      window.location.href=urlred;
+    }
   };
 
   return  subsList ? (
@@ -142,37 +161,37 @@ function Agents() {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem>
+                <MenuItem  onClick={() => handleClose('EA',row._id,row.username)}>
                   <ListItemIcon>
                     <EditIcon fontSize="small" />
                   </ListItemIcon>
                   <ListItemText primary="Edit Agent" />
                 </MenuItem>
-                <MenuItem>
+                <MenuItem onClick={() => handleClose('RH',row._id,row.username)}>
                   <ListItemIcon>
                     <HistoryIcon fontSize="small" />
                   </ListItemIcon>
                   <ListItemText primary="Rake History" />
                 </MenuItem>
-                <MenuItem>
+                <MenuItem onClick={() => handleClose('CH',row._id,row.username)}>
                   <ListItemIcon>
                     <HistoryIcon fontSize="small" />
                   </ListItemIcon>
                   <ListItemText primary="Cash History" />
                 </MenuItem>
-                <MenuItem>
+                <MenuItem onClick={() => handleClose('TC',row._id,row.username)}>
                   <ListItemIcon>
                     <AttachMoneyIcon fontSize="small" />
                   </ListItemIcon>
                   <ListItemText primary="Transfer Chips" />
                 </MenuItem>
-                <MenuItem>
+                <MenuItem onClick={() => handleClose('RC',row._id,row.username)}>
                   <ListItemIcon>
                     <AttachMoneyIcon fontSize="small" />
                   </ListItemIcon>
                   <ListItemText primary="Request Cash" />
                 </MenuItem>
-                <MenuItem>
+                <MenuItem onClick={() => handleClose('CN',row._id,row.username)}>
                   <ListItemIcon>
                     <NotesIcon fontSize="small" />
                   </ListItemIcon>
