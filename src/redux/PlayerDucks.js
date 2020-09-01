@@ -216,6 +216,7 @@ export const getPlayerProfile = () => async  (dispatch, getState) => {
     const res = await axios.get(`${API_AGENT_URL}/player/profile/${id}`,{ headers: { Authorization: AuthStr, agent: agent }});
     let result = null;
     if(res.data){
+      console.log('data exists');
       result = {
         username: res.data.player.username,
         gamePlay: res.data.player.statistics.cashgame.noOfPlayedGames,
