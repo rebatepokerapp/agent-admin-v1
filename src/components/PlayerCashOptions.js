@@ -21,7 +21,10 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   title: {
-    color: '#FFFFFF',
+    marginTop: '10px',
+    marginBottom: '30px',
+    color: '#333333',
+    fontWeight: '700',
   },
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -32,11 +35,10 @@ const useStyles = makeStyles((theme) => ({
     boxSizing: 'border-box',
     width: '100%',
     borderRadius: '4px',
-    border: '1px solid white',
+    border: '1px solid #AAAAAA',
     padding: '10px 15px',
     marginBottom: '10px',
-    fontSize: '14px',
-    backgroundColor: 'white'
+    fontSize: '14px'
   },
   inputtextarea: {
     display: 'block',
@@ -54,6 +56,7 @@ const useStyles = makeStyles((theme) => ({
     color: '#000000',
     backgroundColor: '#FF9A00',
     fontWeight: '700',
+    marginBottom: '100px',
   },
   submitopt: {
     margin: theme.spacing(3, 0, 2),
@@ -91,7 +94,7 @@ function PlayerEditForm (props) {
       <CssBaseline />
       <div className={classes.paper}>
         <Typography component="h1" variant="h5" className={classes.title}>
-          Add/Deduct Chips
+          Transfer Chips
         </Typography>
          
         <form className={classes.form} noValidate onSubmit={handleSubmit(onSubmit)}>
@@ -120,12 +123,14 @@ function PlayerEditForm (props) {
           </span>
           <div>
             <Button
-              type="submit"            
+              type="submit"
+              fullWidth
               variant="contained"
-              className={classes.submitopt}
+              className={classes.submit}
             >
-              Add
-            </Button>            
+              TRANSFER
+            </Button>   
+            <br></br>         
           </div>
           
         </form>

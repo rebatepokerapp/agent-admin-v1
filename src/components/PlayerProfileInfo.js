@@ -74,7 +74,7 @@ const PlayerProfileInfo = () => {
   },[dispatch])
 
   const profile = useSelector(store => store.player.statistics);
-
+  console.log('Profile', profile)
   const dataChart = {
     play:profile.gamePlay,
     won: profile.gameWon,

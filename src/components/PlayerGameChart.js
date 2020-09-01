@@ -10,11 +10,11 @@ const state = {
       datasets: [
         {
           data: [data.play, data.won, data.lost],
-          backgroundColor: ["#341EE6", "#19B212", "#FA0A00"],
+          backgroundColor: ["#666666", "#669933", "#FFA900"],
           hoverBackgroundColor: [
-            "#1F6EFF",
-            "#5CB360",
-            "#FF2A00"
+            "#999999",
+            "#99cc33",
+            "#FFCC00"
           ]
         }
       ]
