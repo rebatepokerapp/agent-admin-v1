@@ -22,9 +22,13 @@ const state = {
   }
   return (
     <MDBContainer>
-      <h3 className="mt-5">Poker Game Stats</h3>
+      <h3 style={{textAlign: 'center'}} className="mt-5">Poker Game Stats</h3>
+      <div>&nbsp;</div>
       <Doughnut data={state.dataDoughnut} options={{ responsive: true }} />
+      <div>&nbsp;</div>
+    <div>&nbsp;</div>
     </MDBContainer>
+    
   );
 }
 

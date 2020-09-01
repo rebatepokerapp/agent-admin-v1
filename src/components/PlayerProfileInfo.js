@@ -6,9 +6,19 @@ import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
 import PlayerGameChart from './PlayerGameChart';
 
 const useStyles = makeStyles((theme) => ({
+  main: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: '5px',
+    maxWidth: '100%', 
+    margin: '0',
+    padding: '0',
+    verticalAlign: 'top',
+  },
+
   title: {
     color: 'black',
   }, 
@@ -21,13 +31,12 @@ const useStyles = makeStyles((theme) => ({
   info: {
     backgroundColor: 'white',
     width: '100%',
-    border: '3px solid gray',
     padding: '25px',
-    margin: '20px'
   },
   divTable: {
     display: 'table',
-    width: '100%'
+    width: '100%',
+    marginTop: '20px',
   },
   divTableRow: {
     display: 'table-row'
@@ -52,11 +61,13 @@ const useStyles = makeStyles((theme) => ({
   } 
 }));
 
+
 const PlayerProfileInfo = () => {
-  const { id } = useParams();
 
   const classes = useStyles();
+  const maincontainer = clsx(classes.main); 
 
+  const { id } = useParams();
   const params = id.split('&');
 
   const idreal = params[0];
@@ -83,7 +94,7 @@ const PlayerProfileInfo = () => {
   
 
   return (
-    <Fragment>
+    <div className={maincontainer}>
       <Container component="main" maxWidth="xl">
         <CssBaseline />
         <div className={classes.info}>
@@ -155,7 +166,7 @@ const PlayerProfileInfo = () => {
           </div>
         </div>
       </Container>
-    </Fragment>
+    </div>
   )
 }
 
