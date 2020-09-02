@@ -31,6 +31,8 @@ import PlayerEditForm from './PlayerOptions';
 import PlayerProfileInfo from './PlayerProfileInfo';
 import EditAgent from './EditAgent';
 
+import PlayerTransferChips from './PlayerTransferChips';
+
 import {
   BrowserRouter as Router,
   Switch,
@@ -199,6 +201,7 @@ export default function Dashboard() {
               <Route path="/app/playeroptions/:id" component={PlayerEditForm} />
               <Route path="/app/playerprofile/:id" component={PlayerProfileInfo} />              
               <Route path="/app/editagent/:id" component={EditAgent} />
+              <Route path="/app/playertransferchips/:id" component={PlayerTransferChips} />              
             </Switch>
           </Router>
           <Box pt={4}>

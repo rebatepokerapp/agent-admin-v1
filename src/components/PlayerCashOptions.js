@@ -67,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function PlayerEditForm (props) {
+function PlayerEditForm ({player}) {
   const classes = useStyles();
 
   const {register, errors, handleSubmit} =  useForm();
@@ -94,7 +94,7 @@ function PlayerEditForm (props) {
       <CssBaseline />
       <div className={classes.paper}>
         <Typography component="h1" variant="h5" className={classes.title}>
-          Transfer Chips
+          {`Transfer Chips ${player.username}`} 
         </Typography>
          
         <form className={classes.form} noValidate onSubmit={handleSubmit(onSubmit)}>
