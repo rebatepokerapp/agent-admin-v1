@@ -92,7 +92,7 @@ const PlayerMenuEdit = ({ id, player }) => {
     } else if(from === 'IP') {
       urlred = `/app/playeriphistory/${id}&${player}`
       window.location.href=urlred;
-    } else if(from === 'PP') {
+    } else if(from === 'PA') {
       urlred = `/app/playerprofile/${id}&${player}`
       window.location.href=urlred;
     }       
@@ -125,11 +125,11 @@ const PlayerMenuEdit = ({ id, player }) => {
           </ListItemIcon>
           <ListItemText primary="Edit Player"/>
         </StyledMenuItem>
-        <StyledMenuItem onClick={() => handleClose('PP',id,player)}>
+        <StyledMenuItem onClick={() => handleClose('PA',id,player)}>
           <ListItemIcon>
             <PersonIcon fontSize="small" />
           </ListItemIcon>
-          <ListItemText primary="Player Profile"/>
+          <ListItemText primary="Player Activity"/>
         </StyledMenuItem>
         <StyledMenuItem onClick={() => handleClose('GH',id,player)}>
           <ListItemIcon>

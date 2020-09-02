@@ -104,7 +104,7 @@ const PlayerProfileInfo = () => {
                 <div className={classes.divTableCell}>
                   <div className={classes.paper}>
                     <Typography component="h1" variant="h5" className={classes.title}>
-                      Player Profile
+                      Player Activity
                     </Typography>
                     <Typography component="h3" variant="h5" className={classes.title}>
                       {profile.username.toUpperCase()}
