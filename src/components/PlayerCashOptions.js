@@ -15,13 +15,12 @@ import { useForm } from 'react-hook-form';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
   },
   title: {
-    marginTop: '10px',
+    marginTop: '70px',
     marginBottom: '30px',
     color: '#333333',
     fontWeight: '700',
@@ -52,18 +51,12 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: 'white'
   },
   submit: {
-    margin: theme.spacing(3, 0, 2),
+    marginTop: '10px',
+    marginBottom: '60px',
     color: '#000000',
     backgroundColor: '#FF9A00',
     fontWeight: '700',
     marginBottom: '100px',
-  },
-  submitopt: {
-    margin: theme.spacing(3, 0, 2),
-    color: '#000000',
-    backgroundColor: '#FF9A00',
-    fontWeight: '700',
-    marginLeft: 5
   },
 }));
 
@@ -98,6 +91,7 @@ function PlayerEditForm ({player}) {
         </Typography>
          
         <form className={classes.form} noValidate onSubmit={handleSubmit(onSubmit)}>
+          <input name="player" className={classes.input} ref={register} placeholder='player' value='{{player.username}}'/>
           <input name="chips" className={classes.input} ref={register} placeholder='Chips'/>
           <TextField 
             className={classes.inputtextarea}
@@ -107,7 +101,6 @@ function PlayerEditForm ({player}) {
             fullWidth
             id="note"
             name="note"
-            autoFocus
             label="Note"
             size='small'
             multiline
@@ -129,8 +122,7 @@ function PlayerEditForm ({player}) {
               className={classes.submit}
             >
               TRANSFER
-            </Button>   
-            <br></br>         
+            </Button>           
           </div>
           
         </form>
