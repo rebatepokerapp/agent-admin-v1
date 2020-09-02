@@ -86,10 +86,13 @@ const PlayerMenuEdit = ({ id, player }) => {
     } else if(from === 'PO') {
       urlred = `/app/playeroptions/${id}&${player}`
       window.location.href=urlred;
+    } else if(from === 'TC') {
+      urlred = `/app/playertransferchips/${id}&${player}`
+      window.location.href=urlred;
     } else if(from === 'IP') {
       urlred = `/app/playeriphistory/${id}&${player}`
       window.location.href=urlred;
-    } else if(from === 'PP') {
+    } else if(from === 'PA') {
       urlred = `/app/playerprofile/${id}&${player}`
       window.location.href=urlred;
     }       
@@ -122,11 +125,11 @@ const PlayerMenuEdit = ({ id, player }) => {
           </ListItemIcon>
           <ListItemText primary="Edit Player"/>
         </StyledMenuItem>
-        <StyledMenuItem onClick={() => handleClose('PP',id,player)}>
+        <StyledMenuItem onClick={() => handleClose('PA',id,player)}>
           <ListItemIcon>
             <PersonIcon fontSize="small" />
           </ListItemIcon>
-          <ListItemText primary="Player Profile"/>
+          <ListItemText primary="Player Activity"/>
         </StyledMenuItem>
         <StyledMenuItem onClick={() => handleClose('GH',id,player)}>
           <ListItemIcon>
@@ -134,11 +137,17 @@ const PlayerMenuEdit = ({ id, player }) => {
           </ListItemIcon>
           <ListItemText primary="Game History" />
         </StyledMenuItem>
+        <StyledMenuItem onClick={() => handleClose('TC',id,player)}>
+          <ListItemIcon>
+            <GpsFixedIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primary="Transfer Chips" />
+        </StyledMenuItem>
         <StyledMenuItem onClick={() => handleClose('CT',id,player)}>
           <ListItemIcon>
             <SwapHorizIcon fontSize="small" />
           </ListItemIcon>
-          <ListItemText primary="Cash Transaction History" />
+          <ListItemText primary="Transaction History" />
         </StyledMenuItem>
         <StyledMenuItem onClick={() => handleClose('IP',id,player)}>
           <ListItemIcon>
