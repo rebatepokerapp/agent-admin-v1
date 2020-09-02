@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
-import PlayerEditForm from './PlayerEditForm';
+import PlayerCashOptions from './PlayerCashOptions';
 import { useParams } from 'react-router-dom'
 import {useDispatch, useSelector} from 'react-redux'
 import {getPlayerData,setPlayerInfo} from '../redux/PlayerDucks';
@@ -46,7 +46,7 @@ const PlayerOptions = () => {
   return player ? (
     <div className={maincontainer}>
       <div>
-        <div><PlayerEditForm player={player}/></div>
+        <div><PlayerCashOptions player={player}/></div>
       </div>
     </div>
 
