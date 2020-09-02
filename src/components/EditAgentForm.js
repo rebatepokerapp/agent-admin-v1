@@ -15,13 +15,15 @@ import { useForm, Controller } from 'react-hook-form';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
   },
   title: {
-    color: '#FFFFFF',
+    marginTop: '50px',
+    marginBottom: '30px',
+    color: '#333333',
+    fontWeight: '700',
   },
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -32,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
     boxSizing: 'border-box',
     width: '100%',
     borderRadius: '4px',
-    border: '1px solid white',
+    border: '1px solid #AAAAAA',
     padding: '10px 15px',
     marginBottom: '10px',
     fontSize: '14px'
@@ -47,7 +49,11 @@ const useStyles = makeStyles((theme) => ({
     color: '#000000',
     backgroundColor: '#FF9A00',
     fontWeight: '700',
+    ':hover': {
+      backgroundColor: '#FFCC00'
+    },
   },
+
 }));
 
 const statusOptions = [
@@ -70,7 +76,9 @@ function EditAgentForm (props) {
   const onSubmit = (data, e) => {
     e.preventDefault();    
     dispatch(editAgentData(data)).then(() => {
-      document.getElementById('alertmes').style.display='';
+      if(document.getElementById('alertmes')){
+        document.getElementById('alertmes').style.display='';
+      }      
     });
     agent.firstname = data.fisrtname;
     agent.lastname = data.lastname;
@@ -79,7 +87,9 @@ function EditAgentForm (props) {
     agent.status = data.status.value;
     agent.commission = data.commission;
     setTimeout(() => {
-      document.getElementById('alertmes').style.display='none';
+      if(document.getElementById('alertmes')){
+        document.getElementById('alertmes').style.display='none';
+      }      
     },3000);   
   }
 
@@ -95,7 +105,7 @@ function EditAgentForm (props) {
       <CssBaseline />
       <div className={classes.paper}>
         <Typography component="h1" variant="h5" className={classes.title}>
-          Edit Agent Information
+          EDIT AGENT
         </Typography>
          
         <form className={classes.form} noValidate onSubmit={handleSubmit(onSubmit)}>
@@ -126,7 +136,7 @@ function EditAgentForm (props) {
             variant="contained"
             className={classes.submit}
           >
-            Update
+            UPDATE
           </Button>
         </form>
         {showError()}

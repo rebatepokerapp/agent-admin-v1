@@ -245,7 +245,7 @@ export const editAgentData = (data) => async  (dispatch, getState) => {
     dispatch({
       type: UPDATE_AGENT_INFO_SUCCESS,
       payload: {
-        player:res.data.agent,
+        agent:res.data.agent,
         message: 'Agent data updated'
       }
     })
