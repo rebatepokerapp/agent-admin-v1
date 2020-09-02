@@ -49,9 +49,6 @@ const PlayerOptions = () => {
         <div><PlayerEditForm player={player}/></div>
       </div>
     </div>
-
-
-        
   ):null
 }
 
