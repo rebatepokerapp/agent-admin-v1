@@ -21,8 +21,9 @@ const useStyles = makeStyles((theme) => ({
     float: 'left',
     textAlign: 'left',
     fontSize: 'medium',
-    color: '#666666',
+    color: '#333333',
     width: '130px',
+    fontWeight: '700'  
   },
 
   rowItemRight: {

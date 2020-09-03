@@ -64,7 +64,7 @@ export default function ChartFiguresPerWeek({ totalperday }) {
             left: 24,
           }}
         >
-          <XAxis dataKey="time" stroke="#666666" />
+          <XAxis dataKey="time" stroke="#333333" />
           <YAxis stroke="#009900">
             <Label
               angle={270}
