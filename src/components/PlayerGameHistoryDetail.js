@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme) => ({
     float: 'left',
     width: '200px',
     verticalAlign: 'top',
+    textAlign: 'center',
   },
   row: {
     margin: '0',
@@ -43,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   rowSubItemRight: {
     float: 'left',
     height: '60px',
-    width: '80px',
+    width: '60px',
     textAlign: 'right',
   },
 }));
