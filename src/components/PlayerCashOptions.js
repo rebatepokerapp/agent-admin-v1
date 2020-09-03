@@ -91,7 +91,7 @@ function PlayerEditForm ({player}) {
         </Typography>
          
         <form className={classes.form} noValidate onSubmit={handleSubmit(onSubmit)}>
-          <input name="player" className={classes.input} ref={register} placeholder='player' value='{{player.username}}'/>
+          <input name="player" className={classes.input} ref={register} placeholder='player' value={player.username}/>
           <input name="chips" className={classes.input} ref={register} placeholder='Chips'/>
           <TextField 
             className={classes.inputtextarea}
