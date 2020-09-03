@@ -7,17 +7,17 @@ const useStyles = makeStyles((theme) => ({
     margin: '0',
   },
   header: {
-    backgroundColor: '#EEEEEE', 
+    backgroundColor: '#CCCCCC', 
     margin: '0',
-    height: '40px',
-    padding: '20px',
-    borderBottom: '1px #CCCCCC',
-    textAlign: 'center',
+    height: '30px',
+    padding: '5px',
+    borderBottom: 'solid 1px #999999',
+    borderTop: 'solid 1px #999999',
   },
   headerItem: {
     float: 'left',
     width: '200px',
-    verticalAlign: 'middle',
+    verticalAlign: 'top',
   },
   row: {
     margin: '0',
@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
   rowItem: {
     float: 'left',
     width: '200px',
+    height: '100%',
   },
 
   rowSubItemCenter: {
@@ -36,13 +37,13 @@ const useStyles = makeStyles((theme) => ({
   rowSubItemLeft: {
     float: 'left',
     height: '60px',
-    width: '100px',
+    width: '80px',
     textAlign: 'left',
   },
   rowSubItemRight: {
     float: 'left',
     height: '60px',
-    width: '100px',
+    width: '80px',
     textAlign: 'right',
   },
 }));
@@ -63,9 +64,9 @@ const PlayerGameHistoryDetail = ({gameHistoryDetail, key}) => {
   return (
     <div key={key} className={maincontainer}>
       <div className={mainheader}>
-          <div className={mainheaderitem}>HANDS</div>
-          <div className={mainheaderitem}>COMMON CARDS</div>
-          <div className={mainheaderitem}>WINNERS</div>
+          <div className={mainheaderitem}>Hands</div>
+          <div className={mainheaderitem}>Common Cards</div>
+          <div className={mainheaderitem}>Winners</div>
       </div>
       <div className={mainrow}>
           <div className={mainrowitem}>
