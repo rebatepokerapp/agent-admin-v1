@@ -142,7 +142,6 @@ function EditAgentForm (props) {
         </form>
         {showError()}
       </div>
-      <FiguresReport />
     </Container>
   ) : null;
 }
