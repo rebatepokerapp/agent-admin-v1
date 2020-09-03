@@ -87,7 +87,7 @@ function PlayerEditForm ({player}) {
       <CssBaseline />
       <div className={classes.paper}>
         <Typography component="h1" variant="h5" className={classes.title}>
-          {`Transfer Chips ${player.username}`} 
+           Transfer Chips 
         </Typography>
          
         <form className={classes.form} noValidate onSubmit={handleSubmit(onSubmit)}>
