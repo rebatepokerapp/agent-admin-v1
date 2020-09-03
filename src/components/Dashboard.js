@@ -30,7 +30,7 @@ import PlayerIpLoginHistory from './PlayerIpLoginHistory';
 import PlayerEditForm from './PlayerOptions';
 import PlayerProfileInfo from './PlayerProfileInfo';
 import EditAgent from './EditAgent';
-
+import SubRakeHistory from './SubRakeHistory';
 import PlayerTransferChips from './PlayerTransferChips';
 
 import {
@@ -201,7 +201,8 @@ export default function Dashboard() {
               <Route path="/app/playeroptions/:id" component={PlayerEditForm} />
               <Route path="/app/playerprofile/:id" component={PlayerProfileInfo} />              
               <Route path="/app/editagent/:id" component={EditAgent} />
-              <Route path="/app/playertransferchips/:id" component={PlayerTransferChips} />              
+              <Route path="/app/playertransferchips/:id" component={PlayerTransferChips} />  
+              <Route path="/app/rakehistory/:id" component={SubRakeHistory} />           
             </Switch>
           </Router>
           <Box pt={4}>

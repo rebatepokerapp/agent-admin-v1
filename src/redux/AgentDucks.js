@@ -16,6 +16,7 @@ const agentData = {
   totalperday:[],
   error: null,
   token: null,
+  lastThreeWeeks: null,
   messageupdate: null
 }
 
@@ -35,6 +36,8 @@ const GET_AGENT_INFO_SUCCESS = 'GET_AGENT_INFO_SUCCESS'
 const GET_AGENT_INFO_ERROR = 'GET_AGENT_INFO_ERROR'
 const UPDATE_AGENT_INFO_SUCCESS = 'UPDATE_AGENT_INFO_SUCCESS'
 const UPDATE_AGENT_INFO_ERROR = 'UPDATE_AGENT_INFO_ERROR'
+const LAST_THREE_WEEKS_SUCCESS = 'LAST_THREE_WEEKS_SUCCESS'
+const LAST_THREE_WEEKS_ERROR = 'LAST_THREE_WEEKS_ERROR'
  
 
 //Reducer
@@ -73,6 +76,10 @@ export default function agentReducer(state = agentData, action){
       return{...state, messageupdate: action.payload.message, data: action.payload.agent, error: null}
     case UPDATE_AGENT_INFO_ERROR:
       return{...state, error: action.payload, messageupdate: null}
+    case LAST_THREE_WEEKS_SUCCESS:
+      return{...state, lastThreeWeeks: action.payload.data, totalrake:action.payload.totalrake, error: null}
+    case LAST_THREE_WEEKS_ERROR:
+      return{...state, error: action.payload}
     default:
       return state
   }
@@ -169,18 +176,24 @@ export const getSubsByAgent = () => async  (dispatch, getState) => {
   }
 }
 
-export const getFiguresByAgent = () => async  (dispatch, getState) => {
+export const getFiguresByAgent = (weeknumber,byId,subId) => async  (dispatch, getState) => {
   try {
+    moment.updateLocale('en', {
+      week: {
+        dow : 1, // Monday is the first day of the week.
+      }
+    })
     const query =  {
-      start_date: moment.utc().day(1).startOf('day')._d,
-      end_date: moment.utc().day(7).endOf('day')._d,
+      start_date: moment().subtract(weeknumber, 'weeks').startOf('week').format('YYYY-MM-DD'),
+      end_date: moment().subtract(weeknumber, 'weeks').endOf('week').format('YYYY-MM-DD'),
       is_datefilter:'1'
     }
-
-    console.log('INICIO',query.start_date);
-    console.log('FIN',query.end_date);
-
-    const { id } = getState().agent.agent;
+    var id = null;
+    if(byId){
+      id = subId;      
+    }else{
+      id = getState().agent.agent.id;
+    }    
     const agent = JSON.stringify(getState().agent.agent);
     const token = getState().agent.agent.jwt_token;
     const AuthStr = 'Bearer '.concat(token);
@@ -253,6 +266,47 @@ export const editAgentData = (data) => async  (dispatch, getState) => {
     dispatch({
       type: UPDATE_AGENT_INFO_ERROR,
       payload: 'Error updating agent data'
+    })
+  }
+}
+
+export const getFiguresAgentLastThreeWeeks = (byId,subId) => async  (dispatch, getState) => {
+  try {
+    moment.updateLocale('en', {
+      week: {
+        dow : 1, // Monday is the first day of the week.
+      }
+    })
+    const query =  {
+      start_date: moment().subtract(2, 'weeks').startOf('week').format('YYYY-MM-DD'),
+      end_date: moment().subtract(0, 'weeks').endOf('week').format('YYYY-MM-DD'),
+      is_datefilter:'1'
+    }
+
+    console.log('INICIO',query.start_date);
+    console.log('FIN',query.end_date);
+    var id = null;
+    if(byId){
+      id = subId;      
+    }else{
+      id = getState().agent.agent.id;
+    }    
+    const agent = JSON.stringify(getState().agent.agent);
+    const token = getState().agent.agent.jwt_token;
+    const AuthStr = 'Bearer '.concat(token);
+    const res = await axios.get(`${API_AGENT_URL}/figuresbyagentlastthree/${id}?start_date=${query.start_date}&end_date=${query.end_date}&is_datefilter=${query.is_datefilter}`,{ headers: { Authorization: AuthStr, agent: agent }});
+
+    dispatch({
+      type: LAST_THREE_WEEKS_SUCCESS,
+      payload: {
+        data: res.data.data,
+        totalrake: res.data.totalRack
+      }
+    })
+  } catch (error) {
+    dispatch({
+      type: LAST_THREE_WEEKS_ERROR,
+      payload: 'Error loading figures last three weeks by agent'
     })
   }
 }

@@ -99,4 +99,25 @@ db.allUsersTransactionHistory.aggregate(
     db.agent.findOne({}).select('accessCode').sort({'accessCode' : -1}).limit(1).exec(function(err, doc){let max_code = doc[0].accessCode + 1;})
     db.agent.findOne().where({accessCode: 1}).sort('-LAST_MOD').exec(function(err, doc){var max = doc.LAST_MOD + 1;})
     db.agent.aggregate([{ "$group": {"_id": null,"max": { "$max": "$accessCode" }}}])
+
+
+db.allUsersTransactionHistory.aggregate( 
+  {
+    '$match': { rackToId: '5f3f4ed126893f460b90f04c', createdAt: { $gte: new ISODate("2020-08-17"), $lte: new ISODate("2020-09-06") } }
+  },
+  {         
+    $group : {
+      _id : {week:{$week : "$createdAt"}, day : {$dayOfWeek:"$createdAt"}},
+      total : {$sum : "$totalRack"}         
+    }     
+  },     
+  {         
+    $group : {
+      _id : "$_id.week",days : {$push : {day:"$_id.day",total : "$total"}}             
+    }            
+  },     
+  {       
+    $sort: {_id:1}     
+  }
+  ).pretty()
     

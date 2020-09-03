@@ -12,6 +12,7 @@ import {editAgentData} from '../redux/AgentDucks';
 import {useDispatch, useSelector} from 'react-redux'
 
 import { useForm, Controller } from 'react-hook-form';
+import FiguresReport from './FiguresReport';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -141,6 +142,7 @@ function EditAgentForm (props) {
         </form>
         {showError()}
       </div>
+      <FiguresReport />
     </Container>
   ) : null;
 }

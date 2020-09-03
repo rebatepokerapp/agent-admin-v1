@@ -8,6 +8,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import {useDispatch, useSelector} from 'react-redux';
 import {getFiguresByAgent} from '../redux/AgentDucks';
+import FiguresReport from './FiguresReport';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -33,7 +34,7 @@ function MainDash() {
 
   useEffect(() => {
     const fetchData = () => {
-      dispatch(getFiguresByAgent())
+      dispatch(getFiguresByAgent(0))
     }
     fetchData();
   }, [dispatch])
@@ -60,7 +61,7 @@ function MainDash() {
         {/* Recent Orders */}
         <Grid item xs={12}>
           <Paper className={classes.paper}>
-            <Figures figuresList={figuresList}/>
+            <FiguresReport/>
           </Paper>
         </Grid>
       </Grid>
