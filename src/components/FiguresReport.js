@@ -15,6 +15,9 @@ const useStyles = makeStyles((theme) => ({
   seeMore: {
     marginTop: theme.spacing(3),
   },
+  total: {
+    fontWeight: '700',
+  },
 }));
 
 const FiguresReport = ({byagentid}) => {
@@ -83,14 +86,14 @@ const FiguresReport = ({byagentid}) => {
           <TableHead>
             <TableRow>
               <TableCell align="right">&nbsp;</TableCell>
-              <TableCell align="right">Monday</TableCell>
-              <TableCell align="right">Tuesday</TableCell>
-              <TableCell align="right">Wednesday</TableCell>
-              <TableCell align="right">Thursday</TableCell>
-              <TableCell align="right">Friday</TableCell>
-              <TableCell align="right">Saturday</TableCell>
-              <TableCell align="right">Sunday</TableCell>
-              <TableCell align="right">Total</TableCell>
+              <TableCell align="right" className={classes.total}>Monday</TableCell>
+              <TableCell align="right" className={classes.total}>Tuesday</TableCell>
+              <TableCell align="right" className={classes.total}>Wednesday</TableCell>
+              <TableCell align="right" className={classes.total}>Thursday</TableCell>
+              <TableCell align="right" className={classes.total}>Friday</TableCell>
+              <TableCell align="right" className={classes.total}>Saturday</TableCell>
+              <TableCell align="right" className={classes.total}>Sunday</TableCell>
+              <TableCell align="right" className={classes.total}>Total</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -152,15 +155,15 @@ const FiguresReport = ({byagentid}) => {
               
             ))}
               <TableRow>
-                <TableCell align="right">Total</TableCell>
-                <TableCell align="right"></TableCell>
-                <TableCell align="right"></TableCell>
-                <TableCell align="right"></TableCell>
-                <TableCell align="right"></TableCell>
-                <TableCell align="right"></TableCell>
-                <TableCell align="right"></TableCell>
-                <TableCell align="right"></TableCell>
-                <TableCell align="right">{granTotal}</TableCell>
+                <TableCell align="left" className={classes.total}>Total</TableCell>
+                <TableCell align="right" className={classes.total}></TableCell>
+                <TableCell align="right" className={classes.total}></TableCell>
+                <TableCell align="right" className={classes.total}></TableCell>
+                <TableCell align="right" className={classes.total}></TableCell>
+                <TableCell align="right" className={classes.total}></TableCell>
+                <TableCell align="right" className={classes.total}></TableCell>
+                <TableCell align="right" className={classes.total}></TableCell>
+                <TableCell align="right" className={classes.total}>{granTotal}</TableCell>
               </TableRow>
           </TableBody>
         </Table>

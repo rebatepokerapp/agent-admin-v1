@@ -54,7 +54,6 @@ export default function ChartFiguresPerWeek({ totalperday }) {
 
   return (
     <React.Fragment>
-      <Title>Rake Figures</Title>
       <ResponsiveContainer>
         <LineChart
           data={data}
@@ -65,17 +64,17 @@ export default function ChartFiguresPerWeek({ totalperday }) {
             left: 24,
           }}
         >
-          <XAxis dataKey="time" stroke={theme.palette.text.secondary} />
-          <YAxis stroke={theme.palette.text.secondary}>
+          <XAxis dataKey="time" stroke="#333333" />
+          <YAxis stroke="#009900">
             <Label
               angle={270}
               position="left"
-              style={{ textAnchor: 'middle', fill: theme.palette.text.primary }}
+              style={{ textAnchor: 'middle', fill: '#009900' }}
             >
               Rake Profit ($)
             </Label>
           </YAxis>
-          <Line type="monotone" dataKey="amount" stroke={theme.palette.text.secondary} dot={false} />
+          <Line type="monotone" dataKey="amount" stroke="#FFA900" dot={false} />
         </LineChart>
       </ResponsiveContainer>
     </React.Fragment>
