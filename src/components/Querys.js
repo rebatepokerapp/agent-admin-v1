@@ -120,4 +120,29 @@ db.allUsersTransactionHistory.aggregate(
     $sort: {_id:1}     
   }
   ).pretty()
+
+
+db.agent.aggregate(
+  [ 
+      { "$graphLookup": { 
+          "from": "agent", 
+          "startWith": "$parentId", 
+          "connectFromField": "parentId", 
+          "connectToField": "_id", 
+          "as": "ancestors"
+      }}, 
+      { "$match": { "username": "omegaagent" } }, 
+      { "$addFields": { 
+          "ancestors": { 
+              "$reverseArray": { 
+                  "$map": { 
+                      "input": "$ancestors", 
+                      "as": "t", 
+                      "in": { "username": "$$t.username" }
+                  } 
+              } 
+          }
+      }}
+  ]
+).pretty()
     
