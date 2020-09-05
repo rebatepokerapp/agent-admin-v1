@@ -37,8 +37,6 @@ export default function ChartFiguresPerWeek({ totalperday }) {
       }
     });
   }
-  
-  console.log('TOTAL POR DIA',totalperday);
 
   const data = [
     createData('Monday', day1),

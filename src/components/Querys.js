@@ -138,11 +138,490 @@ db.agent.aggregate(
                   "$map": { 
                       "input": "$ancestors", 
                       "as": "t", 
-                      "in": { "username": "$$t.username" }
+                      "in": { "name": "$$t.username" }
                   } 
               } 
           }
       }}
   ]
 ).pretty()
+
+db.agent.aggregate([{
+  $match: {
+      username:'omegaagent'
+  }
+}, {
+  $graphLookup: {
+      from: "agent",
+      startWith: "$parentId",
+      connectFromField: "_id",
+      connectToField: "parentId",
+      as: "ancestors"
+  }
+}, { $addFields: { 
+  "ancestors": { 
+      $reverseArray: { 
+          $map: { 
+              "input": "$ancestors", 
+              "as": "t", 
+              "in": { "name": "$$t.username" }
+          } 
+      } 
+  }
+}
+}]).pretty()
+
+db.allUsersTransactionHistory.aggregate(
+  {
+    $lookup: {
+      from: 'player',
+      localField: 'player',
+      foreignField: '_id',
+      as: 'player'
+    }
+  },
+  {
+    $lookup: {
+      from: 'agent',
+      localField: 'player.agentId',
+      foreignField: '_id',
+      as: 'agent'
+    }
+  },
+  {
+    $match: {rackToId:'5f3f4ed126893f460b90f04c'}
+  }
+).pretty()
+
+db.allUsersTransactionHistory.aggregate(
+  {
+    $lookup: {
+      from: 'player',
+      let: { "id": "$_id", "agentId":"$agentId" },
+      pipeline: [
+        {
+          $match: {
+            $expr: {
+              $eq: ["$player", "$$id"]
+            }
+          }
+        },
+        {
+          $lookup: {
+            from: 'agent',
+            pipeline: [
+              {
+                $match: {
+                  $expr:{
+                    $eq : ["$_id", "$$agentId"]
+                  }
+                }
+              },
+              {
+                $project : { username: 1 }
+              }
+            ],
+            as: "agentdata"
+          }
+        },
+        { "$unwind": "$agentdata" },
+        {
+          $project : { username: 1, agentunsername: "$agentdata.username"}
+        }
+      ],
+      as: "playerdata"
+    },
+  },
+  {
+    $match: {rackToId:'5f3f4ed126893f460b90f04c'}
+  }
+).pretty()
+
+db.allUsersTransactionHistory.aggregate(
+  {
+    $match: {rackToId:'5f3f4ed126893f460b90f04c'}
+  },
+  {
+    $lookup: {
+      from: 'player',
+      let: { "id": "$player" },
+      pipeline: [
+        {
+          $match: {
+            $expr: {
+              $eq: ["$_id", "$$id"]
+            }
+          }
+        },
+        {
+          $lookup: {
+            from: 'agent',
+            let: { "agid": "$agentId" },
+            pipeline: [
+              {
+                $match: { 
+                  _id: ObjectId('$$agid')                  
+                }
+              },
+              {
+                $project : { username: 1 , temp: '$$agid'}
+              }        
+            ],
+            as: "agentdata"
+          }
+        },
+        { "$unwind": "$agentdata" },        
+        {
+          $project : { username: 1, agentId: 1, agentusername:"$agentdata.username", temp: "$agentdata.temp"}
+        }
+      ],
+      as: "playerdata"
+    },
+  },
+  {         
+    $group : {
+      _id : {day : {$dayOfWeek:"$createdAt"}, agent: '$playerdata.agentusername', username : "$playerdata.username"},
+      total : {$sum : "$totalRack"}         
+    }     
+  },     
+  {         
+    $group : {
+      _id : {username: "$_id.username", agent:'$_id.agent'},days : {$push : {day:"$_id.day",total : "$total"}}             
+    }            
+  },     
+  {       
+    $sort: {_id:1}     
+  }
+).pretty()
     
+
+db.allUsersTransactionHistory.aggregate(
+  {
+    $match: {rackToId:'5f3f4ed126893f460b90f04c',createdAt: { $gte: new ISODate("2020-08-31")}}
+  },
+  {
+    $lookup: {
+      from: 'player',
+      let: { "id": "$player" },
+      pipeline: [
+        {
+          $match: {
+            $expr: {
+              $eq: ["$_id", "$$id"]
+            }
+          }
+        },
+        {
+          $lookup: {
+            from: 'agent',
+            let: { "agid": {$toObjectId:"$agentId"} },
+            pipeline: [
+              {
+                $match: { 
+                  $expr: {
+                    $eq: ["$_id", "$$agid"]
+                  }                 
+                }
+              },
+              {
+                $project : { username: 1 , temp: '$$agid'}
+              }        
+            ],
+            as: "agentdata"
+          }
+        },
+        { "$unwind": "$agentdata" },        
+        {
+          $project : { username: 1, agentId: 1, agentusername:"$agentdata.username", temp: "$agentdata.temp"}
+        }
+      ],
+      as: "playerdata"
+    },
+  }, 
+  {         
+    $group : {
+      _id : {day : {$dayOfWeek:"$createdAt"}, agent: '$playerdata.agentusername', username : "$playerdata.username"},
+      total : {$sum : "$totalRack"}         
+    }     
+  },     
+  {         
+    $group : {
+      _id : {username: "$_id.username", agent:'$_id.agent'},days : {$push : {day:"$_id.day",total : "$total"}}             
+    }            
+  },      
+  {       
+    $sort: {_id:1}     
+  }
+).pretty()
+
+db.allUsersTransactionHistory.aggregate(
+  {
+    $match: {rackToId:'5f3f4ed126893f460b90f04c',createdAt: { $gte: new ISODate("2020-08-31")}}
+  },
+  {
+    $lookup: {
+      from: 'player',
+      localField: 'player',
+      foreignField: '_id',
+      as: 'playerdata'
+    }
+  },
+).pretty()
+
+db.allUsersTransactionHistory.aggregate(
+{
+  $match: {rackToId:'5f3f4ed126893f460b90f04c',createdAt: { $gte: new ISODate("2020-08-31")}}
+},
+{
+  $lookup: {
+    from: 'player',
+    localField: 'player',
+    foreignField: '_id',
+    as: 'player'
+  }
+},
+{
+  $lookup: {
+    from: 'agent',
+    localField: 'agentId',
+    foreignField: '_id',
+    as: 'agentdata'
+  }
+},
+{
+  $unwind: "$agentdata"
+},
+{         
+  $group : {
+    _id : {day : {$dayOfWeek:"$createdAt"}, username : "$player.username"},
+    total : {$sum : "$totalRack"}         
+  }     
+},    
+{         
+  $group : {
+    _id : {username:"$_id.username", agentname:"$agentdata.username"} ,days : {$push : {day:"$_id.day",total : "$total"}}             
+  }            
+}
+).pretty()
+
+
+db.allUsersTransactionHistory.aggregate(
+{
+  $match: {rackToId:'5f3f4ed126893f460b90f04c',createdAt: { $gte: new ISODate("2020-08-31")}}
+},
+{
+  $lookup: {
+      from: 'player',
+      localField: 'player',
+      foreignField: '_id',
+      as: 'player'
+  }
+},
+{
+  $unwind: {
+      path: "$player",
+      preserveNullAndEmptyArrays: true
+  }
+},
+{
+  $lookup: {
+      from: 'agent',
+      localField: 'player.agentId',
+      foreignField: '_id',
+      as: 'player.agent'
+  }
+},
+{
+  $unwind: {
+      path: "$player.agent",
+      preserveNullAndEmptyArrays: true
+  }
+},
+{
+  $project: {
+      "player._id": 1,
+      "player.username": 1,
+      "player.agent._id": 1,
+      "player.agent.username": 1
+  }
+},
+).pretty()
+
+
+
+db.player.aggregate(    
+  {
+    $lookup: {
+        from: 'agent',
+        localField: 'agentId',
+        foreignField: '_id',
+        as: 'agentplayer'
+    }
+  },
+  {
+    $unwind: {
+        path: "$agentplayer",
+        preserveNullAndEmptyArrays: true
+    }
+  },
+  {
+    $project: {
+        "agentId": 1,
+        "username": 1,
+        "agentplayer": 'test'
+    }
+  },
+  ).pretty()    
+
+db.player.aggregate(    
+{
+  $lookup: {
+      from: 'allUsersTransactionHistory',
+      localField: '_id',
+      foreignField: 'player',
+      as: 'transactions'
+  }
+},
+{
+  $match: {_id:ObjectId('5f3dc31bd347321e822474d9')}
+},
+{
+  $project: {
+      "username": 1,
+      "transactions.totalRack": 1
+  }
+},
+).pretty()
+
+db.player.aggregate( 
+  [
+    {
+      $project: {
+        'agId': {$toObjectId: '$agentId'},
+        'playerusername': '$username'
+      }
+    },
+    {
+      $lookup: {
+          from: 'agent',
+          localField: 'agId',
+          foreignField: '_id',
+          as: 'agentplayer'
+      }
+    },
+    {
+      $project: {
+        '_id': 1,
+        'playerusername': 1,
+        'agentplayer.username': 1
+      }
+    }
+  ]   
+)
+
+db.player.aggregate( 
+  [
+    {
+      $match: {
+        username: 'omegacr'
+      }
+    },
+    {
+      $lookup: {
+          from: 'agent',
+          let: {agent_id:'$agentId'},
+          pipeline:[
+            {
+              addfields: {agentide:{$toString:''}}
+            }
+          ],
+          as: 'agentplayer'
+      }
+    }
+  ]   
+)
+
+db.player.aggregate( 
+  [
+    {
+      $project: {
+        'agId': {$toObjectId: '$agentId'},
+        'playerusername': '$username'
+      }
+    },
+    {
+      $lookup: {
+          from: 'agent',
+          localField: 'agId',
+          foreignField: '_id',
+          as: 'agentplayer'
+      }
+    },
+    {
+      $lookup: {
+          from: 'allUsersTransactionHistory',
+          localField: '_id',
+          foreignField: 'player',
+          as: 'transactions'
+      }
+    },
+    {
+      $match: {'transactions.rackToId':'5f3f4ed126893f460b90f04c','transactions.createdAt': { $gte: new ISODate("2020-08-31")}}
+    },
+    {
+      $group : {
+        _id : {day : {$dayOfWeek:"transactions.$createdAt"}},
+        total : {$sum : "$transactions.totalRack"}         
+      }
+    }       
+  ]   
+).pretty()
+
+db.player.aggregate(
+{
+  $match:{
+    agentId:'5f3f4ed126893f460b90f04c'
+  }  
+},
+{
+  $project: {
+    'agId': {$toObjectId: '$agentId'},
+  }
+},
+{
+  $lookup: {
+    from: 'agent',
+    localField: 'agId',
+    foreignField: '_id',
+    as: 'agentplayer'
+}
+}).pretty()
+
+db.agent.aggregate(
+  [
+    {
+      $match: {
+        _id: ObjectId('5f3f4ed126893f460b90f04c')
+      }
+    },
+    {
+      $graphLookup: {
+        from: "agent",
+        startWith: "$_id",
+        connectFromField: "_id",
+        connectToField: "parentObjectId",
+        as: "SubAgent"
+      }
+    },
+    {
+      $project: {
+        _id: 1,
+        username: 1,
+        level: 1,
+        'SubAgent._id': 1,
+        'SubAgent.username': 1,
+        'SubAgent.level': 1
+      }
+    }
+  ]
+).pretty()

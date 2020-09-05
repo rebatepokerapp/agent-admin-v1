@@ -10,6 +10,9 @@ import TableRow from '@material-ui/core/TableRow';
 import Title from './Title';
 import { makeStyles } from '@material-ui/core/styles';
 import { TableContainer } from '@material-ui/core';
+import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
+import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles((theme) => ({
   seeMore: {
@@ -18,6 +21,21 @@ const useStyles = makeStyles((theme) => ({
   total: {
     fontWeight: '700',
   },
+  header: {
+    backgroundColor: '#2e2e2e',
+    color: '#FFA900',
+    fontSize: 'large'
+  },
+  celtotal: {
+    backgroundColor: '#2e2e2e',
+    color: '#FFA900',
+    fontSize: 'large'
+  },
+  button: {
+    backgroundColor: '#2e2e2e',
+    color: '#FFA900',
+    margin: '5px'
+  }
 }));
 
 const FiguresReport = ({byagentid}) => {
@@ -34,6 +52,8 @@ const FiguresReport = ({byagentid}) => {
   let total = 0;  
   let granTotal = 0;
   let actualIndex = -1;
+  let actualAgent = '';
+  var indx = 100000;
 
   const backToCero = () => {
     total = 0;
@@ -57,9 +77,9 @@ const FiguresReport = ({byagentid}) => {
     fetchData();
   }, [dispatch])
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = (option) => {
     var page = 0;
-    if(newPage === 2){
+    if(option === -1){
       if(weeknumber < 10){
         page = weeknumber + 1;
       }else{
@@ -76,6 +96,22 @@ const FiguresReport = ({byagentid}) => {
     setWeek(page);
   };
 
+  const agentHeader = (agentName, i) => {
+    if(agentName.toString().trim() === actualAgent.toString().trim()){
+      console.log('iguales')
+    }else{
+      actualAgent = agentName;
+      let ind = indx+1;
+      return(
+        <>
+          <TableRow key={ind}>
+            <TableCell align="center" className={classes.header} colSpan={10}>{agentName.toString().toUpperCase()}</TableCell>
+          </TableRow>
+        </>
+      )
+    }
+  }
+
   const figuresList = useSelector(store => store.agent.figures);
 
   return figuresList ? (
@@ -84,8 +120,9 @@ const FiguresReport = ({byagentid}) => {
       <TableContainer>
         <Table size="small">
           <TableHead>
-            <TableRow>
+            <TableRow key='200000'>
               <TableCell align="right">&nbsp;</TableCell>
+              <TableCell align="right" className={classes.total}>Agent</TableCell>
               <TableCell align="right" className={classes.total}>Monday</TableCell>
               <TableCell align="right" className={classes.total}>Tuesday</TableCell>
               <TableCell align="right" className={classes.total}>Wednesday</TableCell>
@@ -97,10 +134,12 @@ const FiguresReport = ({byagentid}) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {figuresList.map((row, index) => (
-
-              <TableRow key={index}>
-                <TableCell>{row._id}</TableCell>
+            {figuresList.map((row, index) => (  
+              <>
+              {agentHeader(row._id.agent, index)}                                  
+              <TableRow key={index}>                                
+                <TableCell>{row._id.username}</TableCell>
+                <TableCell>{row._id.agent}</TableCell>
 
                 {row.days.forEach( day => {
                   total += day.total;
@@ -150,35 +189,54 @@ const FiguresReport = ({byagentid}) => {
                 <TableCell align="right">{saturday}</TableCell>
                 <TableCell align="right">{sunday}</TableCell>
                 <TableCell align="right">{total}</TableCell> 
-                {backToCero()}             
+                {backToCero()}                             
               </TableRow>
+              </>
               
             ))}
-              <TableRow>
-                <TableCell align="left" className={classes.total}>Total</TableCell>
-                <TableCell align="right" className={classes.total}></TableCell>
-                <TableCell align="right" className={classes.total}></TableCell>
-                <TableCell align="right" className={classes.total}></TableCell>
-                <TableCell align="right" className={classes.total}></TableCell>
-                <TableCell align="right" className={classes.total}></TableCell>
-                <TableCell align="right" className={classes.total}></TableCell>
-                <TableCell align="right" className={classes.total}></TableCell>
-                <TableCell align="right" className={classes.total}>{granTotal}</TableCell>
+              <TableRow key='200001'>
+                <TableCell align="left" className={classes.celtotal}>Total</TableCell>
+                <TableCell align="right" className={classes.celtotal}></TableCell>
+                <TableCell align="right" className={classes.celtotal}></TableCell>
+                <TableCell align="right" className={classes.celtotal}></TableCell>
+                <TableCell align="right" className={classes.celtotal}></TableCell>
+                <TableCell align="right" className={classes.celtotal}></TableCell>
+                <TableCell align="right" className={classes.celtotal}></TableCell>
+                <TableCell align="right" className={classes.celtotal}></TableCell>
+                <TableCell align="right" className={classes.celtotal}></TableCell>
+                <TableCell align="right" className={classes.celtotal}>{granTotal}</TableCell>
+              </TableRow>
+              <TableRow key='200002'>
+                <TableCell colSpan={10} align='right'>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  size="small"
+                  className={classes.button}
+                  startIcon={<NavigateBeforeIcon style={{ color: '#FFA900' }}/>}
+                  onClick={() => {
+                    handleChangePage(-1)
+                  }}
+                >
+                  Last
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  size="small"
+                  className={classes.button}
+                  startIcon={<NavigateNextIcon style={{ color: '#FFA900' }}/>}
+                  onClick={() => {
+                    handleChangePage(1)
+                  }}
+                >
+                  Next
+                </Button>
+                </TableCell>
               </TableRow>
           </TableBody>
         </Table>
-      </TableContainer>
-      <TablePagination
-          rowsPerPageOptions={[]}
-          component="div"
-          count={0}
-          rowsPerPage={0}
-          page={1}
-          onChangePage={handleChangePage}
-          backIconButtonText = 'Last Week'
-          nextIconButtonText = 'Next Week'
-      />
-      <div className={classes.seeMore}></div>
+      </TableContainer>      
     </React.Fragment>
   ) : null;
 }
