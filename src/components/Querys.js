@@ -625,3 +625,27 @@ db.agent.aggregate(
     }
   ]
 ).pretty()
+
+db.agent.aggregate(
+[
+  { '$match': { _id: ObjectId('5f3f4ed126893f460b90f04c')} },
+  {
+    '$graphLookup': {
+      from: 'agent',
+      startWith: '$_id',
+      connectFromField: '_id',
+      connectToField: 'parentObjectId',
+      as: 'SubAgent'
+    }
+  },
+  {
+    '$project': {
+      _id: 1,
+      username: 1,
+      level: 1,
+      'SubAgent._id': 1,
+      'SubAgent.username': 1,
+      'SubAgent.level': 1
+    }
+  }
+]).pretty()

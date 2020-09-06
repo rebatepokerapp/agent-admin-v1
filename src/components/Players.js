@@ -17,9 +17,12 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import PlayerMenuEdit from './PlayerMenuEdit';
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {getPlayersByAgent} from '../redux/AgentDucks';
+import { makeStyles } from '@material-ui/core/styles';
 
 
 const tableIcons = {
@@ -42,8 +45,34 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
+const useStyles = makeStyles((theme) => ({
+  seeMore: {
+    marginTop: theme.spacing(3),
+  },
+  total: {
+    fontWeight: '700',
+  },
+  header: {
+    backgroundColor: '#2e2e2e',
+    color: '#FFA900',
+    fontSize: 'large'
+  },
+  celtotal: {
+    backgroundColor: '#2e2e2e',
+    color: '#FFA900',
+    fontSize: 'large'
+  },
+  button: {
+    backgroundColor: '#2e2e2e',
+    color: '#FFA900',
+    margin: '5px'
+  }
+}));
+
 //Funcion que pinta la lista de players por agente
 function Players() {
+
+  const classes = useStyles();
 
   const dispatch = useDispatch();
   
@@ -56,6 +85,26 @@ function Players() {
   }, [dispatch])
 
   const playersList = useSelector(store => store.agent.players).data;
+
+  let actualAgent = '';
+  var indx = 100000;
+
+  const agentHeader = (agentName, i) => {
+    console.log('ENTROOOO');
+    if(agentName.toString().trim() === actualAgent.toString().trim()){
+      console.log('iguales')
+    }else{
+      actualAgent = agentName;
+      let ind = indx+1;
+      return(
+        <>
+          <TableRow key={ind}>
+            <TableCell align="center" className={classes.header} colSpan={10}>{agentName.toString().toUpperCase()}</TableCell>
+          </TableRow>
+        </>
+      )
+    }
+  }
 
   return (
 
@@ -71,8 +120,7 @@ function Players() {
           exportButton: true,
           default: "dense",
           paging:false,
-          filtering: true,
-
+          filtering: true
         }}
         title="Players"
         columns={[
