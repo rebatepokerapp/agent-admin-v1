@@ -32,6 +32,7 @@ import PlayerProfileInfo from './PlayerProfileInfo';
 import EditAgent from './EditAgent';
 import SubRakeHistory from './SubRakeHistory';
 import PlayerTransferChips from './PlayerTransferChips';
+import AddAgent from './AddAgent';
 
 import {
   BrowserRouter as Router,
@@ -161,7 +162,7 @@ export default function Dashboard() {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            {`${agent.agent.name.toUpperCase()} - Balance: $${agent.agent.rake_chips}`}
+            {`${agent.agent.name.toUpperCase()} - Balance: $${agent.agent.rake_chips.toFixed(2)}`}
           </Typography>
           <AgentMenu agent={agent.agent} />
         </Toolbar>
@@ -202,7 +203,8 @@ export default function Dashboard() {
               <Route path="/app/playerprofile/:id" component={PlayerProfileInfo} />              
               <Route path="/app/editagent/:id" component={EditAgent} />
               <Route path="/app/playertransferchips/:id" component={PlayerTransferChips} />  
-              <Route path="/app/rakehistory/:id" component={SubRakeHistory} />           
+              <Route path="/app/rakehistory/:id" component={SubRakeHistory} />
+              <Route path="/app/addagent" component={AddAgent} />                          
             </Switch>
           </Router>
           <Box pt={4}>

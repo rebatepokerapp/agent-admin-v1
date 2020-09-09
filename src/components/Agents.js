@@ -27,6 +27,7 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {getSubsByAgent} from '../redux/AgentDucks';
@@ -36,6 +37,12 @@ const useStyles = makeStyles((theme) => ({
       color: '#FFFFFF',
       backgroundColor: '#669933',
       fontWeight: '700',
+  },
+  buttonAdd:{
+    color: '#FFFFFF',
+    backgroundColor: '#669933',
+    fontWeight: '700',
+    margin: '5px',    
   },
   menuheader:{
     color: '#000000',
@@ -90,6 +97,11 @@ function Agents() {
     setAnchorEl(event.currentTarget);
   };
 
+  const faddAgent = () => {
+    var urlred = `/app/addagent`
+    window.location.href=urlred;
+  }
+
   const handleClose = (from,id,agent) => {    
     setAnchorEl(null);
     if(from === 'EA'){
@@ -116,6 +128,17 @@ function Agents() {
   return  subsList ? (
 
     <div style={{ maxWidth: "100%" }}>
+      <div style={{ maxWidth: "100%", textAlign: 'right' }}>
+        <Button 
+          className={classes.buttonAdd} 
+          aria-haspopup="true" 
+          onClick={() => faddAgent()}
+          variant="contained"
+          >
+            <PersonAddIcon />
+          &nbsp;Add Agent
+        </Button>
+      </div>      
       <MaterialTable
         icons={tableIcons}
         options={{

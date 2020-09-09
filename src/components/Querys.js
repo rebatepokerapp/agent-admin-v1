@@ -649,3 +649,29 @@ db.agent.aggregate(
     }
   }
 ]).pretty()
+
+db.createUser(
+  {
+    user: "root",
+    pwd: "re#tepk20#$cj",
+    roles: [
+      {
+        role: "userAdminAnyDatabase",
+        db: "admin"
+      },
+      "readWriteAnyDatabase"
+    ]
+  }
+)
+/*
+mongo --port 27017 --authenticationDatabase "admin" -u "root" -p "re#tepk20#$cj"
+
+mongo --port 27017 -u "root" -p "re#tepk20#$cj" --authenticationDatabase "admin"
+
+mongo -u "root" -p "re#tepk20#$cj" --authenticationDatabase  "admin"
+
+mongod --port 27017 --dbpath /var/lib/mongo
+
+mongo --port 27017 --authenticationDatabase "admin" -u "root" -p re#tepk20#$cj
+
+*/

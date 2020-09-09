@@ -181,14 +181,14 @@ const FiguresReport = ({byagentid}) => {
                   }
                 })}
 
-                <TableCell align="right">{monday}</TableCell>
-                <TableCell align="right">{tuesday}</TableCell>
-                <TableCell align="right">{wednesday}</TableCell>
-                <TableCell align="right">{thursday}</TableCell>
-                <TableCell align="right">{friday}</TableCell>
-                <TableCell align="right">{saturday}</TableCell>
-                <TableCell align="right">{sunday}</TableCell>
-                <TableCell align="right">{total}</TableCell> 
+                <TableCell align="right">{monday.toFixed(2)}</TableCell>
+                <TableCell align="right">{tuesday.toFixed(2)}</TableCell>
+                <TableCell align="right">{wednesday.toFixed(2)}</TableCell>
+                <TableCell align="right">{thursday.toFixed(2)}</TableCell>
+                <TableCell align="right">{friday.toFixed(2)}</TableCell>
+                <TableCell align="right">{saturday.toFixed(2)}</TableCell>
+                <TableCell align="right">{sunday.toFixed(2)}</TableCell>
+                <TableCell align="right">{total.toFixed(2)}</TableCell> 
                 {backToCero()}                             
               </TableRow>
               </>
@@ -204,7 +204,7 @@ const FiguresReport = ({byagentid}) => {
                 <TableCell align="right" className={classes.celtotal}></TableCell>
                 <TableCell align="right" className={classes.celtotal}></TableCell>
                 <TableCell align="right" className={classes.celtotal}></TableCell>
-                <TableCell align="right" className={classes.celtotal}>{granTotal}</TableCell>
+                <TableCell align="right" className={classes.celtotal}>{granTotal.toFixed(2)}</TableCell>
               </TableRow>
               <TableRow key='200002'>
                 <TableCell colSpan={10} align='right'>
