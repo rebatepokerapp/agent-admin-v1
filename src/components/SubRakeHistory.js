@@ -26,7 +26,7 @@ const SubRakeHistory = () => {
   const params = id.split('&');
 
   const idreal = params[0];
-  const username = params[1];
+  //const username = params[1];
 
   return (
     <div  className={maincontainer}>

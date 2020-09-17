@@ -1,4 +1,4 @@
-import React, {useEffect, Fragment} from 'react';
+import React, {useEffect} from 'react';
 import { useParams } from 'react-router-dom'
 import {useDispatch, useSelector} from 'react-redux'
 import {getPlayerProfile,setPlayerInfo} from '../redux/PlayerDucks';
@@ -75,14 +75,10 @@ const PlayerProfileInfo = () => {
 
   const dispatch = useDispatch();
 
-  const setPlayer = () => {
-    dispatch(setPlayerInfo(idreal,username));
-  }
-
   useEffect(() => {
-    setPlayer();
+    dispatch(setPlayerInfo(idreal,username));
     dispatch(getPlayerProfile())
-  },[dispatch])
+  },[idreal, username, dispatch])
 
   const profile = useSelector(store => store.player.statistics);
   console.log('Profile', profile)

@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import Dashboard from './Dashboard';
 import Signin from './Signin';
 import { useSelector} from 'react-redux'
+import LogOut from './LogOut';
 
 const Router = () => {
 
@@ -11,12 +12,13 @@ const Router = () => {
   return (
     <BrowserRouter>
       <Switch> 
-        <Route exact path="/" render={() => <Redirect to="/app/dashboard" />} />
+        <Route path="/logout" component={LogOut} />
+        <Route exact path="/" render={() => <Redirect to="/app" />} />
         <Route
           exact
           path="/app"
           render={() => <Redirect to="/app/dashboard" />}
-        />       
+        />               
         <PrivateRoute path="/app" component={Dashboard} />
         <PublicRoute path="/login" component={Signin} />
       </Switch>

@@ -70,13 +70,16 @@ const statusOptions = [
 function PlayerEditForm (props) {
 
   let {player} = props;
-  const classes = useStyles();
 
-  let showAlert = false;
+  var showAlert = false;
+
+  console.log(showAlert);
+
+  const classes = useStyles();
 
   const dispatch = useDispatch();
 
-  const {register, errors, handleSubmit, control} =  useForm();  
+  const {register, handleSubmit, control} =  useForm();  
 
   const error = useSelector(store => store.player.error);
   const messageupdate = useSelector(store => store.player.messageupdate);

@@ -30,7 +30,7 @@ const LastThreeWeeks = ({byagentid}) => {
       dispatch(getFiguresAgentLastThreeWeeks(byId,sub))
     }
     fetchData();
-  }, [dispatch])
+  }, [dispatch, byId, sub])
 
   const thisweek = moment(todaydate).week();
 
@@ -61,9 +61,9 @@ const LastThreeWeeks = ({byagentid}) => {
   ];
 
   if(figuresbyweek){
-    figuresbyweek.map((week) => {      
+    figuresbyweek.forEach( week => {      
       if(week._id === thisweek){
-        week.days.map((day) => {
+        week.days.forEach( day => {
           switch(day.day) {
             case 2:
               data[0].thisweek=day.total;
@@ -91,7 +91,7 @@ const LastThreeWeeks = ({byagentid}) => {
           }
         })
       }else if(week._id === (thisweek-1)){
-        week.days.map((day) => {
+        week.days.forEach( day  => {
           switch(day.day) {
             case 2:
               data[0].lastweek=day.total;
@@ -119,7 +119,7 @@ const LastThreeWeeks = ({byagentid}) => {
           }
         })
       }else if(week._id === (thisweek-2)){
-        week.days.map((day) => {
+        week.days.forEach( day => {
           switch(day.day) {
             case 2:
               data[0].twoweeksbefore=day.total;
@@ -150,7 +150,6 @@ const LastThreeWeeks = ({byagentid}) => {
     })
   }
 
-  console.log('data',data);
   return (
     <div style={{ width: '100%', height: 300 }}>
       <ResponsiveContainer>

@@ -1,5 +1,4 @@
 import React from 'react';
-import Title from './Title';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 
@@ -11,8 +10,8 @@ const useStyles = makeStyles((theme) => ({
 
   row: {
     margin: '0',
-    paddingTop: '15px',
-    paddingBottom: '20px',
+    paddingTop: '14px',
+    paddingBottom: '14px',
     paddingLeft: '10px',
     paddingRight: '10px',
   },
@@ -36,13 +35,33 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Deposits({ totalRake }) {
+export default function Deposits({ dashboard, totalRake, totalperday }) {
   const classes = useStyles();
   const maincontainer = clsx(classes.main); 
   const mainrow = clsx(classes.row); 
   const mainrowitemleft = clsx(classes.rowItemLeft); 
-  const mainrowitemright = clsx(classes.rowItemRight); 
+  const mainrowitemright = clsx(classes.rowItemRight);
+  
+  let totalPlayer = 0;
+  let totalOnlinePlayers = 0;
+  //let topPlayers = 0;
+  let totalPlayinPly = 0;
+  let totalRunningGame = 0;
+  let totalRk = 0;
+  let totalPday = 0;
+  let totalGamePlayed = 0;
 
+  if(dashboard){
+    totalPlayer = dashboard.totalPlayer;
+    totalOnlinePlayers = dashboard.totalOnlinePlayers;
+    //topPlayers = dashboard.topPlayers;
+    totalPlayinPly = dashboard.totalPlayingPly;
+    totalRunningGame = dashboard.totalRunningGame;
+    totalRk = totalRake;
+    totalPday = totalperday[0].total;
+    totalGamePlayed = dashboard.totalGamePlayed;
+  }
+  
   return (
     <div className={maincontainer}>
       <div className={mainrow}>
@@ -50,15 +69,31 @@ export default function Deposits({ totalRake }) {
           Today's Rake:
         </div>
         <div className={mainrowitemright}>
-          ${`${totalRake}`}
+          ${`${totalRk.toFixed(2)}`}
         </div>
       </div>
       <div className={mainrow}>
         <div className={mainrowitemleft}>
-          Today's Players:
+          Rake by day:
         </div>
         <div className={mainrowitemright}>
-          12
+          ${`${totalPday.toFixed(2)}`}
+        </div>
+      </div>
+      <div className={mainrow}>
+        <div className={mainrowitemleft}>
+          Total Players:
+        </div>
+        <div className={mainrowitemright}>
+        {totalPlayer}
+        </div>
+      </div>
+      <div className={mainrow}>
+        <div className={mainrowitemleft}>
+          Game Played:
+        </div>
+        <div className={mainrowitemright}>
+        {totalGamePlayed}
         </div>
       </div>
       <div className={mainrow}>
@@ -66,7 +101,7 @@ export default function Deposits({ totalRake }) {
           Today's Tables:
         </div>
         <div className={mainrowitemright}>
-          122
+          {totalPlayinPly}
         </div>
       </div>
       <div className={mainrow}>
@@ -74,7 +109,7 @@ export default function Deposits({ totalRake }) {
           Online Players:
         </div>
         <div className={mainrowitemright}>
-          8
+          {totalOnlinePlayers}
         </div>
       </div>
       <div className={mainrow}>
@@ -82,7 +117,7 @@ export default function Deposits({ totalRake }) {
           Online Tables:
         </div>
         <div className={mainrowitemright}>
-          12
+          {totalRunningGame}
         </div>
       </div>   
     </div>

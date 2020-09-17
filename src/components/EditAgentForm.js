@@ -53,7 +53,9 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: '#FFCC00'
     },
   },
-
+  alerttext: {
+    color: 'red'
+  },
 }));
 
 const statusOptions = [
@@ -112,8 +114,26 @@ function EditAgentForm (props) {
           <input name="username" className={classes.input} ref={register} placeholder='Username' defaultValue={agent.username} readOnly/>
           <input name="firstname" className={classes.input} ref={register} placeholder='Firstname'defaultValue={agent.firstname}/>
           <input name="lastname" className={classes.input} ref={register} placeholder='Lastname'defaultValue={agent.lastname}/>
-          <input name="commission" className={classes.input} ref={register} placeholder='Commission'defaultValue={agent.commission}/>
-          <input name="email" className={classes.input} ref={register} placeholder='Email'defaultValue={agent.email} readOnly/>                    
+          <span className={classes.alerttext}>
+              {errors?.commission?.message}
+          </span>
+          <input name="commission" className={classes.input} ref={register(
+            {
+              required: {value: true, message: 'Commission is required'}
+            }
+          )} placeholder='Commission'defaultValue={agent.commission}/>
+          <span className={classes.alerttext}>
+              {errors?.email?.message}
+          </span>
+          <input name="email" className={classes.input} ref={register(
+            {
+              required: 'Required',
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: "Invalid email address"
+              }
+            }
+          )} placeholder='Email'defaultValue={agent.email} readOnly/>                    
           <Controller
             className={classes.inputcmb}
             as={ReactSelect}
@@ -122,6 +142,7 @@ function EditAgentForm (props) {
             isClearable
             control={control}
             placeholder='Status'
+            rules={{ required: true }}
             defaultValue={() => {
               if(agent.status === 'active'){
                 return {value: 'active', label: 'Active'};

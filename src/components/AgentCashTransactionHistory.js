@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { forwardRef } from 'react';
 import MaterialTable from "material-table";
@@ -18,7 +18,7 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import {useDispatch, useSelector} from 'react-redux';
-import { setPlayerInfo, getPlayerTransCashHistory } from '../redux/PlayerDucks';
+import { setAgentInfo, getAgentTransCashHistory } from '../redux/AgentDucks';
 import moment from 'moment';
 
 
@@ -42,24 +42,22 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
-const PlayerCashTransHistory = () => {
+const AgentCashTransactionHistory = () => {
   const { id } = useParams();
 
   const params = id.split('&');
 
-  const idreal = params[0];
-  const username = params[1];
+  const [idreal] = useState(params[0])
+  const [username] = useState(params[1])
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(setPlayerInfo(idreal,username));
-    dispatch(getPlayerTransCashHistory());
+    dispatch(setAgentInfo(idreal,username));    
+    dispatch(getAgentTransCashHistory());
   }, [idreal, username, dispatch])
 
-  const transcashhistorylist = useSelector(store => store.player.transactions);
-
-  console.log('CASH TRANS', transcashhistorylist);
+  const transcashhistorylist = useSelector(store => store.agent.transactions);
   
   
   return transcashhistorylist ? (
@@ -79,7 +77,7 @@ const PlayerCashTransHistory = () => {
           filtering: true,
 
         }}
-        title={`Player Cash Transaction History: ${username.toUpperCase()}`}
+        title={`Agent Cash Transaction History: ${username.toUpperCase()}`}
         columns={[
           { title: "Tx.Number", field: "transactionNumber", filtering: false},
           { title: "Provider Email/ID", field: "providerEmail", filtering: false},
@@ -96,4 +94,4 @@ const PlayerCashTransHistory = () => {
   ) : null;
 }
 
-export default PlayerCashTransHistory;
+export default AgentCashTransactionHistory;

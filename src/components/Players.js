@@ -17,12 +17,15 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import PlayerMenuEdit from './PlayerMenuEdit';
-import TableCell from '@material-ui/core/TableCell';
-import TableRow from '@material-ui/core/TableRow';
+//import TableCell from '@material-ui/core/TableCell';
+//import TableRow from '@material-ui/core/TableRow';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {getPlayersByAgent} from '../redux/AgentDucks';
 import { makeStyles } from '@material-ui/core/styles';
+
+import Button from '@material-ui/core/Button';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
 
 const tableIcons = {
@@ -66,7 +69,13 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#2e2e2e',
     color: '#FFA900',
     margin: '5px'
-  }
+  },
+  buttonAdd:{
+    color: '#FFFFFF',
+    backgroundColor: '#669933',
+    fontWeight: '700',
+    margin: '5px',    
+  },
 }));
 
 //Funcion que pinta la lista de players por agente
@@ -84,16 +93,18 @@ function Players() {
     fetchData();
   }, [dispatch])
 
-  const playersList = useSelector(store => store.agent.players).data;
+  const playersList = useSelector(store => store.agent.players);
 
-  let actualAgent = '';
-  var indx = 100000;
+  //let actualAgent = '';
+  //var indx = 100000;
 
-  const agentHeader = (agentName, i) => {
-    console.log('ENTROOOO');
-    if(agentName.toString().trim() === actualAgent.toString().trim()){
-      console.log('iguales')
-    }else{
+  const faddPlayer = () => {
+    var urlred = `/app/addplayer`
+    window.location.href=urlred;
+  }
+
+  /*const agentHeader = (agentName, i) => {
+    if(agentName.toString().trim() !== actualAgent.toString().trim()){
       actualAgent = agentName;
       let ind = indx+1;
       return(
@@ -104,11 +115,22 @@ function Players() {
         </>
       )
     }
-  }
+  }*/
 
-  return (
+  return playersList ? (
 
     <div style={{ maxWidth: "100%" }}>
+      <div style={{ maxWidth: "100%", textAlign: 'right' }}>
+        <Button 
+          className={classes.buttonAdd} 
+          aria-haspopup="true" 
+          onClick={() => faddPlayer()}
+          variant="contained"
+          >
+            <PersonAddIcon />
+          &nbsp;Add Player
+        </Button>
+      </div>
       <MaterialTable
         icons={tableIcons}
         options={{
@@ -127,7 +149,13 @@ function Players() {
           { title: "PlayerID", field: "uniqId", filtering: false},
           { title: "Username", field: "username", filtering: false},
           { title: "Agent", field: "agentName", filtering: false},
-          { title: "Balance", field: "chips", filtering: false},
+          { title: "Balance", field: "chips", filtering: false, render: rowData => 
+            <>
+            {
+              rowData.chips.toFixed(2)
+            }
+            </>
+          },
           { title: "Status", field: "status", filtering: true},
           { title: 'Action', field: 'action', filtering: false,
             render: row => (
@@ -138,7 +166,7 @@ function Players() {
         data={playersList}
       />
     </div>
-  )
+  ) : null;
 }
 
 export default Players;

@@ -1,7 +1,6 @@
 import React from "react";
 import { Doughnut } from "react-chartjs-2";
 import { MDBContainer } from "mdbreact";
-import { colors } from "@material-ui/core";
 
 const PlayerGameChart = ({data}) => {
 const state = {

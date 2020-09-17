@@ -56,8 +56,10 @@ function SignIn (props) {
 
   const onSubmit = (data, e) => {
     e.preventDefault();
-    dispatch(signIn(data));
-    e.target.reset();
+    dispatch(signIn(data)).then(() => {
+      e.target.reset();
+    });
+    
   }
 
   const showError = () => (

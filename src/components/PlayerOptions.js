@@ -32,14 +32,10 @@ const PlayerOptions = () => {
 
   const dispatch = useDispatch();
 
-  const setPlayer = () => {
-    dispatch(setPlayerInfo(idreal,username));
-  }
-
   useEffect(() => {
-    setPlayer();
+    dispatch(setPlayerInfo(idreal,username));
     dispatch(getPlayerData())
-  },[dispatch])
+  },[idreal, username, dispatch])
 
   const player = useSelector(store => store.player.data);
 

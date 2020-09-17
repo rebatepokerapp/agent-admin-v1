@@ -53,15 +53,9 @@ const PlayerIpLoginHistory = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const fetchPlayerInfo = () => {
-      dispatch(setPlayerInfo(idreal,username))
-    }    
-    const fetchData = () => {
-      dispatch(getPlayerIpLoginHistory())
-    }
-    fetchPlayerInfo();
-    fetchData();
-  }, [dispatch])
+    dispatch(setPlayerInfo(idreal,username));
+    dispatch(getPlayerIpLoginHistory());
+  }, [idreal, username, dispatch])
 
   const ipplayerloginhistorylist = useSelector(store => store.player.iplist);
 

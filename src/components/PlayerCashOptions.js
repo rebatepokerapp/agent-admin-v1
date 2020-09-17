@@ -56,7 +56,6 @@ const useStyles = makeStyles((theme) => ({
     color: '#000000',
     backgroundColor: '#FF9A00',
     fontWeight: '700',
-    marginBottom: '100px',
   },
 }));
 

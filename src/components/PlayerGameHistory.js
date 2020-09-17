@@ -54,15 +54,9 @@ const PlayerGameHistory = () => {
   const dispatch = useDispatch();
   
   useEffect(() => {
-    const fetchPlayerInfo = () => {
-      dispatch(setPlayerInfo(idreal,username))
-    }    
-    const fetchData = () => {
-      dispatch(getPlayerGameHistory())
-    }
-    fetchPlayerInfo();
-    fetchData();
-  }, [dispatch])
+    dispatch(setPlayerInfo(idreal,username));
+    dispatch(getPlayerGameHistory());
+  }, [idreal, username, dispatch])
 
   const gamehistorylist = useSelector(store => store.player.gamehistory);
 

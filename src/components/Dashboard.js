@@ -33,6 +33,9 @@ import EditAgent from './EditAgent';
 import SubRakeHistory from './SubRakeHistory';
 import PlayerTransferChips from './PlayerTransferChips';
 import AddAgent from './AddAgent';
+import AddPlayer from './AddPlayer';
+import AgentCashTransactionHistory from './AgentCashTransactionHistory';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 
 import {
   BrowserRouter as Router,
@@ -131,7 +134,19 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     overflow: 'auto',
     flexDirection: 'column',
-  }
+  },
+  access: {
+    flexGrow: 1,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    color: '#FFA900',
+    padding: '0 8px',
+    ...theme.mixins.toolbar,
+  },
+  textcode: {
+    display: 'none'
+  },
 }));
 
 export default function Dashboard() {
@@ -143,10 +158,23 @@ export default function Dashboard() {
   };
   const handleDrawerClose = () => {
     setOpen(false);
-  };
+  };  
 
   const agent = useSelector(store => store.agent);
 
+  const copyLink = () => {
+    var texto = document.getElementById('accesscod');
+    navigator.clipboard.writeText(texto.value).then( () => {
+      console.log('copy to clipboard');
+    }).catch(() => {
+      console.log('error copy to clipboard');
+    })   
+  }
+
+  const getLink = (code) => {
+    return `https://${window.location.href.toString().split('/')[2]}/register.html?accesscode=${code}`;
+  }
+  
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -164,6 +192,12 @@ export default function Dashboard() {
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             {`${agent.agent.name.toUpperCase()} - Balance: $${agent.agent.rake_chips.toFixed(2)}`}
           </Typography>
+          <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.access}>
+            {`Access Code: ${agent.agent.accessCode}`}<input type="text" className={classes.textcode} value={getLink(agent.agent.accessCode)} id="accesscod" readOnly></input>            
+          </Typography>
+          <IconButton onClick={() => copyLink()} className={classes.toolbarIcon}>
+            <FileCopyIcon />
+          </IconButton>
           <AgentMenu agent={agent.agent} />
         </Toolbar>
       </AppBar>
@@ -204,7 +238,9 @@ export default function Dashboard() {
               <Route path="/app/editagent/:id" component={EditAgent} />
               <Route path="/app/playertransferchips/:id" component={PlayerTransferChips} />  
               <Route path="/app/rakehistory/:id" component={SubRakeHistory} />
-              <Route path="/app/addagent" component={AddAgent} />                          
+              <Route path="/app/addagent" component={AddAgent} />  
+              <Route path="/app/addplayer" component={AddPlayer} /> 
+              <Route path="/app/cashhistory/:id" component={AgentCashTransactionHistory} />                         
             </Switch>
           </Router>
           <Box pt={4}>

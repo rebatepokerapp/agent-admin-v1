@@ -2,12 +2,11 @@ import React, { useEffect } from 'react'
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import TotalRakeInfo from './TotalRakeInfo';
-import Figures from './Figures';
 import ChartFiguresPerWeek from './ChartFiguresPerWeek';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import {useDispatch, useSelector} from 'react-redux';
-import {getFiguresByAgent} from '../redux/AgentDucks';
+import {getFiguresByAgent,getAgentDashboard} from '../redux/AgentDucks';
 import FiguresReport from './FiguresReport';
 
 
@@ -36,10 +35,14 @@ function MainDash() {
     const fetchData = () => {
       dispatch(getFiguresByAgent(0))
     }
+    const fetchDash = () => {
+      dispatch(getAgentDashboard())
+    }    
     fetchData();
+    fetchDash();
   }, [dispatch])
 
-  const figuresList = useSelector(store => store.agent.figures);
+  const dashboarddata = useSelector(store => store.agent.dashboard);
   const totalRake = useSelector(store => store.agent.totalrake);
   const totalperday = useSelector(store => store.agent.totalperday);
 
@@ -49,7 +52,7 @@ function MainDash() {
         {/* Recent Deposits */}
         <Grid item xs={12} md={4} lg={3}>
           <Paper className={fixedHeightPaper}>
-            <TotalRakeInfo totalRake={totalRake}/>
+            <TotalRakeInfo dashboard={dashboarddata} totalRake={totalRake} totalperday={totalperday}/>
           </Paper>
         </Grid>
         {/* Chart */}

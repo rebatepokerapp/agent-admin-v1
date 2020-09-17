@@ -2,15 +2,6 @@ import React, { useEffect } from 'react'
 import MaterialTable from "material-table";
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import EditIcon from '@material-ui/icons/Edit';
-import HistoryIcon from '@material-ui/icons/History';
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
-import NotesIcon from '@material-ui/icons/Notes';
 import { forwardRef } from 'react';
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
@@ -31,6 +22,7 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {getSubsByAgent} from '../redux/AgentDucks';
+import AgentMenuEdit from './AgentMenuEdit';
 
 const useStyles = makeStyles((theme) => ({
   button:{
@@ -89,41 +81,12 @@ function Agents() {
     fetchData();
   }, [dispatch])
 
-  const subsList = useSelector(store => store.agent.subagents).data;
-
-  const [anchorEl, setAnchorEl] = React.useState(null);
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const subsList = useSelector(store => store.agent.subagents);
 
   const faddAgent = () => {
     var urlred = `/app/addagent`
     window.location.href=urlred;
   }
-
-  const handleClose = (from,id,agent) => {    
-    setAnchorEl(null);
-    if(from === 'EA'){
-      var urlred = `/app/editagent/${id}&${agent}`
-      window.location.href=urlred;
-    } else if(from === 'RH') {
-      urlred = `/app/rakehistory/${id}&${agent}`
-      window.location.href=urlred;
-    } else if(from === 'CH') {
-      urlred = `/app/cashhistory/${id}&${agent}`
-      window.location.href=urlred;
-    } else if(from === 'TC') {
-      urlred = `/app/transferchips/${id}&${agent}`
-      window.location.href=urlred;
-    } else if(from === 'RC') {
-      urlred = `/app/requestcash/${id}&${agent}`
-      window.location.href=urlred;
-    } else if(from === 'CN') {
-      urlred = `/app/chipsnotes/${id}&${agent}`
-      window.location.href=urlred;
-    }
-  };
 
   return  subsList ? (
 
@@ -167,61 +130,7 @@ function Agents() {
           {
             title: '',field: '',filtering: false,
             render: row => (
-              <div>
-              <Button 
-                className={classes.button} 
-                aria-haspopup="true" 
-                onClick={handleClick}
-                aria-controls="customized-menu"
-                variant="contained"
-                >
-                  <ArrowForwardIosIcon />
-              </Button>
-              <Menu
-                id="customized-menu"
-                anchorEl={anchorEl}
-                keepMounted
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                <MenuItem  onClick={() => handleClose('EA',row._id,row.username)}>
-                  <ListItemIcon>
-                    <EditIcon fontSize="small" />
-                  </ListItemIcon>
-                  <ListItemText primary="Edit Agent" />
-                </MenuItem>
-                <MenuItem onClick={() => handleClose('RH',row._id,row.username)}>
-                  <ListItemIcon>
-                    <HistoryIcon fontSize="small" />
-                  </ListItemIcon>
-                  <ListItemText primary="Rake History" />
-                </MenuItem>
-                <MenuItem onClick={() => handleClose('CH',row._id,row.username)}>
-                  <ListItemIcon>
-                    <HistoryIcon fontSize="small" />
-                  </ListItemIcon>
-                  <ListItemText primary="Cash History" />
-                </MenuItem>
-                <MenuItem onClick={() => handleClose('TC',row._id,row.username)}>
-                  <ListItemIcon>
-                    <AttachMoneyIcon fontSize="small" />
-                  </ListItemIcon>
-                  <ListItemText primary="Transfer Chips" />
-                </MenuItem>
-                <MenuItem onClick={() => handleClose('RC',row._id,row.username)}>
-                  <ListItemIcon>
-                    <AttachMoneyIcon fontSize="small" />
-                  </ListItemIcon>
-                  <ListItemText primary="Request Cash" />
-                </MenuItem>
-                <MenuItem onClick={() => handleClose('CN',row._id,row.username)}>
-                  <ListItemIcon>
-                    <NotesIcon fontSize="small" />
-                  </ListItemIcon>
-                  <ListItemText primary="Edit Chips Notes" />
-                </MenuItem>
-              </Menu>
-              </div>
+              <AgentMenuEdit agent={row.username} id={row._id}/>
             ),
           },
         ]}

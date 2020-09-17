@@ -11,7 +11,8 @@ const playerData = {
   statistics: null,
   messageupdate:'',
   iplist: null,
-  error: null
+  error: null,
+  validate: ''
 }
 
 const PLAYER_GAME_HISTORY_SUCCESS = 'PLAYER_GAME_HISTORY_SUCCESS';
@@ -28,6 +29,13 @@ const UPDATE_PLAYER_INFO_SUCCESS = 'UPDATE_PLAYER_INFO_SUCCESS'
 const UPDATE_PLAYER_INFO_ERROR = 'UPDATE_PLAYER_INFO_ERROR'
 const GET_PLAYER_PROFILE_SUCCESS = 'GET_PLAYER_PROFILE_SUCCESS'
 const GET_PLAYER_PROFILE_ERROR = 'GET_PLAYER_PROFILE_ERROR'
+const VALIDATE_PLAYER_EMAIL_SUCCESS = 'VALIDATE_PLAYER_EMAIL_SUCCESS'
+const VALIDATE_PLAYER_EMAIL_ERROR = 'VALIDATE_PLAYER_EMAIL_ERROR'
+const ADD_PLAYER_INFO_SUCCESS = 'ADD_PLAYER_INFO_SUCCESS'
+const ADD_PLAYER_INFO_ERROR = 'ADD_PLAYER_INFO_ERROR'
+const SET_PLAYER_MESSAGES_SUCCESSS = 'SET_PLAYER_MESSAGES_SUCCESSS'
+const VALIDATE_PLAYER_USERNAME_SUCCESS = 'VALIDATE_PLAYER_USERNAME_SUCCESS'
+const VALIDATE_PLAYER_USERNAME_ERROR = 'VALIDATE_PLAYER_USERNAME_ERROR'
 
 
 //Reducer
@@ -57,10 +65,24 @@ export default function playerReducer(state = playerData, action){
     case UPDATE_PLAYER_INFO_SUCCESS:
       return{...state, messageupdate: action.payload.message, data: action.payload.player, error: null}
     case UPDATE_PLAYER_INFO_ERROR:
-      return{...state, error: action.payload, messageupdate: null}
+      return{...state, error: action.payload, messageupdate: null}    
     case GET_PLAYER_PROFILE_SUCCESS:
       return{...state, statistics: action.payload,  messageupdate: null, error: null}
     case GET_PLAYER_PROFILE_ERROR:
+      return{...state, error: action.payload, messageupdate: null}
+    case VALIDATE_PLAYER_EMAIL_SUCCESS:
+      return{...state, validate: action.payload,messageupdate: null, error: null}
+    case VALIDATE_PLAYER_EMAIL_ERROR:
+      return{...state, error: action.payload, messageupdate: null}
+    case ADD_PLAYER_INFO_SUCCESS:
+      return{...state, messageupdate: action.payload.message, data: action.payload.player, error: null, transactions: null, gamehistory: null, statistics: null, iplist: null}
+    case ADD_PLAYER_INFO_ERROR:
+      return{...state, error: action.payload, messageupdate: null}
+    case SET_PLAYER_MESSAGES_SUCCESSS:
+      return{...state, error: null, messageupdate: null}
+    case VALIDATE_PLAYER_USERNAME_SUCCESS:
+      return{...state, validate: action.payload,messageupdate: null, error: null}
+    case VALIDATE_PLAYER_USERNAME_ERROR:
       return{...state, error: action.payload, messageupdate: null}
     default:
       return state
@@ -77,6 +99,13 @@ export const setPlayerInfo = (id,player) => async (dispatch, getState) => {
   })
 }
 
+export const setPlayerMessagesError = () => async (dispatch, getState) => {
+  dispatch({
+    type: SET_PLAYER_MESSAGES_SUCCESSS,
+    payload: null
+  })
+}
+
 export const getPlayerGameHistory = () => async  (dispatch, getState) => {
   try {
     const query =  {
@@ -90,7 +119,6 @@ export const getPlayerGameHistory = () => async  (dispatch, getState) => {
     const AuthStr = 'Bearer '.concat(token);
     console.log('PLAYER ID', id)
     const res = await axios.get(`${API_AGENT_URL}/player/gameHistory/${id}?start=${query.start}&length=${query.length}&search=${query.search}`,{ headers: { Authorization: AuthStr, agent: agent }});
-    console.log('DATA', res.data)
     dispatch({
       type: PLAYER_GAME_HISTORY_SUCCESS,
       payload: res.data.data
@@ -216,7 +244,6 @@ export const getPlayerProfile = () => async  (dispatch, getState) => {
     const res = await axios.get(`${API_AGENT_URL}/player/profile/${id}`,{ headers: { Authorization: AuthStr, agent: agent }});
     let result = null;
     if(res.data){
-      console.log('data exists');
       result = {
         username: res.data.player.username,
         gamePlay: res.data.player.statistics.cashgame.noOfPlayedGames,
@@ -239,5 +266,62 @@ export const getPlayerProfile = () => async  (dispatch, getState) => {
       type: GET_PLAYER_PROFILE_ERROR,
       payload: 'Error getting player data'
     });
+  }
+}
+
+export const validateEmail = (data) => async  (dispatch, getState) => {
+  try {   
+    const agent = JSON.stringify(getState().agent.agent);
+    const token = getState().agent.agent.jwt_token;
+    const AuthStr = 'Bearer '.concat(token);
+    await axios.post(`${API_AGENT_URL}/player/checkemail`, data, { headers: { Authorization: AuthStr, agent: agent }});
+    dispatch({
+      type: VALIDATE_PLAYER_EMAIL_SUCCESS,
+      payload: 'OK'
+    })
+  } catch (error) {
+    dispatch({
+      type: VALIDATE_PLAYER_EMAIL_ERROR,
+      payload: 'Email already exist'
+    })
+  }
+}
+
+export const validateUsername = (data) => async  (dispatch, getState) => {
+  try {   
+    const agent = JSON.stringify(getState().agent.agent);
+    const token = getState().agent.agent.jwt_token;
+    const AuthStr = 'Bearer '.concat(token);
+    await axios.post(`${API_AGENT_URL}/player/checkusername`, data, { headers: { Authorization: AuthStr, agent: agent }});
+    dispatch({
+      type: VALIDATE_PLAYER_USERNAME_SUCCESS,
+      payload: 'OK'
+    })
+  } catch (error) {
+    dispatch({
+      type: VALIDATE_PLAYER_USERNAME_ERROR,
+      payload: 'Username already exist'
+    })
+  }
+}
+
+export const addPlayerData = (data) => async  (dispatch, getState) => {
+  try {   
+    const agent = JSON.stringify(getState().agent.agent);
+    const token = getState().agent.agent.jwt_token;
+    const AuthStr = 'Bearer '.concat(token);
+    const res = await axios.post(`${API_AGENT_URL}/player/addplayer`, data, { headers: { Authorization: AuthStr, agent: agent }});
+    dispatch({
+      type: ADD_PLAYER_INFO_SUCCESS,
+      payload: {
+        player: res.data.player,
+        message: 'Player inserted'
+      }
+    })
+  } catch (error) {
+    dispatch({
+      type: ADD_PLAYER_INFO_ERROR,
+      payload: 'Error inserting player data'
+    })
   }
 }

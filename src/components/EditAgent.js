@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {getAgentData,setAgentInfo} from '../redux/AgentDucks';
 import { useParams } from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
@@ -24,28 +24,23 @@ const EditAgent = () => {
 
   const classes = useStyles();
   const maincontainer = clsx(classes.main); 
+  const [idreal] = useState(params[0])
+  const [username] = useState(params[1])
 
-  const idreal = params[0];
-  const username = params[1];
+  const dispatch = useDispatch(); 
 
-  const dispatch = useDispatch();
-
-  const setAgent = () => {
-    dispatch(setAgentInfo(idreal,username));
-  }
-
-  useEffect(() => {
-    setAgent();
+  useEffect(() => {  
+    dispatch(setAgentInfo(idreal,username))
     dispatch(getAgentData())
-  },[dispatch])
+  },[idreal, username, dispatch])
 
   const agent = useSelector(store => store.agent.data);
 
-  return (
+  return agent ? (
     <div  className={maincontainer}>
       <div><EditAgentForm agent={agent}/></div>
     </div>
-  )
+  ): null;
 }
 
 export default EditAgent

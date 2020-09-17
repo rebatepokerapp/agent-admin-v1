@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
@@ -11,7 +11,8 @@ import Typography from '@material-ui/core/Typography';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import {useDispatch, useSelector} from 'react-redux'
 import clsx from 'clsx';
-import {addAgentData} from '../redux/AgentDucks';
+import {addPlayerData, validateEmail, setPlayerMessagesError, validateUsername} from '../redux/PlayerDucks';
+import {getSubsByAgent} from '../redux/AgentDucks';
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -73,8 +74,10 @@ const statusOptions = [
   {value:"block", label:"Block"}
 ]
 
-const AddAgent = () => {
+const AddPlayer = () => {
   const classes = useStyles();
+
+  const subAgents = [];
 
   const dispatch = useDispatch();
 
@@ -82,17 +85,45 @@ const AddAgent = () => {
 
   const {register, errors, handleSubmit, control} =  useForm();
 
-  const error = useSelector(store => store.agent.error);
-  const messageupdate = useSelector(store => store.agent.messageupdate);
+  const error = useSelector(store => store.player.error);
+  const messageupdate = useSelector(store => store.player.messageupdate);
+  
 
   const onSubmit = (data, e) => {
     e.preventDefault();    
-    dispatch(addAgentData(data)).then(() => {
-      e.target.reset();
-      if(messageupdate === 'Agent inserted'){
-        window.location.href='/app/agents';
+    dispatch(addPlayerData(data)).then(() => { 
+      console.log(messageupdate);     
+      if(messageupdate === 'Player inserted'){
+        console.log(messageupdate);
+        window.location.href='/app/players';
       }      
+      e.target.reset();
+      setTimeout(() => {
+        dispatch(setPlayerMessagesError());      
+      },3000);
     });   
+  }
+
+  useEffect(() => {
+    const fetchData = () => {
+      dispatch(getSubsByAgent())
+    }
+    fetchData();
+  }, [dispatch])
+
+  const subsList = useSelector(store => store.agent.subagents);
+
+  console.log(subsList)
+
+  if(subsList){
+    var item = null;
+    subsList.map( sub => {
+      item = {
+        value: sub._id,
+        label: sub.username
+      }
+      subAgents.push(item);
+    })
   }
 
   const showError = () => (
@@ -108,18 +139,38 @@ const AddAgent = () => {
         <CssBaseline />
         <div className={classes.paper}>
           <Typography component="h1" variant="h5" className={classes.title}>
-            ADD AGENT
+            ADD PLAYER
           </Typography>
           
           <form className={classes.form} noValidate onSubmit={handleSubmit(onSubmit)}>
             <span className={classes.alerttext}>
                 {errors?.username?.message}
             </span>
-            <input name="username" className={classes.input} ref={register(
-              {
-                required: {value: true, message: 'Username is required'}
-              }
-            )} placeholder='Username' />
+            <input name="username" id="username" className={classes.input} ref={register(
+                {
+                  required: {value: true, message: 'Username is required'}
+                }
+              )} 
+              placeholder='Username'
+              onBlur={(e) => {
+                e.preventDefault();
+                var data = {
+                  username: document.getElementById('username').value
+                }
+                console.log(data)
+                dispatch(validateUsername(data)).then(
+                  (res) => {
+                    console.log('validacion')
+                  }
+                )
+                setTimeout(() => {
+                  if(document.getElementById('alertmes')){
+                    document.getElementById('alertmes').style.display='none';
+                  }
+                  dispatch(setPlayerMessagesError());     
+                },3000);
+              }} 
+            />
             <input name="firstname" className={classes.input} ref={register} placeholder='Firstname' />
             <input name="lastname" className={classes.input} ref={register} placeholder='Lastname' />
             <span className={classes.alerttext}>
@@ -133,15 +184,10 @@ const AddAgent = () => {
             <span className={classes.alerttext}>
                 {errors?.commission?.message}
             </span>
-            <input name="commission" className={classes.input} ref={register(
-              {
-                required: {value: true, message: 'Commission is required'}
-              }
-            )} placeholder='Commission' />
             <span className={classes.alerttext}>
                 {errors?.email?.message}
             </span>
-            <input name="email" className={classes.input} ref={register(
+            <input name="email" id="email" className={classes.input} ref={register(
               {
                 required: 'Required',
                 pattern: {
@@ -149,7 +195,38 @@ const AddAgent = () => {
                   message: "Invalid email address"
                 }
               }
-            )} placeholder='Email' />                    
+              )} 
+              placeholder='Email'
+              onBlur={(e) => {
+                e.preventDefault();
+                var data = {
+                  email: document.getElementById('email').value
+                }
+                console.log(data)
+                dispatch(validateEmail(data)).then(
+                  () => {
+                    console.log('validacion')
+                  }
+                )
+                setTimeout(() => {
+                  if(document.getElementById('alertmes')){
+                    document.getElementById('alertmes').style.display='none';
+                  }
+                  dispatch(setPlayerMessagesError());     
+                },3000);
+              }}
+            /> 
+            <Controller
+              className={classes.inputcmb}
+              as={ReactSelect}
+              options={subAgents}
+              name="parentId"
+              isClearable
+              control={control}
+              placeholder='Parent Agent'
+              defaultValue={null} 
+              rules={{ required: true }}
+            />                   
             <Controller
               className={classes.inputcmb}
               as={ReactSelect}
@@ -177,4 +254,4 @@ const AddAgent = () => {
   )
 }
 
-export default withRouter(AddAgent)
+export default withRouter(AddPlayer)
