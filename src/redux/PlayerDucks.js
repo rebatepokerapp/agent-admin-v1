@@ -117,7 +117,6 @@ export const getPlayerGameHistory = () => async  (dispatch, getState) => {
     const agent = JSON.stringify(getState().agent.agent);
     const token = getState().agent.agent.jwt_token;
     const AuthStr = 'Bearer '.concat(token);
-    console.log('PLAYER ID', id)
     const res = await axios.get(`${API_AGENT_URL}/player/gameHistory/${id}?start=${query.start}&length=${query.length}&search=${query.search}`,{ headers: { Authorization: AuthStr, agent: agent }});
     dispatch({
       type: PLAYER_GAME_HISTORY_SUCCESS,

@@ -23,6 +23,9 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import {useDispatch, useSelector} from 'react-redux';
 import {getSubsByAgent} from '../redux/AgentDucks';
 import AgentMenuEdit from './AgentMenuEdit';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles((theme) => ({
   button:{
@@ -44,6 +47,9 @@ const useStyles = makeStyles((theme) => ({
     color: '#000000',
     fontWeight: '700',
     fontSize: 'large',
+  },
+  textcode: {
+    display: 'none'
   },
 }));
 
@@ -88,6 +94,19 @@ function Agents() {
     window.location.href=urlred;
   }
 
+  const copyLink = (id) => {
+    var texto = document.getElementById(id);
+    navigator.clipboard.writeText(texto.value).then( () => {
+      console.log('copy to clipboard');
+    }).catch(() => {
+      console.log('error copy to clipboard');
+    })   
+  }
+
+  const getLink = (code) => {
+    return `https://${window.location.href.toString().split('/')[2]}/register.html?accesscode=${code}`;
+  }
+
   return  subsList ? (
 
     <div style={{ maxWidth: "100%" }}>
@@ -121,7 +140,19 @@ function Agents() {
           filtering: true,        
         }}
         columns={[
-          { title: "Access Code", field: "accessCode", filtering: false},
+          { title: "Access Code", field: "accessCode", filtering: false,
+            render: agent => (
+              <>
+                {`${agent.accessCode} `}
+                <Tooltip title="Copy register link">
+                  <IconButton onClick={() => copyLink(agent.accessCode)} className={classes.toolbarIcon}>
+                    <FileCopyIcon />
+                  </IconButton>
+                </Tooltip>
+                <input type="text" className={classes.textcode} value={getLink(agent.accessCode)} id={agent.accessCode} readOnly></input>
+              </>
+            )          
+          },
           { title: "Username", field: "username", filtering: false},
           { title: "Email", field: "email", filtering: false},
           { title: "Rake %", field: "commission", filtering: false},

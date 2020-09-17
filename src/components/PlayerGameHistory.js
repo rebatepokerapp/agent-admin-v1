@@ -59,8 +59,6 @@ const PlayerGameHistory = () => {
   }, [idreal, username, dispatch])
 
   const gamehistorylist = useSelector(store => store.player.gamehistory);
-
-  console.log('GAME HISTORY', gamehistorylist);
   
   return gamehistorylist ? (
 
@@ -86,7 +84,7 @@ const PlayerGameHistory = () => {
           { title: "Big Blind", field: "bigBlind", filtering: false},
           { title: "Status", field: "status", filtering: false},
           { title: "Pot", field: "pot", filtering: false},
-          { title: "Date", field: "createdAt", filtering: true, render: rowData => moment(rowData.createdAt).format("YYYY/MM/DD hh:mm")},
+          { title: "Date", field: "createdAt", filtering: true, render: rowData => moment(rowData.createdAt).format("YYYY/MM/DD HH:mm")},
           { title: 'Action', field: 'action', filtering: false}
         ]}
         data={gamehistorylist}

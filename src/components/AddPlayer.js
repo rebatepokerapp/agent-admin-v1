@@ -117,7 +117,7 @@ const AddPlayer = () => {
 
   if(subsList){
     var item = null;
-    subsList.map( sub => {
+    subsList.forEach( sub => {
       item = {
         value: sub._id,
         label: sub.username

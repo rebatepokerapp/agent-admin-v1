@@ -192,12 +192,18 @@ export default function Dashboard() {
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             {`${agent.agent.name.toUpperCase()} - Balance: $${agent.agent.rake_chips.toFixed(2)}`}
           </Typography>
-          <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.access}>
-            {`Access Code: ${agent.agent.accessCode}`}<input type="text" className={classes.textcode} value={getLink(agent.agent.accessCode)} id="accesscod" readOnly></input>            
-          </Typography>
-          <IconButton onClick={() => copyLink()} className={classes.toolbarIcon}>
-            <FileCopyIcon />
-          </IconButton>
+          {
+          agent.agent.role !== 'master' ? 
+            (<><Typography component="h1" variant="h6" color="inherit" noWrap className={classes.access}>
+              {`Access Code: ${agent.agent.accessCode}`}<input type="text" className={classes.textcode} value={getLink(agent.agent.accessCode)} id="accesscod" readOnly></input>            
+            </Typography>
+            <IconButton onClick={() => copyLink()} className={classes.toolbarIcon}>
+              <FileCopyIcon />
+            </IconButton></>)
+          :
+          ''
+          }
+          
           <AgentMenu agent={agent.agent} />
         </Toolbar>
       </AppBar>

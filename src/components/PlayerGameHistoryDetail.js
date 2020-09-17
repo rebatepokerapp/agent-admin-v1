@@ -1,6 +1,6 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
+//import clsx from 'clsx';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -12,6 +12,7 @@ import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import moment from 'moment';
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -109,12 +110,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PlayerGameHistoryDetail = ({gameHistoryDetail, key}) => {
-  console.log('DETALLE ', gameHistoryDetail)
 
   const diffMinutes = (date1,date2) => {
-    // Expresión regular para comprobar formato
-    var formatohora = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/;
-
     var hora_inicio = Date.parse(date2);
     var hora_final = Date.parse(date1);
     
@@ -126,14 +123,14 @@ const PlayerGameHistoryDetail = ({gameHistoryDetail, key}) => {
   }
 
   const classes = useStyles();
-  const maincontainer = clsx(classes.main); 
+  /*const maincontainer = clsx(classes.main); 
   const mainheader = clsx(classes.header); 
   const mainheaderitem = clsx(classes.headerItem); 
   const mainrow = clsx(classes.row); 
   const mainrowitem = clsx(classes.rowItem); 
   const mainrowsubitemcenter = clsx(classes.rowSubItemCenter); 
   const mainrowsubitemleft = clsx(classes.rowSubItemLeft); 
-  const mainrowsubitemright = clsx(classes.rowSubItemRight); 
+  const mainrowsubitemright = clsx(classes.rowSubItemRight);*/ 
 
   const setPotValue = () => {
     let distribution = [];
@@ -146,7 +143,7 @@ const PlayerGameHistoryDetail = ({gameHistoryDetail, key}) => {
     let AgentsRole = [];
 
     if(!gameHistoryDetail.rakeCap.length){
-      gameHistoryDetail.roundBets.map( bet =>{ 
+      gameHistoryDetail.roundBets.forEach( bet =>{ 
         totalBet = bet ?  parseFloat(parseFloat(bet).toFixed(2)) + parseFloat(parseFloat( totalBet ).toFixed(4)): parseFloat(totalBet)
       })
       totalRackOfTheGame=eval(parseFloat((parseFloat(totalBet) * parseFloat(gameHistoryDetail.rakePercenage)) / 100).toFixed(4));
@@ -170,11 +167,11 @@ const PlayerGameHistoryDetail = ({gameHistoryDetail, key}) => {
       player.plrRake = gameHistoryDetail.rakeDistribution.length ? gameHistoryDetail.roundBets[index] ? parseFloat(gameHistoryDetail.roundBets[index] / totalBetAmount * totalRackOfTheGame).toFixed(2) : " " : " "
       player.bets = gameHistoryDetail.roundBets[index] ? parseFloat(gameHistoryDetail.roundBets[index]).toFixed(4) : "-"
       totalRake = gameHistoryDetail.rakeDistribution.length && gameHistoryDetail.roundBets[index] ? parseFloat(player.plrRake) + totalRake : totalRake;
-      totalBet = player.bets && player.bets != '-' ? parseFloat(player.bets) + totalBet : totalBet;  
+      totalBet = player.bets && player.bets !== '-' ? parseFloat(player.bets) + totalBet : totalBet;  
       player.agentRake = [];
-      gameHistoryDetail.rakeDistribution.map(rakeDistribution => {
+      gameHistoryDetail.rakeDistribution.forEach(rakeDistribution => {
         let rackData = {}
-        if (rakeDistribution.playerId == gameHistoryDetail.players[index].id && !rakeDistribution.adminChips) {
+        if (rakeDistribution.playerId === gameHistoryDetail.players[index].id && !rakeDistribution.adminChips) {
           rackData.name = rakeDistribution.email
           rackData.rackTo = parseFloat(rakeDistribution.totalRake).toFixed(4)
           rackData.role = rakeDistribution.role
@@ -218,7 +215,7 @@ const PlayerGameHistoryDetail = ({gameHistoryDetail, key}) => {
     }
 
     for (var b = 0; b < gameHistoryDetail.rakeDistribution.length; b++) {
-      if (gameHistoryDetail.rakeDistribution[b].adminChips == true) { 
+      if (gameHistoryDetail.rakeDistribution[b].adminChips === true) { 
         let player = {
           playerName: gameHistoryDetail.rakeDistribution[b].playerId,
           plrRake: parseFloat(gameHistoryDetail.rakeDistribution[b].totalRake).toFixed(4),
@@ -236,7 +233,7 @@ const PlayerGameHistoryDetail = ({gameHistoryDetail, key}) => {
 
     for (var d = 0; d < gameHistoryDetail.history.length; d++) {
       if (gameHistoryDetail.history[d].boardCard != null) {
-        if (gameHistoryDetail.history[d].playerAction == 10) {
+        if (gameHistoryDetail.history[d].playerAction === 10) {
           let TotalRake = {
             name: "Revert Chips " + gameHistoryDetail.history[d].playerName,
             action: "Revert",
@@ -292,7 +289,7 @@ const PlayerGameHistoryDetail = ({gameHistoryDetail, key}) => {
     <TableContainer className={classes.containersty}>
       <Table size="small">
         <TableBody>
-          <TableRow>
+          <TableRow key={1000}>
             <TableCell align="left">              
               <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
                 <img src={`/card/cardsIcon.png`} alt="" />{` ${gameHistoryDetail.gameNumber}`}
@@ -302,10 +299,10 @@ const PlayerGameHistoryDetail = ({gameHistoryDetail, key}) => {
               &nbsp;
             </TableCell>
             <TableCell align="right">
-              {gameHistoryDetail.updatedAt}
+              {moment(gameHistoryDetail.updatedAt).format("YYYY/MM/DD HH:mm")}
             </TableCell>
           </TableRow>
-          <TableRow>
+          <TableRow key={1001}>
             <TableCell align="left">
               <div className={classes.boldhead}>
                 <b>Small Blind:</b> {` ${gameHistoryDetail.smallBlind}`}
@@ -330,10 +327,10 @@ const PlayerGameHistoryDetail = ({gameHistoryDetail, key}) => {
             </TableCell>
             <TableCell align="left">
               <div className={classes.boldhead}>
-                <b>Game Start Time:</b> {` ${gameHistoryDetail.createdAt}`}
+                <b>Game Start Time:</b> {` ${moment(gameHistoryDetail.createdAt).format("YYYY/MM/DD HH:mm")}`}
               </div> 
               <div className={classes.boldhead}>
-                <b>Game End Time:</b> {` ${gameHistoryDetail.updatedAt}`}
+                <b>Game End Time:</b> {` ${moment(gameHistoryDetail.updatedAt).format("YYYY/MM/DD HH:mm")}`}
               </div>  
               <div className={classes.boldhead}>
                 <b>Game Duration:</b> {`${`${diffMinutes(gameHistoryDetail.updatedAt,gameHistoryDetail.createdAt)} Minutes`}`}
@@ -344,7 +341,7 @@ const PlayerGameHistoryDetail = ({gameHistoryDetail, key}) => {
       </Table>
       <Table size="small">
         <TableHead>
-          <TableRow className={classes.tableheade}>
+          <TableRow className={classes.tableheade} key={1002}>
             <TableCell align="left" className={classes.tablecelltext}>Player Name</TableCell>
             <TableCell align="left" className={classes.tablecelltext}>Chips</TableCell>
             <TableCell align="left" className={classes.tablecelltext}>Status</TableCell>
@@ -352,8 +349,8 @@ const PlayerGameHistoryDetail = ({gameHistoryDetail, key}) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {gameHistoryDetail.players.map( player => (
-            <TableRow>            
+          {gameHistoryDetail.players.map( (player, idx) => (
+            <TableRow key={idx}>            
               <TableCell align="left">{player.playerName}</TableCell>
               <TableCell align="left">{player.chips.toFixed(2)}</TableCell>
               <TableCell align="left">{player.status}</TableCell>              
@@ -364,7 +361,7 @@ const PlayerGameHistoryDetail = ({gameHistoryDetail, key}) => {
               </TableCell>
             </TableRow>
           ) )}
-          <TableRow>
+          <TableRow key={1003}>
             <TableCell align="left" colSpan={4}>
               <Typography noWrap className={classes.boldletter}>
                 BOARD
@@ -378,14 +375,14 @@ const PlayerGameHistoryDetail = ({gameHistoryDetail, key}) => {
       </Table>      
       <Table size="small">
         <TableHead>
-          <TableRow>
+          <TableRow key={1004}>
             <TableCell align="left" colSpan={4}>
               <Typography noWrap className={classes.boldletter}>
                 WINNER
               </Typography>
             </TableCell>
           </TableRow>
-          <TableRow className={classes.tableheade}>
+          <TableRow className={classes.tableheade} key={1005}>
             <TableCell align="left" className={classes.tablecelltext}>Player Name</TableCell>
             <TableCell align="left" className={classes.tablecelltext}>Chips</TableCell>
             <TableCell align="left" className={classes.tablecelltext}>Type</TableCell>
@@ -393,8 +390,8 @@ const PlayerGameHistoryDetail = ({gameHistoryDetail, key}) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {gameHistoryDetail.winners.map( player => (
-            <TableRow>            
+          {gameHistoryDetail.winners.map( (player, ind) => (
+            <TableRow key={ind}>            
               <TableCell align="left">{player.playerName}</TableCell>
               <TableCell align="left">{player.chips}</TableCell>
               <TableCell align="left">{player.winningType}</TableCell>
@@ -419,7 +416,7 @@ const PlayerGameHistoryDetail = ({gameHistoryDetail, key}) => {
         <AccordionDetails>
           <Table size="small">
             <TableHead>
-              <TableRow className={classes.tableheade}>
+              <TableRow className={classes.tableheade} key={1006}>
                 <TableCell align="left" className={classes.tablecelltext}>Player Name</TableCell>
                 <TableCell align="left" className={classes.tablecelltext}>Bet Amount</TableCell>
                 <TableCell align="left" className={classes.tablecelltext}>Total Bet Amount</TableCell>
@@ -431,8 +428,8 @@ const PlayerGameHistoryDetail = ({gameHistoryDetail, key}) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {gameHistoryDetail.history.map( player => (
-                <TableRow>            
+              {gameHistoryDetail.history.map( (player, indic) => (
+                <TableRow key={indic}>            
                   <TableCell align="left">{player.playerName}</TableCell>
                   <TableCell align="left">{player.betAmount.toFixed(2)}</TableCell>
                   <TableCell align="left">{player.totalBetAmount !== '-' ? player.totalBetAmount.toFixed(2) : player.totalBetAmount}</TableCell>
@@ -473,7 +470,7 @@ const PlayerGameHistoryDetail = ({gameHistoryDetail, key}) => {
         <AccordionDetails>
           <Table size="small">
             <TableHead>
-              <TableRow className={classes.tableheade}>
+              <TableRow className={classes.tableheade} key={1007}>
                 <TableCell align="left" className={classes.tablecelltext}>Type Distribution</TableCell>
                 <TableCell align="left" className={classes.tablecelltext}>Action</TableCell>
                 <TableCell align="left" className={classes.tablecelltext}>Deposit/Withdraw</TableCell>
@@ -481,8 +478,8 @@ const PlayerGameHistoryDetail = ({gameHistoryDetail, key}) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {gameHistoryDetail.distribution.map( dist => (
-                <TableRow>            
+              {gameHistoryDetail.distribution.map( (dist, indice) => (
+                <TableRow key={indice}>            
                   <TableCell align="left">{dist.name}</TableCell>
                   <TableCell align="left">{dist.action}</TableCell>
                   <TableCell align="left" className={dist.type === 'Deposit' ? classes.textGreen : dist.type === 'Deduct' ? classes.textRed : ''}>{dist.type}</TableCell>
@@ -505,7 +502,7 @@ const PlayerGameHistoryDetail = ({gameHistoryDetail, key}) => {
         <AccordionDetails>
           <Table size="small">
             <TableHead>
-              <TableRow className={classes.tableheade}>
+              <TableRow className={classes.tableheade} key={1008}>
                 <TableCell align="left" className={classes.tablecelltext}>Player Name</TableCell>
                 <TableCell align="left" className={classes.tablecelltext}>Bet Amount</TableCell>
                 <TableCell align="left" className={classes.tablecelltext}>
@@ -534,11 +531,11 @@ const PlayerGameHistoryDetail = ({gameHistoryDetail, key}) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {gameHistoryDetail.RackDeductions.map( rack => (
-                <TableRow>            
+              {gameHistoryDetail.RackDeductions.map( (rack, indxc) => (
+                <TableRow key={indxc}>            
                   <TableCell align="left" className={classes.rdistributiondetail}>{rack.playerName}</TableCell>
-                  <TableCell align="left" className={classes.rdistributiondetail}>{rack.bets}</TableCell>
-                  <TableCell align="left" className={classes.rdistributiondetail}>{rack.plrRake}</TableCell>                        
+                  <TableCell align="left" className={classes.rdistributiondetail}>{rack.bets ? parseFloat(rack.bets).toFixed(2) : ''}</TableCell>
+                  <TableCell align="left" className={classes.rdistributiondetail}>{parseFloat(rack.plrRake).toFixed(2)}</TableCell>                        
                   {
                     gameHistoryDetail.AgentsRole.map( agents => {
                       let indice = 0;
@@ -552,7 +549,7 @@ const PlayerGameHistoryDetail = ({gameHistoryDetail, key}) => {
                       if(existe === true){
                         return (                                  
                           <TableCell align="left" className={classes.rdistributiondetail}>
-                            {`${rack.agentRake[indice].rackTo} - (${rack.agentRake[indice].rackPercent}%) - (${rack.agentRake[indice].name})`}
+                            {`${parseFloat(rack.agentRake[indice].rackTo).toFixed(2)} - (${rack.agentRake[indice].rackPercent}%) - (${rack.agentRake[indice].name})`}
                           </TableCell>
                         );
                       }else{
@@ -566,10 +563,10 @@ const PlayerGameHistoryDetail = ({gameHistoryDetail, key}) => {
                   }                        
                 </TableRow>
               ) )}
-              <TableRow>
+              <TableRow key={1009}>
                 <TableCell align="left" className={classes.rdistributiondetail}>&nbsp;</TableCell>
-                <TableCell align="left" className={classes.rdistributiondetail}>{gameHistoryDetail.totalBet}</TableCell>
-                <TableCell align="left" className={classes.rdistributiondetail}>{gameHistoryDetail.totalRakes}</TableCell>
+                <TableCell align="left" className={classes.rdistributiondetail}>{gameHistoryDetail.totalBet.toFixed(2)}</TableCell>
+                <TableCell align="left" className={classes.rdistributiondetail}>{gameHistoryDetail.totalRakes.toFixed(2)}</TableCell>
                 <TableCell align="left" className={classes.rdistributiondetail}>&nbsp;</TableCell>
               </TableRow>          
             </TableBody>
