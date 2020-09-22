@@ -42,13 +42,30 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
-const AgentCashTransactionHistory = () => {
+const AgentCashTransactionHistory = ({master}) => {  
   const { id } = useParams();
+  let agidreal = null;
+  let agusername = null;
+  let agentUsername = null;
 
-  const params = id.split('&');
+  let tagidreal = useSelector(store => store.agent.agent.id);
+  let tagusername = useSelector(store => store.agent.agent.name);
 
-  const [idreal] = useState(params[0])
-  const [username] = useState(params[1])
+  if(master){
+    agidreal = tagidreal;
+    agusername = tagusername;
+    agentUsername = null;
+  }else{    
+
+    const params = id.split('&');
+
+    agidreal = params[0];
+    agusername = params[1];
+    agentUsername = agusername;
+  }
+
+  const [idreal] = useState(agidreal)
+  const [username] = useState(agusername)
 
   const dispatch = useDispatch();
 
@@ -60,7 +77,7 @@ const AgentCashTransactionHistory = () => {
   const transcashhistorylist = useSelector(store => store.agent.transactions);
   
   
-  return transcashhistorylist ? (
+  return transcashhistorylist && username ? (
 
     <div style={{ maxWidth: "100%" }}>
       <MaterialTable
@@ -77,12 +94,12 @@ const AgentCashTransactionHistory = () => {
           filtering: true,
 
         }}
-        title={`Agent Cash Transaction History: ${username.toUpperCase()}`}
+        title={`Agent Transaction History ${agentUsername ? '> ' + agentUsername.toUpperCase():''}`}
         columns={[
-          { title: "Tx.Number", field: "transactionNumber", filtering: false},
+          { title: "Tx.Number", field: "transactionNumber", filtering: false, cellStyle: {fontSize:'10px'}},
           { title: "Provider Email/ID", field: "providerEmail", filtering: false},
-          { title: "Before Balance", field: "previousBalance", filtering: false},
-          { title: "After Balance", field: "afterBalance", filtering: false},
+          { title: "Before Balance", field: "beforeBalance", filtering: false, render: rowData => rowData.beforeBalance ? parseFloat(rowData.beforeBalance).toFixed(2) :0},
+          { title: "After Balance", field: "afterBalance", filtering: false, render: rowData => rowData.afterBalance ? parseFloat(rowData.afterBalance).toFixed(2) : 0},
           { title: "In", field: "chips", filtering: false, render: rowData => rowData.category === 'credit' ? rowData.chips : '-', cellStyle: {color:'green'}},
           { title: "Out", field: "chips", filtering: false, render: rowData => rowData.category === 'debit' ? rowData.chips : '-', cellStyle: {color:'red'}},
           { title: "Status", field: "status", filtering: false},

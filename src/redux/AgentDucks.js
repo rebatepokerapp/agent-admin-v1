@@ -19,7 +19,9 @@ const agentData = {
   lastThreeWeeks: null,
   messageupdate: null,
   transactions: null,
-  dashboard: null
+  dashboard: null,
+  rakebalance: 0,
+  balance: 0
 }
 
 const AGENT_LOGIN_SUCCESS = 'AGENT_LOGIN_SUCCESS';
@@ -46,6 +48,9 @@ const AGENT_TRANSACTION_HISTORY_SUCCESS = 'AGENT_TRANSACTION_HISTORY_SUCCESS'
 const AGENT_TRANSACTION_HISTORY_ERROR = 'AGENT_TRANSACTION_HISTORY_ERROR'
 const GET_AGENT_DASHBOARD_SUCCESS = 'GET_AGENT_DASHBOARD_SUCCESS'
 const GET_AGENT_DASHBOARD_ERROR = 'GET_AGENT_DASHBOARD_ERROR'
+const SET_AGENT_BALANCE_SUCCESSS = 'SET_AGENT_BALANCE_SUCCESSS'
+const AGENT_TRANSFER_SUCCESS = 'AGENT_TRANSFER_SUCCESS'
+const AGENT_TRANSFER_ERROR = 'AGENT_TRANSFER_ERROR'
  
 
 //Reducer
@@ -53,9 +58,9 @@ const GET_AGENT_DASHBOARD_ERROR = 'GET_AGENT_DASHBOARD_ERROR'
 export default function agentReducer(state = agentData, action){
   switch(action.type){
     case AGENT_LOGIN_SUCCESS:
-      return{...state, agent: action.payload.agent, isAuthenticated: true, token: action.payload.token, error: null, id: null, username: null, data: null, players: null, subagents: null, figures: null, totalrake: 0, totalperday: null, lastThreeWeeks: null, messageupdate: null, transactions: null, dashboard: null}
+      return{...state, agent: action.payload.agent, rakebalance: action.payload.agent.rake_chips, balance: action.payload.agent.chips, isAuthenticated: true, token: action.payload.token, error: null, id: null, username: null, data: null, players: null, subagents: null, figures: null, totalrake: 0, totalperday: null, lastThreeWeeks: null, messageupdate: null, transactions: null, dashboard: null}
     case AGENT_LOGOUT_SUCCESS:      
-      return{...state, agent: null, isAuthenticated: false, token: null, error: null, id: null, username: null, data: null, players: null, subagents: null, figures: null, totalrake: 0, totalperday: null, lastThreeWeeks: null, messageupdate: null, transactions: null, dashboard: null}
+      return{...state, agent: null, balance: 0, rakebalance: 0,isAuthenticated: false, token: null, error: null, id: null, username: null, data: null, players: null, subagents: null, figures: null, totalrake: 0, totalperday: null, lastThreeWeeks: null, messageupdate: null, transactions: null, dashboard: null}
     case GET_AGENT_PLAYERS_SUCCESS:
       return{...state, players: action.payload, error: null}
     case GET_AGENT_DASHBOARD_SUCCESS:
@@ -100,6 +105,12 @@ export default function agentReducer(state = agentData, action){
       return{...state, transactions: action.payload, error: null, messageupdate: null}
     case AGENT_TRANSACTION_HISTORY_ERROR:
       return{...state, error: action.payload, messageupdate: null}
+    case SET_AGENT_BALANCE_SUCCESSS:
+      return{...state, balance: action.payload}   
+    case AGENT_TRANSFER_SUCCESS:
+      return{...state, messageupdate: action.payload.message, data: action.payload.agent, rakebalance: action.payload.rakebalance, balance: action.payload.balance, error: null}
+    case AGENT_TRANSFER_ERROR:
+      return{...state, error: action.payload, messageupdate: null}     
     default:
       return state
   }
@@ -112,6 +123,13 @@ export const setAgentInfo = (id,agent) => async (dispatch, getState) => {
       id: id,
       username: agent
     }
+  })
+}
+
+export const setAgentBalance = (balance) => async (dispatch, getState) => {
+  dispatch({
+    type: SET_AGENT_BALANCE_SUCCESSS,
+    payload: balance
   })
 }
 
@@ -153,9 +171,14 @@ export const signOut = () => async  (dispatch, getState) => {
 }
 
 
-export const getPlayersByAgent = () => async  (dispatch, getState) => {
-  try {
-    const { id } = getState().agent.agent;
+export const getPlayersByAgent = (subagent) => async  (dispatch, getState) => {
+  try {  
+    var id = null;  
+    if(subagent){
+      id  = getState().agent.id;
+    }else{
+      id = getState().agent.agent.id;
+    }
     const agent = JSON.stringify(getState().agent.agent);
     const token = getState().agent.agent.jwt_token;
     const AuthStr = 'Bearer '.concat(token);
@@ -232,7 +255,7 @@ export const getFiguresByAgent = (weeknumber,byId,subId) => async  (dispatch, ge
       id = subId;      
     }else{
       id = getState().agent.agent.id;
-    }    
+    }  
     const agent = JSON.stringify(getState().agent.agent);
     const token = getState().agent.agent.jwt_token;
     const AuthStr = 'Bearer '.concat(token);
@@ -305,6 +328,32 @@ export const editAgentData = (data) => async  (dispatch, getState) => {
   }
 }
 
+export const agentTransfer = (data) => async  (dispatch, getState) => {
+  try {
+    const id = getState().agent.agent.id;    
+    const agent = JSON.stringify(getState().agent.agent);
+    const token = getState().agent.agent.jwt_token;
+    const AuthStr = 'Bearer '.concat(token);
+    data.agentId = id;
+    data.isAdmin = 'no';
+    const res = await axios.post(`${API_AGENT_URL}/agent/transfer`, data, { headers: { Authorization: AuthStr, agent: agent }});
+    dispatch({
+      type: AGENT_TRANSFER_SUCCESS,
+      payload: {
+        agent:res.data.agent,
+        balance: res.data.balance,
+        rakebalance: res.data.rakebalance,
+        message: res.data.message
+      }
+    })
+  } catch (error) {
+    dispatch({
+      type: AGENT_TRANSFER_ERROR,
+      payload: 'Error updating agent data'
+    })
+  }
+}
+
 export const addAgentData = (data) => async  (dispatch, getState) => {
   try {   
     const agent = JSON.stringify(getState().agent.agent);
@@ -343,7 +392,7 @@ export const getFiguresAgentLastThreeWeeks = (byId,subId) => async  (dispatch, g
     if(byId){
       id = subId;      
     }else{
-      id = getState().agent.agent.id;
+      id = getState().agent.id;
     }    
     const agent = JSON.stringify(getState().agent.agent);
     const token = getState().agent.agent.jwt_token;
@@ -372,7 +421,7 @@ export const getAgentTransCashHistory = () => async  (dispatch, getState) => {
       length:0,
       search: ''
     }
-    const id = getState().agent.agent.id;
+    const id = getState().agent.id;
     const agent = JSON.stringify(getState().agent.agent);
     const token = getState().agent.agent.jwt_token;
     const AuthStr = 'Bearer '.concat(token);

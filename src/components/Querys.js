@@ -666,6 +666,40 @@ db.createUser(
 
 db.agent.find({},{accessCode:1}).sort({accessCode:-1}).limit(1)
 
+db.setting.insert(
+  {
+    "defaultChips" : 10000,
+    "rakePercenage" : 3.75,
+    "chipsBought" : 0,
+    "processId" : 0,
+    "android_version" : 1,
+    "ios_version" : 1,
+    "systemChips" : 0,
+    "adminExtraRakePercentage" : 0.25,
+    "BackupDetails" : {
+            "db_backup_days" : "",
+            "db_next_backup_date" : "2020-06-19",
+            "db_host" : "",
+            "db_username" : "pokerdbuser",
+            "db_password" : "repssba21te89p1k",
+            "db_name" : "rebatepokerdb"
+    },
+    "android_store_link" : "1",
+    "ios_store_link" : "1",
+    "multitable_status" : "active",
+    "__v" : 0,
+    "maintenance" : {
+            "maintenance_start_date" : "2020-06-19 23:31",
+            "maintenance_end_date" : "2020-06-19 23:31",
+            "time_difference" : 0,
+            "message" : "This Application is Under Maintenance.",
+            "showBeforeMinutes" : "90",
+            "status" : "inactive",
+            "quickMaintenance" : "inactive"
+    }
+}
+)
+
 /*
 mongo --port 27017 --authenticationDatabase "admin" -u "root" -p "re#tepk20#$cj"
 
@@ -678,3 +712,64 @@ mongod --port 27017 --dbpath /var/lib/mongo
 mongo --port 27017 --authenticationDatabase "admin" -u "root" -p re#tepk20#$cj
 
 */
+
+db.createUser(
+  {
+    user: "admin",
+    pwd: "repssba21te89p1k",
+    roles: [ { role: "userAdminAnyDatabase", db: "rebatepokerdb" } ]
+  }
+)
+db.auth('admin', 'repssba21te89p1k')
+
+mongo --port 27017 -u admin --authenticationDatabase 'admin' -p repssba21te89p1k
+
+//mongo -u "admin" -p "repssba21te89p1k" --authenticationDatabase "admin"
+
+db.grantRolesToUser(
+  "admin",
+  [ "readWrite" , { role: "read", db: "admin" } ],
+  { w: "majority" , wtimeout: 4000 }
+)
+
+db.dropUser("admin", {w: "majority", wtimeout: 4000})
+
+db.createUser(
+  {
+    user: "pokerdbuser",
+    pwd: "repssba21te89p1k", 
+    roles: [ "readWrite", "dbAdmin" ]
+  }
+)
+
+db.auth('pokerdbuser', 'repssba21te89p1k')
+
+//mongo -u "pokerdbuser" -p "repssba21te89p1k" --authenticationDatabase "rebatepokerdb"
+
+mongod --dbpath /var/lib/mongo --replSet rebatepkdbrep --port 27017 --fork --logpath=/var/lib/mongo/fork/mongo.log
+mongod --dbpath /var/lib/mongo2 --replSet rebatepkdbrep --port 27018 --fork --logpath=/var/lib/mongo2/fork/mongo.log
+mongod --dbpath /var/lib/mongo3 --replSet rebatepkdbrep --port 27019 --fork --logpath=/var/lib/mongo3/fork/mongo.log
+
+rs.initiate()
+
+rs.conf()
+rs.status()
+
+rs.initiate(
+  {
+     _id: "rebatepkdbrep",
+     version: 1,
+     members: [
+        { _id: 0, host : "localhost:27017" }
+     ]
+  }
+)
+
+rs.initiate({
+  _id : "rebatepkdbrep",
+  members: [
+     { _id: 0, host: "localhost:27017" },
+     { _id: 1, host: "localhost:27018" },
+     { _id: 2, host: "localhost:27019" }
+  ]
+})

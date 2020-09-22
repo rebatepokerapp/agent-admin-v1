@@ -6,6 +6,7 @@ import PeopleIcon from '@material-ui/icons/People';
 import WorkIcon from '@material-ui/icons/Work';
 import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 import { Home as HomeIcon } from '@material-ui/icons'
+import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 
 
 
@@ -22,6 +23,12 @@ export const mainListItems = (
         <TrendingUpIcon style={{color:'#FFA900'}}/>
       </ListItemIcon>
       <ListItemText primary="Rake Figures" />
+    </ListItem>
+    <ListItem button component="a" href="/app/cashhistoryagent">
+      <ListItemIcon>
+        <MonetizationOnIcon style={{color:'#FFA900'}}/>
+      </ListItemIcon>
+      <ListItemText primary="Cash History" />
     </ListItem>
     <ListItem button component="a" href="/app/agents">
       <ListItemIcon>

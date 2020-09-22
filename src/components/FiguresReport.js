@@ -234,7 +234,8 @@ const FiguresReport = ({byagentid}) => {
                     default:
                       break;
                   }
-                })}
+                }                
+                )}
 
                 <TableCell align="right">{monday.toFixed(2)}</TableCell>
                 <TableCell align="right">{tuesday.toFixed(2)}</TableCell>

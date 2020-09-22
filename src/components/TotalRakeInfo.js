@@ -51,14 +51,24 @@ export default function Deposits({ dashboard, totalRake, totalperday }) {
   let totalPday = 0;
   let totalGamePlayed = 0;
 
+  if(totalRake){
+    totalRk = totalRake;
+  }
+
+  if(totalperday){
+    if(totalperday.lenght > 0){
+      totalPday = totalperday[0].total;
+    }else{
+      totalPday = 0;
+    }
+  }
+
   if(dashboard){
     totalPlayer = dashboard.totalPlayer;
     totalOnlinePlayers = dashboard.totalOnlinePlayers;
     //topPlayers = dashboard.topPlayers;
     totalPlayinPly = dashboard.totalPlayingPly;
-    totalRunningGame = dashboard.totalRunningGame;
-    totalRk = totalRake;
-    totalPday = totalperday[0].total;
+    totalRunningGame = dashboard.totalRunningGame;            
     totalGamePlayed = dashboard.totalGamePlayed;
   }
   
@@ -66,7 +76,7 @@ export default function Deposits({ dashboard, totalRake, totalperday }) {
     <div className={maincontainer}>
       <div className={mainrow}>
         <div className={mainrowitemleft}>
-          Today's Rake:
+          Total Rake:
         </div>
         <div className={mainrowitemright}>
           ${`${totalRk.toFixed(2)}`}

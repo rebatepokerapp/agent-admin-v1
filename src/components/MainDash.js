@@ -10,6 +10,7 @@ import {getFiguresByAgent,getAgentDashboard} from '../redux/AgentDucks';
 import FiguresReport from './FiguresReport';
 
 
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
