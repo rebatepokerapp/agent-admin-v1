@@ -51,6 +51,8 @@ const GET_AGENT_DASHBOARD_ERROR = 'GET_AGENT_DASHBOARD_ERROR'
 const SET_AGENT_BALANCE_SUCCESSS = 'SET_AGENT_BALANCE_SUCCESSS'
 const AGENT_TRANSFER_SUCCESS = 'AGENT_TRANSFER_SUCCESS'
 const AGENT_TRANSFER_ERROR = 'AGENT_TRANSFER_ERROR'
+const AGENT_REQUEST_BALANCE_SUCCESS = 'AGENT_REQUEST_BALANCE_SUCCESS'
+const AGENT_REQUEST_BALANCE_ERROR = 'AGENT_REQUEST_BALANCE_ERROR'
  
 
 //Reducer
@@ -82,7 +84,7 @@ export default function agentReducer(state = agentData, action){
     case GET_AGENT_FIGURES_ERROR:
       return{...state, error: action.payload}
     case SET_AGENT_INFO_SUCCESSS:
-      return{...state, id: action.payload.id, username: action.payload.username, data: null, error: null, messageupdate: null}
+      return{...state, id: action.payload.id, username: action.payload.username, data: null, error: null, messageupdate: null, figures: null, lastThreeWeeks: null, messageupdate: null, transactions: null,}
     case SET_AGENT_INFO_ERROR:
       return{...state, error: action.payload, messageupdate: null}
     case GET_AGENT_INFO_SUCCESS:
@@ -110,6 +112,10 @@ export default function agentReducer(state = agentData, action){
     case AGENT_TRANSFER_SUCCESS:
       return{...state, messageupdate: action.payload.message, data: action.payload.agent, rakebalance: action.payload.rakebalance, balance: action.payload.balance, error: null}
     case AGENT_TRANSFER_ERROR:
+      return{...state, error: action.payload, messageupdate: null}
+    case AGENT_REQUEST_BALANCE_SUCCESS:
+      return{...state, messageupdate: action.payload.message, data: action.payload.agent, rakebalance: action.payload.rakebalance, balance: action.payload.balance, error: null}
+    case AGENT_REQUEST_BALANCE_ERROR:
       return{...state, error: action.payload, messageupdate: null}     
     default:
       return state
@@ -349,6 +355,29 @@ export const agentTransfer = (data) => async  (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: AGENT_TRANSFER_ERROR,
+      payload: 'Error updating agent data'
+    })
+  }
+}
+
+export const agentRequestBalance = (data) => async  (dispatch, getState) => {
+  try {   
+    const agent = JSON.stringify(getState().agent.agent);
+    const token = getState().agent.agent.jwt_token;
+    const AuthStr = 'Bearer '.concat(token);
+    const res = await axios.post(`${API_AGENT_URL}/agent/requestbalance`, data, { headers: { Authorization: AuthStr, agent: agent }});
+    dispatch({
+      type: AGENT_REQUEST_BALANCE_SUCCESS,
+      payload: {
+        agent:res.data.agent,
+        balance: res.data.balance,
+        rakebalance: res.data.rakebalance,
+        message: res.data.message
+      }
+    })
+  } catch (error) {
+    dispatch({
+      type: AGENT_REQUEST_BALANCE_ERROR,
       payload: 'Error updating agent data'
     })
   }

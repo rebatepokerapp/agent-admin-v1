@@ -42,42 +42,21 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
-const AgentCashTransactionHistory = ({master}) => {  
-  const { id } = useParams();
-  let agidreal = null;
-  let agusername = null;
-  let agentUsername = null;
-
-  let tagidreal = useSelector(store => store.agent.agent.id);
-  let tagusername = useSelector(store => store.agent.agent.name);
-
-  if(master){
-    agidreal = tagidreal;
-    agusername = tagusername;
-    agentUsername = null;
-  }else{    
-
-    const params = id.split('&');
-
-    agidreal = params[0];
-    agusername = params[1];
-    agentUsername = agusername;
-  }
-
-  const [idreal] = useState(agidreal)
-  const [username] = useState(agusername)
+const AgentCashTransactionHistory = ({id,username}) => {  
+  
+  const [idreal] = useState(id)
+  const [agusername] = useState(username)
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(setAgentInfo(idreal,username));    
+    dispatch(setAgentInfo(idreal,agusername));    
     dispatch(getAgentTransCashHistory());
-  }, [idreal, username, dispatch])
+  }, [idreal, agusername, dispatch])
 
   const transcashhistorylist = useSelector(store => store.agent.transactions);
   
-  
-  return transcashhistorylist && username ? (
+  return transcashhistorylist && agusername ? (
 
     <div style={{ maxWidth: "100%" }}>
       <MaterialTable
@@ -94,7 +73,7 @@ const AgentCashTransactionHistory = ({master}) => {
           filtering: true,
 
         }}
-        title={`Agent Transaction History ${agentUsername ? '> ' + agentUsername.toUpperCase():''}`}
+        title={`Agent Transaction History ${agusername ? '> ' + agusername.toUpperCase():''}`}
         columns={[
           { title: "Tx.Number", field: "transactionNumber", filtering: false, cellStyle: {fontSize:'10px'}},
           { title: "Provider Email/ID", field: "providerEmail", filtering: false},

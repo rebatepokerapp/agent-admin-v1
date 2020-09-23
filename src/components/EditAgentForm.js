@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
@@ -8,7 +8,7 @@ import { withRouter } from 'react-router-dom';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import ReactSelect from "react-select";
-import {editAgentData} from '../redux/AgentDucks';
+import {editAgentData,getAgentData,setAgentInfo} from '../redux/AgentDucks';
 import {useDispatch, useSelector} from 'react-redux'
 
 import { useForm, Controller } from 'react-hook-form';
@@ -63,12 +63,18 @@ const statusOptions = [
   {value:"block", label:"Block"}
 ]
 
-function EditAgentForm (props) {
+function EditAgentForm ({id,username}) {
 
-  let {agent} = props;
   const classes = useStyles();
 
   const dispatch = useDispatch();
+
+  useEffect(() => {  
+    dispatch(setAgentInfo(id,username))
+    dispatch(getAgentData())    
+  },[id, username, dispatch])  
+
+  const agent = useSelector(store => store.agent.data);
 
   const {register, errors, handleSubmit, control} =  useForm();  
 
@@ -106,10 +112,6 @@ function EditAgentForm (props) {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <Typography component="h1" variant="h5" className={classes.title}>
-          EDIT AGENT
-        </Typography>
-         
         <form className={classes.form} noValidate onSubmit={handleSubmit(onSubmit)}>
           <input name="username" className={classes.input} ref={register} placeholder='Username' defaultValue={agent.username} readOnly/>
           <input name="firstname" className={classes.input} ref={register} placeholder='Firstname'defaultValue={agent.firstname}/>

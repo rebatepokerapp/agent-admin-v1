@@ -204,7 +204,7 @@ export default function Dashboard() {
           </Typography>
           <Typography className={classes.balance}>
             {`[Rake Balance: $${rakebalance?rakebalance.toFixed(2):0}] `}{
-              <TransferChips maxamount={agent.agent.rake_chips}/>
+              agent.agent.isTransferAllow === true || agent.agent.isTransferAllow === 'true' ? <TransferChips maxamount={agent.agent.rake_chips}/> : null
             }{` [Balance: $${balance?balance.toFixed(2):0}]`}
           </Typography>          
           {
