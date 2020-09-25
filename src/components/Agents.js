@@ -159,7 +159,7 @@ function Agents() {
           },
         ]}
         data={subsList}
-        title="Agents"
+        title="AGENTS"
       />
     </div>
   ) : null

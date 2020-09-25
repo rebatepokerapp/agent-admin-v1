@@ -20,6 +20,7 @@ import ViewColumn from '@material-ui/icons/ViewColumn';
 import {useDispatch, useSelector} from 'react-redux';
 import { setAgentInfo, getAgentTransCashHistory } from '../redux/AgentDucks';
 import moment from 'moment';
+import TablePagination from '@material-ui/core/TablePagination';
 
 
 const tableIcons = {
@@ -49,12 +50,30 @@ const AgentCashTransactionHistory = ({id,username}) => {
 
   const dispatch = useDispatch();
 
+  let start = 0;
+
+  const [length, setLength] = useState(10);
+  const [page, setPage] = useState(0);
+
+  const handleChangePage = (event, newPage) => {
+    start = length * newPage;
+    dispatch(getAgentTransCashHistory(start,length));
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setLength(parseInt(event.target.value, 10));    
+    setPage(0);
+  };
+
   useEffect(() => {
     dispatch(setAgentInfo(idreal,agusername));    
-    dispatch(getAgentTransCashHistory());
-  }, [idreal, agusername, dispatch])
+    dispatch(getAgentTransCashHistory(start,length));
+  }, [idreal, agusername, start,length, dispatch])
 
   const transcashhistorylist = useSelector(store => store.agent.transactions);
+  const recordsTotal = useSelector(store => store.agent.recordsTotal);
+  const recordsFiltered = useSelector(store => store.agent.recordsFiltered);
   
   return transcashhistorylist && agusername ? (
 
@@ -85,6 +104,14 @@ const AgentCashTransactionHistory = ({id,username}) => {
           { title: "Date", field: "createdAt", filtering: true, render: rowData => moment(rowData.createdAt).format("YYYY/MM/DD hh:mm")},
         ]}
         data={transcashhistorylist}        
+      />
+      <TablePagination
+        component="div"
+        count={recordsTotal}
+        page={page}
+        onChangePage={handleChangePage}
+        rowsPerPage={length}
+        onChangeRowsPerPage={handleChangeRowsPerPage}
       />
     </div>
   ) : null;

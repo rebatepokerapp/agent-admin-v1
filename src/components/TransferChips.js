@@ -95,6 +95,9 @@ const useStyles = makeStyles((theme) => ({
   alerttext: {
     color: 'red'
   },
+  botonmobile: {
+    fontSize: 12,
+  }
 }));
 
 const styles = (theme) => ({
@@ -130,7 +133,7 @@ const DialogContent = withStyles((theme) => ({
   },
 }))(MuiDialogContent);
 
-const TransferChips = ({maxamount}) => {
+const TransferChips = ({maxamount,isMobile}) => {
 
   const {register, unregister, errors, handleSubmit, control, setValue} =  useForm(); 
 
@@ -170,7 +173,7 @@ const TransferChips = ({maxamount}) => {
 
   return (
     <>
-      <BootstrapButton variant="contained" color="primary" disableRipple className={classes.margin} onClick={handleClickOpen}>
+      <BootstrapButton variant="contained" color="primary" disableRipple className={isMobile?classes.botonmobile:classes.margin} onClick={handleClickOpen}>
         {`Transfer >`}
       </BootstrapButton>
       <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>

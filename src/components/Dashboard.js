@@ -155,6 +155,13 @@ const useStyles = makeStyles((theme) => ({
     color: 'white',
     fontSize: '18px',
     fontWeight: 'bold',
+  },
+  balancemobil: {
+    color: 'white',
+    fontSize: '11px',
+    fontWeight: 'bold',
+    marginBottom: '10px',
+    textAlign: 'center',
   }
 }));
 
@@ -203,11 +210,11 @@ export default function Dashboard() {
           <Typography component="h1" variant="h6" color="inherit" className={classes.title}>
             {`${agent.agent.name.toUpperCase()}`}
           </Typography>
-          {!isMobile?<Typography className={classes.balance}>
+          {!isMobile?<div><Typography className={classes.balance}>
             {`Rake Balance: $${rakebalance?rakebalance.toFixed(2):0} `}{
               agent.agent.isTransferAllow === true || agent.agent.isTransferAllow === 'true' ? <TransferChips maxamount={agent.agent.rake_chips}/> : null
             }{` Balance: $${balance?balance.toFixed(2):0}`}
-          </Typography>:null}                    
+          </Typography></div>:null}                              
           {
           agent.agent.role !== 'master' ? 
             (<><Typography component="h1" variant="h6" color="inherit" noWrap className={classes.access}>
@@ -222,6 +229,11 @@ export default function Dashboard() {
           
           <AgentMenu agent={agent.agent} />
         </Toolbar>
+        {isMobile?<Typography className={classes.balancemobil}>
+          {`Rake Balance: $${rakebalance?rakebalance.toFixed(2):0} `}{
+            agent.agent.isTransferAllow === true || agent.agent.isTransferAllow === 'true' ? <TransferChips maxamount={agent.agent.rake_chips} isMobile={isMobile}/> : null
+          }{` Balance: $${balance?balance.toFixed(2):0}`}
+        </Typography>:null}
       </AppBar>
       <Drawer
         variant="permanent"

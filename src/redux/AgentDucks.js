@@ -21,7 +21,9 @@ const agentData = {
   transactions: null,
   dashboard: null,
   rakebalance: 0,
-  balance: 0
+  balance: 0,
+  recordsTotal: 0,
+  recordsFiltered: 0
 }
 
 const AGENT_LOGIN_SUCCESS = 'AGENT_LOGIN_SUCCESS';
@@ -104,7 +106,7 @@ export default function agentReducer(state = agentData, action){
     case LAST_THREE_WEEKS_ERROR:
       return{...state, error: action.payload}
     case AGENT_TRANSACTION_HISTORY_SUCCESS:
-      return{...state, transactions: action.payload, error: null, messageupdate: null}
+      return{...state, transactions: action.payload.data, recordsTotal: action.payload.recordsTotal, recordsFiltered: action.payload.recordsFiltered, error: null, messageupdate: null}
     case AGENT_TRANSACTION_HISTORY_ERROR:
       return{...state, error: action.payload, messageupdate: null}
     case SET_AGENT_BALANCE_SUCCESSS:
@@ -443,11 +445,11 @@ export const getFiguresAgentLastThreeWeeks = (byId,subId) => async  (dispatch, g
   }
 }
 
-export const getAgentTransCashHistory = () => async  (dispatch, getState) => {
+export const getAgentTransCashHistory = (pstart,plength) => async  (dispatch, getState) => {
   try {
     const query =  {
-      start: 0,
-      length:0,
+      start: pstart,
+      length: plength,
       search: ''
     }
     const id = getState().agent.id;
@@ -457,7 +459,11 @@ export const getAgentTransCashHistory = () => async  (dispatch, getState) => {
     const res = await axios.get(`${API_AGENT_URL}/agent/agentchipshistory/${id}?start=${query.start}&length=${query.length}&search=${query.search}`,{ headers: { Authorization: AuthStr, agent: agent }});
     dispatch({
       type: AGENT_TRANSACTION_HISTORY_SUCCESS,
-      payload: res.data.data
+      payload: {
+        data: res.data.data,
+        recordsTotal: res.data.recordsTotal,
+        recordsFiltered: res.data.recordsFiltered
+      }
     })
   } catch (error) {
     dispatch({
