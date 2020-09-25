@@ -99,6 +99,9 @@ const useStyles = makeStyles((theme) => ({
   inputhide: {
     visibility: 'hidden',
   },
+  classbutton: {
+    color: 'green'
+  }
 }));
 
 const DialogContent = withStyles((theme) => ({
@@ -166,7 +169,7 @@ const RequestBalanceDlg = ({id,username}) => {
   return (
     <>
       <Tooltip title="Request Balance" aria-label="requestbalance">
-        <IconButton color="primary" aria-label="requestbalance" onClick={handleOpen}>
+        <IconButton className={classes.classbutton} aria-label="requestbalance" onClick={handleOpen}>
           <LocalAtmIcon />
         </IconButton>
       </Tooltip>

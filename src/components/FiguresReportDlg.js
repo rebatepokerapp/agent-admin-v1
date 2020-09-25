@@ -20,11 +20,15 @@ import LastThreeWeeks from './LastThreeWeeks';
 const useStyles = makeStyles((theme) => ({
   appBar: {
     position: 'relative',
+    backgroundColor: 'green'
   },
   title: {
     marginLeft: theme.spacing(2),
     flex: 1,
   },
+  classbutton: {
+    color: 'green'
+  }
 }));
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -47,7 +51,7 @@ const FiguresReportDlg = ({id,username}) => {
   return (
     <>
       <Tooltip title="Rake History" aria-label="rakehistory">
-        <IconButton color="primary" aria-label="rakehistory" onClick={handleOpen}>
+        <IconButton className={classes.classbutton} aria-label="rakehistory" onClick={handleOpen}>
           <BarChartIcon />
         </IconButton>
       </Tooltip>

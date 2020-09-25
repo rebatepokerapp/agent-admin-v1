@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react'
 import { withStyles,makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
@@ -6,10 +6,9 @@ import MuiDialogContent from '@material-ui/core/DialogContent';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
-import EditIcon from '@material-ui/icons/Edit';
-import Tooltip from '@material-ui/core/Tooltip';
-import EditAgentForm from './EditAgentForm';
-
+import Button from '@material-ui/core/Button';
+import AddPlayer from './AddPlayer';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
 const styles = (theme) => ({
   root: {
@@ -81,9 +80,12 @@ const useStyles = makeStyles((theme) => ({
   alerttext: {
     color: 'red'
   },
-  classbutton: {
-    color: 'green'
-  }
+  buttonAdd:{
+    color: '#FFFFFF',
+    backgroundColor: '#669933',
+    fontWeight: '700',
+    margin: '5px',    
+  },
 }));
 
 const DialogContent = withStyles((theme) => ({
@@ -92,11 +94,11 @@ const DialogContent = withStyles((theme) => ({
   },
 }))(MuiDialogContent);
 
-const EditAgentFormDlg = ({id,username}) => {
+const AddPlayerDlg = () => {
 
   const classes = useStyles();
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = React.useState(false);
 
   const handleClose = () => {
     setOpen(false);
@@ -104,27 +106,31 @@ const EditAgentFormDlg = ({id,username}) => {
 
   const handleOpen = () => {
     setOpen(true);
-  };  
+  };
 
   return (
     <>
-      <Tooltip title="Edit Agent" aria-label="editagent">
-        <IconButton className={classes.classbutton} aria-label="editagent" onClick={handleOpen}>
-          <EditIcon />
-        </IconButton>
-      </Tooltip>
+      <Button 
+        className={classes.buttonAdd} 
+        aria-haspopup="true" 
+        onClick={handleOpen}
+        variant="contained"
+        >
+          <PersonAddIcon />
+        &nbsp;Add Player
+      </Button>
       <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open} maxWidth="sm" fullWidth={true}>
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
           <Typography component="h1" variant="h5" className={classes.title}>
-          {`EDIT AGENT ${username.toUpperCase()}`}
+            ADD PLAYER
           </Typography>          
         </DialogTitle>
         <DialogContent dividers>
-          <EditAgentForm id={id} username={username}/>
+          <AddPlayer/>
         </DialogContent>
       </Dialog>
     </>
   )
 }
 
-export default EditAgentFormDlg
+export default AddPlayerDlg

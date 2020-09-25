@@ -21,13 +21,13 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: '700',
   },
   header: {
-    backgroundColor: '#2e2e2e',
-    color: '#FFA900',
+    backgroundColor: '#CCCCCC',
+    color: 'black',
     fontSize: 'large'
   },
   celtotal: {
-    backgroundColor: '#2e2e2e',
-    color: '#FFA900',
+    backgroundColor: '#CCCCCC',
+    color: 'black',
     fontSize: 'large'
   },
   button: {

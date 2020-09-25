@@ -26,6 +26,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import Button from '@material-ui/core/Button';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import AddPlayerDlg from './AddPlayerDlg';
 
 
 const tableIcons = {
@@ -120,17 +121,6 @@ function Players() {
   return playersList ? (
 
     <div style={{ maxWidth: "100%" }}>
-      <div style={{ maxWidth: "100%", textAlign: 'right' }}>
-        <Button 
-          className={classes.buttonAdd} 
-          aria-haspopup="true" 
-          onClick={() => faddPlayer()}
-          variant="contained"
-          >
-            <PersonAddIcon />
-          &nbsp;Add Player
-        </Button>
-      </div>
       <MaterialTable
         icons={tableIcons}
         options={{
@@ -144,7 +134,7 @@ function Players() {
           paging:false,
           filtering: true
         }}
-        title="Players"
+        title="PLAYERS"               
         columns={[
           { title: "PlayerID", field: "uniqId", filtering: false},
           { title: "Username", field: "username", filtering: false},
@@ -157,10 +147,12 @@ function Players() {
             </>
           },
           { title: "Status", field: "status", filtering: true},
-          { title: 'Action', field: 'action', filtering: false,
+          { field: '', filtering: false,
             render: row => (
-              <PlayerMenuEdit player={row.username} id={row._id}/>
+              <PlayerMenuEdit id={row._id} username={row.username} />
             ),
+            title:<AddPlayerDlg/>,
+            sorting: false,           
           },
         ]}
         data={playersList}

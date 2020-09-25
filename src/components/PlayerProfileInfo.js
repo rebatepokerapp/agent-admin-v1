@@ -62,34 +62,27 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const PlayerProfileInfo = () => {
+const PlayerProfileInfo = ({id,username}) => {
 
   const classes = useStyles();
   const maincontainer = clsx(classes.main); 
 
-  const { id } = useParams();
-  const params = id.split('&');
-
-  const idreal = params[0];
-  const username = params[1];
-
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(setPlayerInfo(idreal,username));
+    dispatch(setPlayerInfo(id,username));
     dispatch(getPlayerProfile())
-  },[idreal, username, dispatch])
+  },[id, username, dispatch])
 
   const profile = useSelector(store => store.player.statistics);
-  console.log('Profile', profile)
   const dataChart = {
-    play:profile.gamePlay,
-    won: profile.gameWon,
-    lost: profile.gameLost
+    play:profile?profile.gamePlay:0,
+    won: profile?profile.gameWon:0,
+    lost: profile?profile.gameLost:0
   }
   
 
-  return (
+  return profile ? (
     <div className={maincontainer}>
       <Container component="main" maxWidth="xl">
         <CssBaseline />
@@ -99,10 +92,6 @@ const PlayerProfileInfo = () => {
               <div className={classes.divTableRow}>
                 <div className={classes.divTableCell}>
                   <div className={classes.paper}>
-                    <Typography component="h3" variant="h5" className={classes.title}>
-                      {profile.username.toUpperCase()}
-                      <div>&nbsp;</div>
-                    </Typography>
                     <Typography component="h1" variant="h5" className={classes.title}>
                       Player Activity
                     </Typography>
@@ -164,7 +153,7 @@ const PlayerProfileInfo = () => {
         </div>
       </Container>
     </div>
-  )
+  ) : null;
 }
 
 export default PlayerProfileInfo

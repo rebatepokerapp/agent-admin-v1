@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment } from 'react'
+import React, { useEffect, Fragment, useState } from 'react'
 import { forwardRef } from 'react';
 import MaterialTable from "material-table";
 import AddBox from '@material-ui/icons/AddBox';
@@ -21,6 +21,7 @@ import { setPlayerInfo, getPlayerGameHistory } from '../redux/PlayerDucks';
 import { useParams } from 'react-router-dom';
 import PlayerGameHistoryDetail from './PlayerGameHistoryDetail';
 import moment from 'moment';
+import TablePagination from '@material-ui/core/TablePagination';
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -42,23 +43,34 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
-const PlayerGameHistory = () => { 
-
-  const { id } = useParams();
-
-  const params = id.split('&');
-
-  const idreal = params[0];
-  const username = params[1];
+const PlayerGameHistory = ({id,username}) => { 
 
   const dispatch = useDispatch();
+
+  let start = 0;
+
+  const [length, setLength] = useState(10);
+  const [page, setPage] = useState(0);
+
+  const handleChangePage = (event, newPage) => {
+    start = length * newPage;
+    dispatch(getPlayerGameHistory(start,length));
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setLength(parseInt(event.target.value, 10));    
+    setPage(0);
+  };
   
   useEffect(() => {
-    dispatch(setPlayerInfo(idreal,username));
-    dispatch(getPlayerGameHistory());
-  }, [idreal, username, dispatch])
+    dispatch(setPlayerInfo(id,username));
+    dispatch(getPlayerGameHistory(start,length));
+  }, [id, username, start, length, dispatch])
 
   const gamehistorylist = useSelector(store => store.player.gamehistory);
+  const recordsTotal = useSelector(store => store.player.recordsTotal);
+  const recordsFiltered = useSelector(store => store.player.recordsFiltered);
   
   return gamehistorylist ? (
 
@@ -95,6 +107,14 @@ const PlayerGameHistory = () => {
             </Fragment>
           )
         }}
+      />
+      <TablePagination
+        component="div"
+        count={recordsTotal}
+        page={page}
+        onChangePage={handleChangePage}
+        rowsPerPage={length}
+        onChangeRowsPerPage={handleChangeRowsPerPage}
       />
     </div>
   ) : null;

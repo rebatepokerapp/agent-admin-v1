@@ -8,7 +8,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import EditIcon from '@material-ui/icons/Edit';
 import Tooltip from '@material-ui/core/Tooltip';
-import EditAgentForm from './EditAgentForm';
+import PlayerEditForm from './PlayerEditForm';
 
 
 const styles = (theme) => ({
@@ -92,11 +92,11 @@ const DialogContent = withStyles((theme) => ({
   },
 }))(MuiDialogContent);
 
-const EditAgentFormDlg = ({id,username}) => {
+const PlayerEditFormDlg = ({id,username}) => {
 
   const classes = useStyles();
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = React.useState(false);
 
   const handleClose = () => {
     setOpen(false);
@@ -104,27 +104,27 @@ const EditAgentFormDlg = ({id,username}) => {
 
   const handleOpen = () => {
     setOpen(true);
-  };  
+  };
 
   return (
     <>
-      <Tooltip title="Edit Agent" aria-label="editagent">
-        <IconButton className={classes.classbutton} aria-label="editagent" onClick={handleOpen}>
+      <Tooltip title="Edit Player" aria-label="editplayer">
+        <IconButton className={classes.classbutton} aria-label="editplayer" onClick={handleOpen}>
           <EditIcon />
         </IconButton>
       </Tooltip>
       <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open} maxWidth="sm" fullWidth={true}>
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
           <Typography component="h1" variant="h5" className={classes.title}>
-          {`EDIT AGENT ${username.toUpperCase()}`}
+          {`EDIT PLAYER ${username.toUpperCase()}`}
           </Typography>          
         </DialogTitle>
         <DialogContent dividers>
-          <EditAgentForm id={id} username={username}/>
+          <PlayerEditForm id={id} username={username}/>
         </DialogContent>
       </Dialog>
     </>
   )
 }
 
-export default EditAgentFormDlg
+export default PlayerEditFormDlg

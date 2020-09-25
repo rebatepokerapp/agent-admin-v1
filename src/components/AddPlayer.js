@@ -113,8 +113,6 @@ const AddPlayer = () => {
 
   const subsList = useSelector(store => store.agent.subagents);
 
-  console.log(subsList)
-
   if(subsList){
     var item = null;
     subsList.forEach( sub => {
@@ -138,10 +136,6 @@ const AddPlayer = () => {
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
-          <Typography component="h1" variant="h5" className={classes.title}>
-            ADD PLAYER
-          </Typography>
-          
           <form className={classes.form} noValidate onSubmit={handleSubmit(onSubmit)}>
             <span className={classes.alerttext}>
                 {errors?.username?.message}

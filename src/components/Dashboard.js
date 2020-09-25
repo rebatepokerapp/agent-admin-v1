@@ -38,6 +38,7 @@ import AgentCashTransactionHistory from './AgentCashTransactionHistory';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import AgentCashHistory from './AgentCashHistory';
 import TransferChips from './TransferChips';
+import {isMobile} from 'react-device-detect';
 
 
 import {
@@ -91,7 +92,7 @@ const useStyles = makeStyles((theme) => ({
     }),
   },
   menuButton: {
-    marginRight: 36,
+    marginRight: 0,
   },
   menuButtonHidden: {
     display: 'none',
@@ -151,8 +152,8 @@ const useStyles = makeStyles((theme) => ({
     display: 'none'
   },
   balance: {
-    color: 'green',
-    fontSize: '14px',
+    color: 'white',
+    fontSize: '18px',
     fontWeight: 'bold',
   }
 }));
@@ -166,7 +167,7 @@ export default function Dashboard() {
   };
   const handleDrawerClose = () => {
     setOpen(false);
-  };  
+  }; 
 
   const agent = useSelector(store => store.agent);
   const balance = useSelector(store => store.agent.balance);
@@ -202,11 +203,11 @@ export default function Dashboard() {
           <Typography component="h1" variant="h6" color="inherit" className={classes.title}>
             {`${agent.agent.name.toUpperCase()}`}
           </Typography>
-          <Typography className={classes.balance}>
-            {`[Rake Balance: $${rakebalance?rakebalance.toFixed(2):0}] `}{
+          {!isMobile?<Typography className={classes.balance}>
+            {`Rake Balance: $${rakebalance?rakebalance.toFixed(2):0} `}{
               agent.agent.isTransferAllow === true || agent.agent.isTransferAllow === 'true' ? <TransferChips maxamount={agent.agent.rake_chips}/> : null
-            }{` [Balance: $${balance?balance.toFixed(2):0}]`}
-          </Typography>          
+            }{` Balance: $${balance?balance.toFixed(2):0}`}
+          </Typography>:null}                    
           {
           agent.agent.role !== 'master' ? 
             (<><Typography component="h1" variant="h6" color="inherit" noWrap className={classes.access}>
@@ -265,9 +266,9 @@ export default function Dashboard() {
               <Route path="/app/cashhistory/:id" component={AgentCashTransactionHistory} />                                      
             </Switch>
           </Router>
-          <Box pt={4}>
+          {/*<Box pt={4}>
             <Copyright />
-          </Box>
+          </Box>*/}
         </Container>
       </main>
     </div>

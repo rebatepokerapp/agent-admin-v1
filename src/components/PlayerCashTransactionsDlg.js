@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import AppBar from '@material-ui/core/AppBar';
@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import Tooltip from '@material-ui/core/Tooltip';
-import AgentCashTransactionHistory from './AgentCashTransactionHistory';
+import PlayerCashTransHistory from './PlayerCashTransHistory';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 
 const useStyles = makeStyles((theme) => ({
@@ -29,7 +29,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const AgentCashTransHistoryDlg = ({id,username}) => {
+const PlayerCashTransactionsDlg = ({id,username}) => {
 
   const classes = useStyles();
 
@@ -45,8 +45,8 @@ const AgentCashTransHistoryDlg = ({id,username}) => {
 
   return (
     <>
-      <Tooltip title="Transaction History" aria-label="tranhistory">
-        <IconButton className={classes.classbutton} aria-label="tranhistory" onClick={handleOpen}>
+      <Tooltip title="Transaction History" aria-label="transhistory">
+        <IconButton className={classes.classbutton} aria-label="transhistory" onClick={handleOpen}>
           <MonetizationOnIcon />
         </IconButton>
       </Tooltip>
@@ -61,10 +61,10 @@ const AgentCashTransHistoryDlg = ({id,username}) => {
             </Typography>
           </Toolbar>
         </AppBar>
-        <AgentCashTransactionHistory id={id} username={username}/>
+        <PlayerCashTransHistory id={id} username={username}/>
       </Dialog>
     </>
   )
 }
 
-export default AgentCashTransHistoryDlg
+export default PlayerCashTransactionsDlg

@@ -25,8 +25,8 @@ const BootstrapButton = withStyles({
     padding: '6px 12px',
     border: '1px solid',
     lineHeight: 1.5,
-    backgroundColor: '#0063cc',
-    borderColor: '#0063cc',
+    backgroundColor: 'green',
+    borderColor: 'black',
     fontFamily: [
       '-apple-system',
       'BlinkMacSystemFont',
@@ -40,8 +40,8 @@ const BootstrapButton = withStyles({
       '"Segoe UI Symbol"',
     ].join(','),
     '&:hover': {
-      backgroundColor: '#0069d9',
-      borderColor: '#0062cc',
+      backgroundColor: 'darkgreen',
+      borderColor: 'black',
       boxShadow: 'none',
     },
     '&:active': {
@@ -171,7 +171,7 @@ const TransferChips = ({maxamount}) => {
   return (
     <>
       <BootstrapButton variant="contained" color="primary" disableRipple className={classes.margin} onClick={handleClickOpen}>
-        Transfer
+        {`Transfer >`}
       </BootstrapButton>
       <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>

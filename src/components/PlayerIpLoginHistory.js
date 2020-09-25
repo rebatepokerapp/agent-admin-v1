@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect,useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { forwardRef } from 'react';
 import MaterialTable from "material-table";
@@ -20,6 +20,7 @@ import ViewColumn from '@material-ui/icons/ViewColumn';
 import {useDispatch, useSelector} from 'react-redux';
 import { setPlayerInfo, getPlayerIpLoginHistory } from '../redux/PlayerDucks';
 import moment from 'moment';
+import TablePagination from '@material-ui/core/TablePagination';
 
 
 const tableIcons = {
@@ -42,22 +43,34 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
-const PlayerIpLoginHistory = () => {
-  const { id } = useParams();
-
-  const params = id.split('&');
-
-  const idreal = params[0];
-  const username = params[1];
+const PlayerIpLoginHistory = ({id,username}) => {
 
   const dispatch = useDispatch();
 
+  let start = 0;
+
+  const [length, setLength] = useState(10);
+  const [page, setPage] = useState(0);
+
+  const handleChangePage = (event, newPage) => {
+    start = length * newPage;
+    dispatch(getPlayerIpLoginHistory(start,length));
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setLength(parseInt(event.target.value, 10));    
+    setPage(0);
+  };
+
   useEffect(() => {
-    dispatch(setPlayerInfo(idreal,username));
-    dispatch(getPlayerIpLoginHistory());
-  }, [idreal, username, dispatch])
+    dispatch(setPlayerInfo(id,username));
+    dispatch(getPlayerIpLoginHistory(start,length));
+  }, [id, username, start,length, dispatch])
 
   const ipplayerloginhistorylist = useSelector(store => store.player.iplist);
+  const recordsTotal = useSelector(store => store.player.recordsTotal);
+  const recordsFiltered = useSelector(store => store.player.recordsFiltered);
 
   return ipplayerloginhistorylist ? (
 
@@ -76,7 +89,7 @@ const PlayerIpLoginHistory = () => {
           filtering: true,
 
         }}
-        title={`Login Ip History: ${username.toUpperCase()}`}
+        title=''
         columns={[
           { title: "IP", field: "ip", filtering: false},
           { title: "Client", field: "client", filtering: false},
@@ -84,6 +97,14 @@ const PlayerIpLoginHistory = () => {
           { title: "Date", field: "date", filtering: false, render: rowData => moment(rowData.date).format("YYYY/MM/DD hh:mm")}
         ]}
         data={ipplayerloginhistorylist}        
+      />
+      <TablePagination
+        component="div"
+        count={recordsTotal}
+        page={page}
+        onChangePage={handleChangePage}
+        rowsPerPage={length}
+        onChangeRowsPerPage={handleChangeRowsPerPage}
       />
     </div>
   ) : null;

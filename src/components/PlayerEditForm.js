@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
@@ -8,7 +8,7 @@ import { withRouter } from 'react-router-dom';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import ReactSelect from "react-select";
-import {editPlayerData} from '../redux/PlayerDucks';
+import {editPlayerData,getPlayerData,setPlayerInfo} from '../redux/PlayerDucks';
 import {useDispatch, useSelector} from 'react-redux'
 
 import { useForm, Controller } from 'react-hook-form';
@@ -67,19 +67,22 @@ const statusOptions = [
   {value:"block", label:"Block"}
 ]
 
-function PlayerEditForm (props) {
-
-  let {player} = props;
+function PlayerEditForm ({id,username}) {
 
   var showAlert = false;
-
-  console.log(showAlert);
 
   const classes = useStyles();
 
   const dispatch = useDispatch();
 
   const {register, handleSubmit, control} =  useForm();  
+
+  useEffect(() => {
+    dispatch(setPlayerInfo(id,username));
+    dispatch(getPlayerData())
+  },[id, username, dispatch])
+
+  const player = useSelector(store => store.player.data);
 
   const error = useSelector(store => store.player.error);
   const messageupdate = useSelector(store => store.player.messageupdate);
@@ -109,14 +112,10 @@ function PlayerEditForm (props) {
     </Alert>
   )
 
-  return (
+  return player ? (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <Typography component="h1" variant="h5" className={classes.title}>
-          EDIT PLAYER
-        </Typography>
-         
         <form className={classes.form} noValidate onSubmit={handleSubmit(onSubmit)}>
           <input name="username" className={classes.input} ref={register} placeholder='Username' defaultValue={player.username} readOnly/>
           <input name="firstname" className={classes.input} ref={register} placeholder='Firstname'defaultValue={player.firstname}/>
@@ -167,7 +166,7 @@ function PlayerEditForm (props) {
         {showError()}
       </div>
     </Container>
-  );
+  ) : null;
 }
 
 export default withRouter(PlayerEditForm);

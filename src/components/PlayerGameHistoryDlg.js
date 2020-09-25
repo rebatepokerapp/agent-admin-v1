@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import AppBar from '@material-ui/core/AppBar';
@@ -8,8 +8,8 @@ import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import Tooltip from '@material-ui/core/Tooltip';
-import AgentCashTransactionHistory from './AgentCashTransactionHistory';
-import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
+import PlayerGameHistory from './PlayerGameHistory';
+import HistoryIcon from '@material-ui/icons/History';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -29,7 +29,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const AgentCashTransHistoryDlg = ({id,username}) => {
+const PlayerGameHistoryDlg = ({id,username}) => {
 
   const classes = useStyles();
 
@@ -45,9 +45,9 @@ const AgentCashTransHistoryDlg = ({id,username}) => {
 
   return (
     <>
-      <Tooltip title="Transaction History" aria-label="tranhistory">
-        <IconButton className={classes.classbutton} aria-label="tranhistory" onClick={handleOpen}>
-          <MonetizationOnIcon />
+      <Tooltip title="Game History" aria-label="gamehistory">
+        <IconButton className={classes.classbutton} aria-label="gamehistory" onClick={handleOpen}>
+          <HistoryIcon />
         </IconButton>
       </Tooltip>
       <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
@@ -57,14 +57,14 @@ const AgentCashTransHistoryDlg = ({id,username}) => {
               <CloseIcon />
             </IconButton>
             <Typography variant="h6" className={classes.title}>
-              {`TRANSACTION HISTORY ${username.toUpperCase()}`}
+              {`GAME HISTORY ${username.toUpperCase()}`}
             </Typography>
           </Toolbar>
         </AppBar>
-        <AgentCashTransactionHistory id={id} username={username}/>
+        <PlayerGameHistory id={id} username={username}/>
       </Dialog>
     </>
   )
 }
 
-export default AgentCashTransHistoryDlg
+export default PlayerGameHistoryDlg

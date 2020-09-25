@@ -26,6 +26,7 @@ import AgentMenuEdit from './AgentMenuEdit';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
+import AddAgentDlg from './AddAgentDlg';
 
 const useStyles = makeStyles((theme) => ({
   button:{
@@ -50,6 +51,9 @@ const useStyles = makeStyles((theme) => ({
   },
   textcode: {
     display: 'none'
+  },
+  cell: {
+    display: 'inline-block',
   },
 }));
 
@@ -109,18 +113,7 @@ function Agents() {
 
   return  subsList ? (
 
-    <div style={{ maxWidth: "100%", overflowY: 'auto' }}>
-      <div style={{ maxWidth: "100%", textAlign: 'right' }}>
-        <Button 
-          className={classes.buttonAdd} 
-          aria-haspopup="true" 
-          onClick={() => faddAgent()}
-          variant="contained"
-          >
-            <PersonAddIcon />
-          &nbsp;Add Agent
-        </Button>
-      </div>      
+    <div style={{ maxWidth: "100%", overflowY: 'auto' }}>     
       <MaterialTable
         icons={tableIcons}
         options={{
@@ -151,20 +144,18 @@ function Agents() {
                 </Tooltip>
                 <input type="text" className={classes.textcode} value={getLink(agent.accessCode)} id={agent.accessCode} readOnly></input>
               </>
-            ),
-            cellStyle:{width:20,maxWidth:20}         
+            ),    
           },
-          { title: "Username", field: "username", filtering: false, cellStyle:{width:20,maxWidth:20}  },
-          { title: "Email", field: "email", filtering: false, cellStyle:{width:20,maxWidth:20}  },
-          { title: "Rake %", field: "commission", filtering: false, cellStyle:{width:20,maxWidth:20}  },
+          { title: "Username", field: "username", filtering: false, },
+          //{ title: "Email", field: "email", filtering: false  },
+          { title: "Rake %", field: "commission", filtering: false, },
           //{ title: "Active", field: "status", lookup: { "active": 'yes', "Block": 'no' },cellStyle:{width:20,maxWidth:20}  },
           
           {
-            title: '',field: '',filtering: false,
+            title: <AddAgentDlg />,field: '',filtering: false,sorting: false,
             render: row => (
               <AgentMenuEdit agent={row.username} id={row._id}/>
             ),
-            cellStyle:{width:20,maxWidth:20}  
           },
         ]}
         data={subsList}

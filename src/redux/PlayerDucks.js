@@ -12,7 +12,9 @@ const playerData = {
   messageupdate:'',
   iplist: null,
   error: null,
-  validate: ''
+  validate: '',
+  recordsTotal: 0,
+  recordsFiltered: 0
 }
 
 const PLAYER_GAME_HISTORY_SUCCESS = 'PLAYER_GAME_HISTORY_SUCCESS';
@@ -43,19 +45,19 @@ const VALIDATE_PLAYER_USERNAME_ERROR = 'VALIDATE_PLAYER_USERNAME_ERROR'
 export default function playerReducer(state = playerData, action){
   switch(action.type){
     case PLAYER_GAME_HISTORY_SUCCESS:
-      return{...state, gamehistory: action.payload, error: null, messageupdate: null}
+      return{...state, gamehistory: action.payload.data, recordsTotal: action.payload.recordsTotal, recordsFiltered: action.payload.recordsFiltered, error: null, messageupdate: null}
     case PLAYER_GAME_HISTORY_ERROR:
       return{...state, error: action.payload, messageupdate: null}
     case PLAYER_TRANSACTION_HISTORY_SUCCESS:
-      return{...state, transactions: action.payload, error: null, messageupdate: null}
+      return{...state, transactions: action.payload.data, recordsTotal: action.payload.recordsTotal, recordsFiltered: action.payload.recordsFiltered, error: null, messageupdate: null}
     case PLAYER_TRANSACTION_HISTORY_ERROR:
       return{...state, error: action.payload, messageupdate: null}
     case PLAYER_IP_HISTORY_SUCCESS:
-      return{...state, iplist: action.payload, error: null, messageupdate: null}
+      return{...state, iplist: action.payload.data, recordsTotal: action.payload.recordsTotal, recordsFiltered: action.payload.recordsFiltered, error: null, messageupdate: null}
     case PLAYER_IP_HISTORY_ERROR:
       return{...state, error: action.payload, messageupdate: null}
     case SET_PLAYER_INFO_SUCCESSS:
-      return{...state, player: action.payload.id, username: action.payload.username, data: null, error: null, messageupdate: null}
+      return{...state, player: action.payload.id, username: action.payload.username, data: null, error: null, messageupdate: null, gamehistory: null, transactions: null, iplist: null, statistics: null}
     case SET_PLAYER_INFO_ERROR:
       return{...state, error: action.payload, messageupdate: null}
     case GET_PLAYER_INFO_SUCCESS:
@@ -106,11 +108,11 @@ export const setPlayerMessagesError = () => async (dispatch, getState) => {
   })
 }
 
-export const getPlayerGameHistory = () => async  (dispatch, getState) => {
+export const getPlayerGameHistory = (pstart,plength) => async  (dispatch, getState) => {
   try {
     const query =  {
-      start: 0,
-      length:0,
+      start: pstart,
+      length:plength,
       search: ''
     }
     const id = getState().player.player;
@@ -118,9 +120,14 @@ export const getPlayerGameHistory = () => async  (dispatch, getState) => {
     const token = getState().agent.agent.jwt_token;
     const AuthStr = 'Bearer '.concat(token);
     const res = await axios.get(`${API_AGENT_URL}/player/gameHistory/${id}?start=${query.start}&length=${query.length}&search=${query.search}`,{ headers: { Authorization: AuthStr, agent: agent }});
+
     dispatch({
       type: PLAYER_GAME_HISTORY_SUCCESS,
-      payload: res.data.data
+      payload: {
+        data: res.data.data,
+        recordsTotal: res.data.recordsTotal,
+        recordsFiltered: res.data.recordsFiltered
+      }
     })
   } catch (error) {
     dispatch({
@@ -130,11 +137,11 @@ export const getPlayerGameHistory = () => async  (dispatch, getState) => {
   }
 }
 
-export const getPlayerTransCashHistory = () => async  (dispatch, getState) => {
+export const getPlayerTransCashHistory = (pstart,plength) => async  (dispatch, getState) => {
   try {
     const query =  {
-      start: 0,
-      length:0,
+      start: pstart,
+      length:plength,
       search: ''
     }
     const id = getState().player.player;
@@ -144,7 +151,11 @@ export const getPlayerTransCashHistory = () => async  (dispatch, getState) => {
     const res = await axios.get(`${API_AGENT_URL}/player/cashTransHistory/${id}?start=${query.start}&length=${query.length}&search=${query.search}`,{ headers: { Authorization: AuthStr, agent: agent }});
     dispatch({
       type: PLAYER_TRANSACTION_HISTORY_SUCCESS,
-      payload: res.data.data
+      payload: {
+        data: res.data.data,
+        recordsTotal: res.data.recordsTotal,
+        recordsFiltered: res.data.recordsFiltered
+      }
     })
   } catch (error) {
     dispatch({
@@ -154,11 +165,11 @@ export const getPlayerTransCashHistory = () => async  (dispatch, getState) => {
   }
 }
 
-export const getPlayerIpLoginHistory = () => async  (dispatch, getState) => {
+export const getPlayerIpLoginHistory = (pstart,plength) => async  (dispatch, getState) => {
   try {
     const query =  {
-      start: 0,
-      length:0,
+      start: pstart,
+      length:plength,
       search: ''
     }
     const id = getState().player.player;
@@ -166,10 +177,13 @@ export const getPlayerIpLoginHistory = () => async  (dispatch, getState) => {
     const token = getState().agent.agent.jwt_token;
     const AuthStr = 'Bearer '.concat(token);
     const res = await axios.get(`${API_AGENT_URL}/player/iploginhistory/${id}?start=${query.start}&length=${query.length}&search=${query.search}`,{ headers: { Authorization: AuthStr, agent: agent }});
-    console.log(res.data.data);
     dispatch({
       type: PLAYER_IP_HISTORY_SUCCESS,
-      payload: res.data.data
+      payload: {
+        data: res.data.data,
+        recordsTotal: res.data.recordsTotal,
+        recordsFiltered: res.data.recordsFiltered
+      }
     })
   } catch (error) {
     dispatch({
