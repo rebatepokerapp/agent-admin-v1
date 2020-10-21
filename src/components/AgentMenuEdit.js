@@ -50,7 +50,7 @@ const AgentMenuEdit = ({ id, agent }) => {
   return (
     <ul className={classes.nav} >  
       <li nowrap className={classes.navli}><EditAgentFormDlg id={id} username={agent} /></li>
-      <li className={classes.navli}><RequestBalanceDlg id={id} username={agent} /></li>
+      <li className={classes.navli}><RequestBalanceDlg id={id} username={agent} isplayer="false" /></li>
       <li className={classes.navli}><FiguresReportDlg id={id} username={agent} /></li>
       <li className={classes.navli}><AgentCashTransHistoryDlg id={id} username={agent} /></li>
     </ul>              

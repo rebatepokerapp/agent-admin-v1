@@ -11,8 +11,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Divider from '@material-ui/core/Divider';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import { signOut } from "../redux/AgentDucks";
-import {useDispatch} from 'react-redux';
+import { signOut,setMenuState } from "../redux/AgentDucks";
+import {useDispatch,useSelector} from 'react-redux';
+import AgentProfileDlg from './AgentProfileDlg';
 
 const useStyles = makeStyles((theme) => ({
     topIcon: {
@@ -52,11 +53,15 @@ export default function AgentMenu({agent}) {
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
+    dispatch(setMenuState(!menustate))
   };
 
   const handleClose = () => {
     setAnchorEl(null);
+    dispatch(setMenuState(false))
   };
+
+  const menustate = useSelector(store => store.agent.menustate);
 
   return (
     <div>
@@ -67,7 +72,7 @@ export default function AgentMenu({agent}) {
         id="customized-menu"
         anchorEl={anchorEl}
         keepMounted
-        open={Boolean(anchorEl)}
+        open={Boolean(menustate)}
         onClose={handleClose}
       >
         <MenuItem>
@@ -76,18 +81,7 @@ export default function AgentMenu({agent}) {
           </ListItemIcon>
           <ListItemText primary="Messages" />
         </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-          <LocalAtmIcon className={classes.menuIcon}/>
-          </ListItemIcon>
-          <ListItemText primary="Payments" />
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <SettingsIcon className={classes.menuIcon}/>
-          </ListItemIcon>
-          <ListItemText primary="Settings" />
-        </MenuItem>
+        <AgentProfileDlg />
         <Divider />
         <MenuItem>
           <ListItemIcon>

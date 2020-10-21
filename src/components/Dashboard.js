@@ -166,7 +166,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Dashboard() {
-  const classes = useStyles();
+  const classes = useStyles();  
 
   const [open, setOpen] = useState(false);
   const handleDrawerOpen = () => {
@@ -176,7 +176,7 @@ export default function Dashboard() {
     setOpen(false);
   }; 
 
-  const agent = useSelector(store => store.agent);
+  const agent = useSelector(store => store.agent.agentsession);
   const balance = useSelector(store => store.agent.balance);
   const rakebalance = useSelector(store => store.agent.rakebalance);
 
@@ -193,7 +193,7 @@ export default function Dashboard() {
     return `https://${window.location.href.toString().split('/')[2]}/register.html?accesscode=${code}`;
   }
   
-  return (
+  return agent ? (
     <div className={classes.root}>
       <CssBaseline />
       <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
@@ -208,17 +208,17 @@ export default function Dashboard() {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" className={classes.title}>
-            {`${agent.agent.name.toUpperCase()}`}
+            {`${agent.username?agent.username.toUpperCase():''}`}
           </Typography>
           {!isMobile?<div><Typography className={classes.balance}>
             {`Rake Balance: $${rakebalance?rakebalance.toFixed(2):0} `}{
-              agent.agent.isTransferAllow === true || agent.agent.isTransferAllow === 'true' ? <TransferChips maxamount={agent.agent.rake_chips}/> : null
+              agent.isTransferAllow === true || agent.isTransferAllow === 'true' ? <TransferChips maxamount={agent.rake_chips}/> : null
             }{` Balance: $${balance?balance.toFixed(2):0}`}
           </Typography></div>:null}                              
           {
-          agent.agent.role !== 'master' ? 
+          agent.role !== 'master' ? 
             (<><Typography component="h1" variant="h6" color="inherit" noWrap className={classes.access}>
-              {`Access Code: ${agent.agent.accessCode}`}<input type="text" className={classes.textcode} value={getLink(agent.agent.accessCode)} id="accesscod" readOnly></input>            
+              {`Access Code: ${agent.agent.accessCode}`}<input type="text" className={classes.textcode} value={getLink(agent.accessCode)} id="accesscod" readOnly></input>            
             </Typography>
             <IconButton onClick={() => copyLink()} className={classes.toolbarIcon}>
               <FileCopyIcon />
@@ -227,16 +227,16 @@ export default function Dashboard() {
           ''
           }
           
-          <AgentMenu agent={agent.agent} />
+          <AgentMenu agent={agent} />
         </Toolbar>
         {isMobile?<Typography className={classes.balancemobil}>
           {`Rake Balance: $${rakebalance?rakebalance.toFixed(2):0} `}{
             agent.agent.isTransferAllow === true || agent.agent.isTransferAllow === 'true' ? <TransferChips maxamount={agent.agent.rake_chips} isMobile={isMobile}/> : null
           }{` Balance: $${balance?balance.toFixed(2):0}`}
-        </Typography>:null}
+        </Typography>:null}        
       </AppBar>
       <Drawer
-        variant="permanent"
+        variant={isMobile?"temporary":"permanent"}
         classes={{
           paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
         }}
@@ -248,6 +248,7 @@ export default function Dashboard() {
           </IconButton>
         </div>
         <Divider />
+          {isMobile?<><List>{' '}</List><List>{' '}</List></>:null}
         <List>{mainListItems}</List>
         <Divider />
         <List>{secondaryListItems}</List>
@@ -255,6 +256,7 @@ export default function Dashboard() {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
+          {isMobile?<br/>:null}
           <Router>
             <Switch>                   
               <Route path="/app/playeriphistory/:id" component={PlayerIpLoginHistory} />      
@@ -284,5 +286,5 @@ export default function Dashboard() {
         </Container>
       </main>
     </div>
-  );
+  ) : null;
 }

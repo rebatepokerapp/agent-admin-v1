@@ -6,6 +6,7 @@ import moment from 'moment';
 const agentData = {
   id: null,
   username: '',
+  agentsession: null,
   agent: null,
   data: null,
   isAuthenticated: false,
@@ -23,7 +24,8 @@ const agentData = {
   rakebalance: 0,
   balance: 0,
   recordsTotal: 0,
-  recordsFiltered: 0
+  recordsFiltered: 0,
+  menustate: false
 }
 
 const AGENT_LOGIN_SUCCESS = 'AGENT_LOGIN_SUCCESS';
@@ -55,6 +57,10 @@ const AGENT_TRANSFER_SUCCESS = 'AGENT_TRANSFER_SUCCESS'
 const AGENT_TRANSFER_ERROR = 'AGENT_TRANSFER_ERROR'
 const AGENT_REQUEST_BALANCE_SUCCESS = 'AGENT_REQUEST_BALANCE_SUCCESS'
 const AGENT_REQUEST_BALANCE_ERROR = 'AGENT_REQUEST_BALANCE_ERROR'
+const SET_MENU_STATE_SUCCESSS = 'SET_MENU_STATE_SUCCESSS'
+const SET_ERROR_SUCCESSS = 'SET_ERROR_SUCCESSS'
+const AGENT_CHANGE_PASSWORD_SUCCESS = 'AGENT_CHANGE_PASSWORD_SUCCESS'
+const AGENT_CHANGE_PASSWORD_ERROR = 'AGENT_CHANGE_PASSWORD_ERROR'
  
 
 //Reducer
@@ -62,9 +68,11 @@ const AGENT_REQUEST_BALANCE_ERROR = 'AGENT_REQUEST_BALANCE_ERROR'
 export default function agentReducer(state = agentData, action){
   switch(action.type){
     case AGENT_LOGIN_SUCCESS:
-      return{...state, agent: action.payload.agent, rakebalance: action.payload.agent.rake_chips, balance: action.payload.agent.chips, isAuthenticated: true, token: action.payload.token, error: null, id: null, username: null, data: null, players: null, subagents: null, figures: null, totalrake: 0, totalperday: null, lastThreeWeeks: null, messageupdate: null, transactions: null, dashboard: null}
+      return{...state, agentsession: action.payload.agent, agent: action.payload.agent, rakebalance: action.payload.agent.rake_chips, balance: action.payload.agent.chips, isAuthenticated: true, token: action.payload.token, error: null, id: null, username: null, data: null, players: null, subagents: null, figures: null, totalrake: 0, totalperday: null, lastThreeWeeks: null, messageupdate: null, transactions: null, dashboard: null, menustate: false}
     case AGENT_LOGOUT_SUCCESS:      
-      return{...state, agent: null, balance: 0, rakebalance: 0,isAuthenticated: false, token: null, error: null, id: null, username: null, data: null, players: null, subagents: null, figures: null, totalrake: 0, totalperday: null, lastThreeWeeks: null, messageupdate: null, transactions: null, dashboard: null}
+      return{...state, agent: null, balance: 0, rakebalance: 0,isAuthenticated: false, token: null, error: null, id: null, username: null, data: null, players: null, subagents: null, figures: null, totalrake: 0, totalperday: null, lastThreeWeeks: null, messageupdate: null, transactions: null, dashboard: null, menustate: false}
+    case SET_MENU_STATE_SUCCESSS:
+      return{...state, menustate: action.payload, error: null}
     case GET_AGENT_PLAYERS_SUCCESS:
       return{...state, players: action.payload, error: null}
     case GET_AGENT_DASHBOARD_SUCCESS:
@@ -118,10 +126,23 @@ export default function agentReducer(state = agentData, action){
     case AGENT_REQUEST_BALANCE_SUCCESS:
       return{...state, messageupdate: action.payload.message, data: action.payload.agent, rakebalance: action.payload.rakebalance, balance: action.payload.balance, error: null}
     case AGENT_REQUEST_BALANCE_ERROR:
-      return{...state, error: action.payload, messageupdate: null}     
+      return{...state, error: action.payload, messageupdate: null}   
+    case SET_ERROR_SUCCESSS:
+      return{...state, error: action.payload.error, messageupdate: action.payload.message}  
+    case AGENT_CHANGE_PASSWORD_SUCCESS:
+      return{...state, messageupdate: action.payload.message, data: action.payload.agent, error: null}
+    case AGENT_CHANGE_PASSWORD_ERROR:
+      return{...state, error: action.payload, messageupdate: null}    
     default:
       return state
   }
+}
+
+export const setMenuState = (state) => async (dispatch, getState) => {
+  dispatch({
+    type: SET_MENU_STATE_SUCCESSS,
+    payload: state
+  })
 }
 
 export const setAgentInfo = (id,agent) => async (dispatch, getState) => {
@@ -130,6 +151,16 @@ export const setAgentInfo = (id,agent) => async (dispatch, getState) => {
     payload: {
       id: id,
       username: agent
+    }
+  })
+}
+
+export const setErrorMessage = (error,message) => async (dispatch, getState) => {
+  dispatch({
+    type: SET_ERROR_SUCCESSS,
+    payload: {
+      error: error,
+      message: message
     }
   })
 }
@@ -298,7 +329,8 @@ export const getAgentData = () => async  (dispatch, getState) => {
         lastname: res.data.agent.lastname,
         email: res.data.agent.email,
         commission: res.data.agent.commission,
-        status: res.data.agent.status
+        status: res.data.agent.status,
+        isTransferAllow: res.data.agent.isTransferAllow
       }
     }
 
@@ -315,16 +347,17 @@ export const getAgentData = () => async  (dispatch, getState) => {
 }
 
 export const editAgentData = (data) => async  (dispatch, getState) => {
-  try {
+  try {    
     const id = getState().agent.id;    
     const agent = JSON.stringify(getState().agent.agent);
     const token = getState().agent.agent.jwt_token;
     const AuthStr = 'Bearer '.concat(token);
+    console.log(data)
     const res = await axios.post(`${API_AGENT_URL}/agent/edit/${id}`, data, { headers: { Authorization: AuthStr, agent: agent }});
     dispatch({
       type: UPDATE_AGENT_INFO_SUCCESS,
       payload: {
-        agent:res.data.agent,
+        agent: res.data.agent,
         message: 'Agent data updated'
       }
     })
@@ -358,6 +391,29 @@ export const agentTransfer = (data) => async  (dispatch, getState) => {
     dispatch({
       type: AGENT_TRANSFER_ERROR,
       payload: 'Error updating agent data'
+    })
+  }
+}
+
+export const agentChangePassword = (data) => async  (dispatch, getState) => {
+  try {
+    const id = getState().agent.agent.id;    
+    const agent = JSON.stringify(getState().agent.agent);
+    const token = getState().agent.agent.jwt_token;
+    const AuthStr = 'Bearer '.concat(token);
+    data.agentId = id;
+    const res = await axios.post(`${API_AGENT_URL}/agent/changepassword`, data, { headers: { Authorization: AuthStr, agent: agent }});
+    dispatch({
+      type: AGENT_CHANGE_PASSWORD_SUCCESS,
+      payload: {
+        agent:res.data.agent,
+        message: res.data.message
+      }
+    })
+  } catch (error) {
+    dispatch({
+      type: AGENT_CHANGE_PASSWORD_ERROR,
+      payload: 'Error updating agent password'
     })
   }
 }

@@ -106,7 +106,7 @@ const EditAgentFormDlg = ({id,username}) => {
     setOpen(true);
   };  
 
-  return (
+  return username ? (
     <>
       <Tooltip title="Edit Agent" aria-label="editagent">
         <IconButton className={classes.classbutton} aria-label="editagent" onClick={handleOpen}>
@@ -124,7 +124,7 @@ const EditAgentFormDlg = ({id,username}) => {
         </DialogContent>
       </Dialog>
     </>
-  )
+  ) : null;
 }
 
 export default EditAgentFormDlg

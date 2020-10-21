@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react';
+import React,{useEffect, useState} from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
@@ -12,6 +12,9 @@ import {editAgentData,getAgentData,setAgentInfo} from '../redux/AgentDucks';
 import {useDispatch, useSelector} from 'react-redux'
 
 import { useForm, Controller } from 'react-hook-form';
+
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -69,6 +72,7 @@ function EditAgentForm ({id,username}) {
 
   const dispatch = useDispatch();
 
+
   useEffect(() => {  
     dispatch(setAgentInfo(id,username))
     dispatch(getAgentData())    
@@ -80,6 +84,17 @@ function EditAgentForm ({id,username}) {
 
   const error = useSelector(store => store.agent.error);
   const messageupdate = useSelector(store => store.agent.messageupdate);
+
+  let value = false;
+  if(agent){
+    value = agent.isTransferAllow;
+  }
+
+  const [state, setState] = useState(value);
+
+  const handleChange = (event) => {
+    setState(event.target.checked);
+  };
 
   const onSubmit = (data, e) => {
     e.preventDefault();    
@@ -94,6 +109,7 @@ function EditAgentForm ({id,username}) {
     agent.email = data.email;
     agent.status = data.status.value;
     agent.commission = data.commission;
+    agent.isTransferAllow = state;
     setTimeout(() => {
       if(document.getElementById('alertmes')){
         document.getElementById('alertmes').style.display='none';
@@ -107,7 +123,6 @@ function EditAgentForm ({id,username}) {
         {error ? error : messageupdate}<strong>{error ? ' — Check it out!' : ''}</strong>        
     </Alert>
   )
-
   return agent ? (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -135,7 +150,19 @@ function EditAgentForm ({id,username}) {
                 message: "Invalid email address"
               }
             }
-          )} placeholder='Email'defaultValue={agent.email} readOnly/>                    
+          )} placeholder='Email'defaultValue={agent.email} readOnly/> 
+          <FormControlLabel
+            control={
+              <Switch
+                checked={state}
+                onChange={handleChange}
+                name="isTransferAllow"
+                color="primary"
+                inputRef={register}
+              />
+            }
+            label="Allow Transfer"
+          />           
           <Controller
             className={classes.inputcmb}
             as={ReactSelect}

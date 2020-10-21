@@ -134,11 +134,18 @@ const FiguresReport = ({byagentid}) => {
   };
 
   let month = month_name(moment().subtract(weeknumber, 'weeks').startOf('week').toDate()).toUpperCase();
+  let monthNext = month_name(moment().subtract(weeknumber, 'weeks').endOf('week').toDate()).toUpperCase();
+
+  if (month !== monthNext) {
+    month = `${month} - ${monthNext}`
+  }
   
 
   const figuresList = useSelector(store => store.agent.figures);
 
   let numday = 0;
+
+  console.log(figuresList)
 
   for (let index = 0; index < 7; index++) {
     numday=moment().subtract(weeknumber, 'weeks').startOf('week').add(index,'days').toDate().getUTCDate();
@@ -193,7 +200,7 @@ const FiguresReport = ({byagentid}) => {
               <>
               {agentHeader(row._id.agent, index)}                                  
               <TableRow key={index}>                                
-                <TableCell>{row._id.username}</TableCell>
+                <TableCell>{row._id.username.length > 0?row._id.username:'Tournament Fee'}</TableCell>
                 <TableCell>{row._id.agent}</TableCell>
 
                 {row.days.forEach( day => {

@@ -746,6 +746,13 @@ db.auth('pokerdbuser', 'repssba21te89p1k')
 
 //mongo -u "pokerdbuser" -p "repssba21te89p1k" --authenticationDatabase "rebatepokerdb"
 
+db.merchant.insert({
+  id : 1,
+  password : "12345asdfg1ad123sdere"
+})
+
+mongodump --host=185.167.99.225 --port=20017 --username="admin" --password="repssba21te89p1k" --out=/opt/backup/mongodump-2020-10-02
+
 mongod --dbpath /var/lib/mongo --replSet rebatepkdbrep --port 27017 --fork --logpath=/var/lib/mongo/fork/mongo.log
 mongod --dbpath /var/lib/mongo2 --replSet rebatepkdbrep --port 27018 --fork --logpath=/var/lib/mongo2/fork/mongo.log
 mongod --dbpath /var/lib/mongo3 --replSet rebatepkdbrep --port 27019 --fork --logpath=/var/lib/mongo3/fork/mongo.log
@@ -773,3 +780,19 @@ rs.initiate({
      { _id: 2, host: "localhost:27019" }
   ]
 })
+
+db.regularPricePool.aggregate( 
+  {         
+    $group : {
+      _id : {regPricepoolId: "$regPricepoolId", name: "$name"}       
+    }     
+  },          
+  { $count: "regPricepoolId" }
+  ).pretty()
+
+  db.regularTournaments.find({
+    status: { '$ne': 'Closed' },
+    gameType: 'reg',
+    isDelete: false,
+    isCashGame: true
+}).pretty()

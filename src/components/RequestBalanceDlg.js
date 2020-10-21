@@ -20,7 +20,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { RHFInput } from "react-hook-form-input";
 import NumberFormat from "react-number-format";
 import TextField from '@material-ui/core/TextField';
-import {agentRequestBalance} from '../redux/AgentDucks';
+import {agentRequestBalance,setErrorMessage} from '../redux/AgentDucks';
 import LocalAtmIcon from '@material-ui/icons/LocalAtm';
 import Tooltip from '@material-ui/core/Tooltip';
 import { Visibility } from '@material-ui/icons';
@@ -126,7 +126,7 @@ const StyledMenuItem = withStyles((theme) => ({
   },
 }))(MenuItem);
 
-const RequestBalanceDlg = ({id,username}) => {
+const RequestBalanceDlg = ({id,username,isplayer}) => {
 
   const [open, setOpen] = React.useState(false);
 
@@ -158,6 +158,10 @@ const RequestBalanceDlg = ({id,username}) => {
       handleClose()      
     },3000);
   }
+
+  useEffect(() => {  
+    dispatch(setErrorMessage(null,null));   
+  },[dispatch])
 
   const showError = () => (
     <Alert severity={error ? 'warning' : 'success'} style={{display: (error || messageupdate) ? '': 'none'}} id="alertmes">
@@ -227,6 +231,7 @@ const RequestBalanceDlg = ({id,username}) => {
               }
             />
             <input type="text" ref={register} name="requestType" defaultValue="Add" className={classes.inputhide}></input>
+            <input type="text" ref={register} name="isplayer" defaultValue={isplayer} className={classes.inputhide}></input>
             <input type="text" ref={register} name="agentId" defaultValue={id} className={classes.inputhide}></input>
             <Button
               type="submit"

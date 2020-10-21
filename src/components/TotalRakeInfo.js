@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
+import moment from 'moment';
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -50,18 +51,25 @@ export default function Deposits({ dashboard, totalRake, totalperday }) {
   let totalRk = 0;
   let totalPday = 0;
   let totalGamePlayed = 0;
+  let numday = 0;
+  numday=moment().isoWeekday();
 
   if(totalRake){
     totalRk = totalRake;
   }
 
   if(totalperday){
-    if(totalperday.lenght > 0){
-      totalPday = totalperday[0].total;
+    if(totalperday.length > 0){
+      for (let index = 0; index < totalperday.length; index++) {
+        
+        if(parseInt(totalperday[index]._id.day - 1) === parseInt(numday)){
+          totalPday = totalperday[index].total;
+        }        
+      }
     }else{
       totalPday = 0;
     }
-  }
+  }  
 
   if(dashboard){
     totalPlayer = dashboard.totalPlayer;
@@ -76,7 +84,7 @@ export default function Deposits({ dashboard, totalRake, totalperday }) {
     <div className={maincontainer}>
       <div className={mainrow}>
         <div className={mainrowitemleft}>
-          Total Rake:
+          Week Rake:
         </div>
         <div className={mainrowitemright}>
           ${`${totalRk.toFixed(2)}`}
@@ -84,7 +92,7 @@ export default function Deposits({ dashboard, totalRake, totalperday }) {
       </div>
       <div className={mainrow}>
         <div className={mainrowitemleft}>
-          Rake by day:
+          Today's Rake:
         </div>
         <div className={mainrowitemright}>
           ${`${totalPday.toFixed(2)}`}

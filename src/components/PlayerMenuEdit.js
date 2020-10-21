@@ -5,6 +5,7 @@ import PlayerGameHistoryDlg from './PlayerGameHistoryDlg';
 import PlayerCashTransactionsDlg from './PlayerCashTransactionsDlg';
 import PlayerIpHistoryDlg from './PlayerIpHistoryDlg';
 import PlayerProfileInfoDlg from './PlayerProfileInfoDlg';
+import RequestBalanceDlg from './RequestBalanceDlg';
 
 const useStyles = makeStyles((theme) => ({
   nav: {
@@ -52,6 +53,7 @@ const PlayerMenuEdit = ({ id, username }) => {
       <li className={classes.navli}><PlayerCashTransactionsDlg id={id} username={username} /></li>
       <li className={classes.navli}><PlayerIpHistoryDlg id={id} username={username} /></li>
       <li className={classes.navli}><PlayerProfileInfoDlg id={id} username={username} /></li>
+      <li className={classes.navli}><RequestBalanceDlg id={id} username={username} isplayer="true" /></li>
     </ul>
   )
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -9,7 +9,7 @@ import logo from '../images/logo-icon-small.png';
 import { withRouter } from 'react-router-dom';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
-import { signIn } from "../redux/AgentDucks";
+import { signIn,setErrorMessage } from "../redux/AgentDucks";
 import {useDispatch, useSelector} from 'react-redux'
 
 import { useForm } from 'react-hook-form';
@@ -58,9 +58,13 @@ function SignIn (props) {
     e.preventDefault();
     dispatch(signIn(data)).then(() => {
       e.target.reset();
-    });
-    
+    });    
   }
+
+  useEffect(() => {  
+    dispatch(setErrorMessage(null,null));   
+  },[dispatch])
+   
 
   const showError = () => (
     <Alert severity="warning" style={{display: error ? '': 'none'}}>
