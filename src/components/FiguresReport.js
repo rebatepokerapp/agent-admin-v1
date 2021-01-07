@@ -104,8 +104,10 @@ const FiguresReport = ({byagentid}) => {
         page = weeknumber - 1;
       }
     }
+    document.body.style.cursor='wait';
     dispatch(getFiguresByAgent(page,byId,sub))
     setWeek(page);
+    document.body.style.cursor='default';
   };
 
   const agentHeader = (agentName, i) => {
@@ -144,8 +146,6 @@ const FiguresReport = ({byagentid}) => {
   const figuresList = useSelector(store => store.agent.figures);
 
   let numday = 0;
-
-  console.log(figuresList)
 
   for (let index = 0; index < 7; index++) {
     numday=moment().subtract(weeknumber, 'weeks').startOf('week').add(index,'days').toDate().getUTCDate();

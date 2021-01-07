@@ -72,12 +72,13 @@ const AgentCashTransactionHistory = ({id,username}) => {
   }, [idreal, agusername, start,length, dispatch])
 
   const transcashhistorylist = useSelector(store => store.agent.transactions);
+
   const recordsTotal = useSelector(store => store.agent.recordsTotal);
   const recordsFiltered = useSelector(store => store.agent.recordsFiltered);
   
   return transcashhistorylist && agusername ? (
 
-    <div style={{ maxWidth: "100%" }}>
+    <div style={{ maxWidth: "100%", backgroundColor: "white"}}>
       <MaterialTable
         icons={tableIcons}
         options={{
@@ -95,7 +96,7 @@ const AgentCashTransactionHistory = ({id,username}) => {
         title={`Agent Transaction History ${agusername ? '> ' + agusername.toUpperCase():''}`}
         columns={[
           { title: "Tx.Number", field: "transactionNumber", filtering: false, cellStyle: {fontSize:'10px'}},
-          { title: "Provider Email/ID", field: "providerEmail", filtering: false},
+          { title: "Description", field: "remark", filtering: false, render: rowData => rowData.remark ? rowData.remark.toUpperCase() :''},
           { title: "Before Balance", field: "beforeBalance", filtering: false, render: rowData => rowData.beforeBalance ? parseFloat(rowData.beforeBalance).toFixed(2) :0},
           { title: "After Balance", field: "afterBalance", filtering: false, render: rowData => rowData.afterBalance ? parseFloat(rowData.afterBalance).toFixed(2) : 0},
           { title: "In", field: "chips", filtering: false, render: rowData => rowData.category === 'credit' ? rowData.chips : '-', cellStyle: {color:'green'}},

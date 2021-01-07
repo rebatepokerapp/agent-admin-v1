@@ -3,6 +3,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import PeopleIcon from '@material-ui/icons/People';
+import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import WorkIcon from '@material-ui/icons/Work';
 import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 import { Home as HomeIcon } from '@material-ui/icons'
@@ -41,6 +42,12 @@ export const mainListItems = (
         <PeopleIcon style={{color:'#FFA900'}}/>
       </ListItemIcon>
       <ListItemText primary="Players" />
+    </ListItem>
+    <ListItem button component="a" href="/app/cashier">
+      <ListItemIcon>
+        <AccountBalanceIcon style={{color:'#FFA900'}}/>
+      </ListItemIcon>
+      <ListItemText primary="Cashier" />
     </ListItem>
   </div>
 );

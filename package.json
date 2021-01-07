@@ -20,6 +20,7 @@
     "material-ui-advanced-table": "^0.3.1",
     "mdbreact": "^4.27.0",
     "moment": "^2.27.0",
+    "qrcode.react": "^1.0.1",
     "react": "^16.13.1",
     "react-chartjs-2": "^2.10.0",
     "react-device-detect": "^1.13.1",

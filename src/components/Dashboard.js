@@ -35,10 +35,13 @@ import PlayerTransferChips from './PlayerTransferChips';
 import AddAgent from './AddAgent';
 import AddPlayer from './AddPlayer';
 import AgentCashTransactionHistory from './AgentCashTransactionHistory';
+import agentCashier from './AgentCashier';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import AgentCashHistory from './AgentCashHistory';
 import TransferChips from './TransferChips';
 import {isMobile} from 'react-device-detect';
+import {getAgentBalances} from '../redux/AgentDucks';
+import {useDispatch, useSelector} from 'react-redux'
 
 
 import {
@@ -47,7 +50,6 @@ import {
   Route
 } from "react-router-dom";
 
-import { useSelector} from 'react-redux';
 
 const drawerWidth = 240;
 
@@ -168,6 +170,8 @@ const useStyles = makeStyles((theme) => ({
 export default function Dashboard() {
   const classes = useStyles();  
 
+  const dispatch = useDispatch();
+
   const [open, setOpen] = useState(false);
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -188,6 +192,9 @@ export default function Dashboard() {
       console.log('error copy to clipboard');
     })   
   }
+  setInterval(() => {
+    dispatch(getAgentBalances());    
+  }, 20000);
 
   const getLink = (code) => {
     return `https://${window.location.href.toString().split('/')[2]}/register.html?accesscode=${code}`;
@@ -208,7 +215,7 @@ export default function Dashboard() {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" className={classes.title}>
-            {`${agent.username?agent.username.toUpperCase():''}`}
+            {`${typeof agent.username !== 'undefined' ?agent.username.toUpperCase():''}`}
           </Typography>
           {!isMobile?<div><Typography className={classes.balance}>
             {`Rake Balance: $${rakebalance?rakebalance.toFixed(2):0} `}{
@@ -278,6 +285,7 @@ export default function Dashboard() {
               <Route path="/app/addplayer" component={AddPlayer} /> 
               <Route path="/app/cashhistoryagent" component={AgentCashHistory} />  
               <Route path="/app/cashhistory/:id" component={AgentCashTransactionHistory} />                                      
+              <Route path="/app/cashier" component={agentCashier} /> 
             </Switch>
           </Router>
           {/*<Box pt={4}>

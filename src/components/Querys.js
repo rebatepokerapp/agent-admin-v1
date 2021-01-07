@@ -370,37 +370,63 @@ db.allUsersTransactionHistory.aggregate(
 
 db.allUsersTransactionHistory.aggregate(
 {
-  $match: {rackToId:'5f3f4ed126893f460b90f04c',createdAt: { $gte: new ISODate("2020-08-31")}}
+  $match: {cashierToId:{$in:['5f644361809d49ab26bf7883','5f6443ca55b016ad5086c08f','5f6443de55b016ad5086c091']},createdAt: { $gte: new ISODate("2021-01-04") , $lte: new ISODate("2021-01-10")}}
 },
 {
-  $lookup: {
-    from: 'player',
-    localField: 'player',
-    foreignField: '_id',
-    as: 'player'
-  }
+$lookup: {
+  from: 'player',
+  let: { "id": "$player" },
+  pipeline: [
+    {
+      $match: {
+        $expr: {
+          $eq: ["$_id", "$$id"]
+        }
+      }
+    },
+    {
+      $lookup: {
+        from: 'agent',
+        let: { "agid": {$toObjectId:"$agentId"} },
+        pipeline: [
+          {
+            $match: { 
+              $expr: {
+                $eq: ["$_id", "$$agid"]
+              }                 
+            }
+          },
+          {
+            $project : { username: 1 , temp: '$$agid'}
+          }        
+        ],
+        as: "agentdata"
+      }
+    },
+    { "$unwind": "$agentdata" },        
+    {
+      $project : { username: 1, agentId: 1, agentusername:"$agentdata.username", temp: "$agentdata.temp"}
+    }
+  ],
+  as: "playerdata"
 },
-{
-  $lookup: {
-    from: 'agent',
-    localField: 'agentId',
-    foreignField: '_id',
-    as: 'agentdata'
-  }
-},
-{
-  $unwind: "$agentdata"
-},
+}, 
 {         
-  $group : {
-    _id : {day : {$dayOfWeek:"$createdAt"}, username : "$player.username"},
-    total : {$sum : "$totalRack"}         
-  }     
-},    
+$group : {
+  _id : {day : {$dayOfWeek:"$createdAt"}, agent: '$playerdata.agentusername', username : "$playerdata.username"},
+  total : {$sum : "$withdraw"}         
+}     
+},     
 {         
-  $group : {
-    _id : {username:"$_id.username", agentname:"$agentdata.username"} ,days : {$push : {day:"$_id.day",total : "$total"}}             
-  }            
+$group : {
+  _id : {agent:'$_id.agent'},days : {$push : {day:"$_id.day",total : "$total"}}             
+}            
+},
+{
+$sort: {'_id.username': 1}
+},      
+{       
+$sort: {'_id.agent': 1}     
 }
 ).pretty()
 
@@ -722,7 +748,7 @@ db.createUser(
 )
 db.auth('admin', 'repssba21te89p1k')
 
-mongo --port 27017 -u admin --authenticationDatabase 'admin' -p repssba21te89p1k
+//mongo --port 27017 -u admin --authenticationDatabase 'admin' -p repssba21te89p1k
 
 //mongo -u "admin" -p "repssba21te89p1k" --authenticationDatabase "admin"
 
@@ -744,18 +770,30 @@ db.createUser(
 
 db.auth('pokerdbuser', 'repssba21te89p1k')
 
-//mongo -u "pokerdbuser" -p "repssba21te89p1k" --authenticationDatabase "rebatepokerdb"
+//mongo --host=localhost:27017 -u "pokerdbuser" -p "repssba21te89p1k" --authenticationDatabase "rebatepokerdb"
+
+
 
 db.merchant.insert({
   id : 1,
   password : "12345asdfg1ad123sdere"
 })
 
-mongodump --host=185.167.99.225 --port=20017 --username="admin" --password="repssba21te89p1k" --out=/opt/backup/mongodump-2020-10-02
+//mongodump --host=185.167.99.225 --port=20017 --username="admin" --password="repssba21te89p1k" --out=/opt/backup/mongodump-2020-10-02
 
-mongod --dbpath /var/lib/mongo --replSet rebatepkdbrep --port 27017 --fork --logpath=/var/lib/mongo/fork/mongo.log
-mongod --dbpath /var/lib/mongo2 --replSet rebatepkdbrep --port 27018 --fork --logpath=/var/lib/mongo2/fork/mongo.log
-mongod --dbpath /var/lib/mongo3 --replSet rebatepkdbrep --port 27019 --fork --logpath=/var/lib/mongo3/fork/mongo.log
+//mongostat -u "admin" -p 'repssba21te89p1k' --authenticationDatabase "admin"
+//mongotop -u "admin" -p 'repssba21te89p1k'  --authenticationDatabase "admin"
+
+//mongodump --db=rebatepokerdb --out=/data/backup/20201103/
+
+//mongod --dbpath /var/lib/mongo --replSet rebatepkdbrep --port 27017 --fork --logpath=/var/lib/mongo/fork/mongo.log
+//mongod --dbpath /var/lib/mongo2 --replSet rebatepkdbrep --port 27018 --fork --logpath=/var/lib/mongo2/fork/mongo.log
+//mongod --dbpath /var/lib/mongo3 --replSet rebatepkdbrep --port 27019 --fork --logpath=/var/lib/mongo3/fork/mongo.log
+
+db.sngTournaments.find({
+  players: { '$in': [ '5f64441055b016ad5086c093' ] },
+  'tournamentLosers.playerId': '5f64441055b016ad5086c093'
+}).pretty()
 
 rs.initiate()
 
@@ -772,6 +810,8 @@ rs.initiate(
   }
 )
 
+db.game.find( { $where: "this.winners.length > 1" } )
+
 rs.initiate({
   _id : "rebatepkdbrep",
   members: [
@@ -780,6 +820,12 @@ rs.initiate({
      { _id: 2, host: "localhost:27019" }
   ]
 })
+
+db.sngTournaments.find({players:{$in:['5f64441055b016ad5086c093']},'tournamentWinners.playerId':'5f64441055b016ad5086c093'}).pretty()
+db.room.find({tournamentType: 'sng',tournament: '5f91d0b6aff9dcf82bd64cea'})
+
+db.sngTournaments.find({players:{$in:['5f64441055b016ad5086c093']},'tournamentWinners.playerId':'5f64441055b016ad5086c093'}).pretty()
+
 
 db.regularPricePool.aggregate( 
   {         

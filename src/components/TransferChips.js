@@ -174,7 +174,7 @@ const TransferChips = ({maxamount,isMobile}) => {
   return (
     <>
       <BootstrapButton variant="contained" color="primary" disableRipple className={isMobile?classes.botonmobile:classes.margin} onClick={handleClickOpen}>
-        {`Transfer >`}
+        {`Transfer Rake >`}
       </BootstrapButton>
       <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>

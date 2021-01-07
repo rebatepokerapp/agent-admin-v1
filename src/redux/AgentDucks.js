@@ -25,7 +25,21 @@ const agentData = {
   balance: 0,
   recordsTotal: 0,
   recordsFiltered: 0,
-  menustate: false
+  menustate: false,
+  responseDeposit: null,
+  responseWithdraw: null,
+  responseConfirm: null,
+  playersWithdraws: null,
+  playersDeposits: null,
+  agentWithdraws: null,
+  agentDeposits: null,
+  datadeposit: null,
+  datawithdraw: null,
+  totalrackwithdraw: null,
+  totalrackdeposit: null,
+  totalperdaywithdraw: null,
+  totalperdaydeposit: null
+
 }
 
 const AGENT_LOGIN_SUCCESS = 'AGENT_LOGIN_SUCCESS';
@@ -61,28 +75,39 @@ const SET_MENU_STATE_SUCCESSS = 'SET_MENU_STATE_SUCCESSS'
 const SET_ERROR_SUCCESSS = 'SET_ERROR_SUCCESSS'
 const AGENT_CHANGE_PASSWORD_SUCCESS = 'AGENT_CHANGE_PASSWORD_SUCCESS'
 const AGENT_CHANGE_PASSWORD_ERROR = 'AGENT_CHANGE_PASSWORD_ERROR'
- 
+const REQUEST_ADDRESS_SUCCESS = 'REQUEST_ADDRESS_SUCCESS'
+const REQUEST_ADDRESS_ERROR = 'REQUEST_ADDRESS_ERROR'
+const CONFIRM_TXID_SUCCESS = 'CONFIRM_TXID_SUCCESS'
+const CONFIRM_TXID_ERROR = 'CONFIRM_TXID_ERROR'
+const REQUEST_PAYOUT_SUCCESS = 'REQUEST_PAYOUT_SUCCESS'
+const REQUEST_PAYOUT_ERROR = 'REQUEST_PAYOUT_ERROR' 
+const REQUEST_AGENT_BALANCE_SUCCESS = 'REQUEST_AGENT_BALANCE_SUCCESS'
+const AGENT_PLAYERS_WITHDRAWS_SUCCESS = 'AGENT_PLAYERS_WITHDRAWS_SUCCESS'
+const AGENT_PLAYERS_WITHDRAWS_ERROR = 'AGENT_PLAYERS_WITHDRAWS_ERROR'
+const AGENT_PLAYERS_DEPOSITS_SUCCESS = 'AGENT_PLAYERS_DEPOSITS_SUCCESS'
+const AGENT_PLAYERS_DEPOSITS_ERROR = 'AGENT_PLAYERS_DEPOSITS_ERROR'
+const GET_AGENT_FIGURES_CASHIER_SUCCESS = 'GET_AGENT_FIGURES_CASHIER_SUCCESS'
 
 //Reducer
 //Establece el seteo de los estados de acuerdo a la accion enviada
 export default function agentReducer(state = agentData, action){
   switch(action.type){
     case AGENT_LOGIN_SUCCESS:
-      return{...state, agentsession: action.payload.agent, agent: action.payload.agent, rakebalance: action.payload.agent.rake_chips, balance: action.payload.agent.chips, isAuthenticated: true, token: action.payload.token, error: null, id: null, username: null, data: null, players: null, subagents: null, figures: null, totalrake: 0, totalperday: null, lastThreeWeeks: null, messageupdate: null, transactions: null, dashboard: null, menustate: false}
+      return{...state, agentsession: action.payload.agent, agent: action.payload.agent, rakebalance: action.payload.agent.rake_chips, balance: action.payload.agent.chips, isAuthenticated: true, token: action.payload.token, error: null, id: null, username: null, data: null, players: null, subagents: null, figures: null, totalrake: 0, totalperday: null, lastThreeWeeks: null, messageupdate: null, transactions: null, dashboard: null, menustate: false, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case AGENT_LOGOUT_SUCCESS:      
-      return{...state, agent: null, balance: 0, rakebalance: 0,isAuthenticated: false, token: null, error: null, id: null, username: null, data: null, players: null, subagents: null, figures: null, totalrake: 0, totalperday: null, lastThreeWeeks: null, messageupdate: null, transactions: null, dashboard: null, menustate: false}
+      return{...state, agent: null, balance: 0, rakebalance: 0,isAuthenticated: false, token: null, error: null, id: null, username: null, data: null, players: null, subagents: null, figures: null, totalrake: 0, totalperday: null, lastThreeWeeks: null, messageupdate: null, transactions: null, dashboard: null, menustate: false, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case SET_MENU_STATE_SUCCESSS:
-      return{...state, menustate: action.payload, error: null}
+      return{...state, menustate: action.payload, error: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case GET_AGENT_PLAYERS_SUCCESS:
-      return{...state, players: action.payload, error: null}
+      return{...state, players: action.payload, error: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case GET_AGENT_DASHBOARD_SUCCESS:
-      return{...state, dashboard: action.payload, error: null}
+      return{...state, dashboard: action.payload, error: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case GET_AGENT_DASHBOARD_ERROR:
       return{...state, error: action.payload}
     case GET_AGENT_SUBS_SUCCESS:
-      return{...state, subagents: action.payload, error: null, messageupdate: null}
+      return{...state, subagents: action.payload, error: null, messageupdate: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case GET_AGENT_FIGURES_SUCCESS:
-      return{...state, figures: action.payload.data, totalrake:action.payload.totalrake, totalperday: action.payload.totalperday, error: null}
+      return{...state, figures: action.payload.data, totalrake:action.payload.totalrake, totalperday: action.payload.totalperday, error: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case AGENT_LOGIN_ERROR:
       return{...state, error: action.payload}
     case AGENT_LOGOUT_ERROR:
@@ -94,45 +119,69 @@ export default function agentReducer(state = agentData, action){
     case GET_AGENT_FIGURES_ERROR:
       return{...state, error: action.payload}
     case SET_AGENT_INFO_SUCCESSS:
-      return{...state, id: action.payload.id, username: action.payload.username, data: null, error: null, messageupdate: null, figures: null, lastThreeWeeks: null, messageupdate: null, transactions: null,}
+      return{...state, id: action.payload.id, username: action.payload.username, data: null, error: null, messageupdate: null, figures: null, lastThreeWeeks: null, messageupdate: null, transactions: null, responseConfirm: null}
     case SET_AGENT_INFO_ERROR:
-      return{...state, error: action.payload, messageupdate: null}
+      return{...state, error: action.payload, messageupdate: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case GET_AGENT_INFO_SUCCESS:
-      return{...state, data: action.payload, error: null, messageupdate: null}
+      return{...state, data: action.payload, error: null, messageupdate: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case GET_AGENT_INFO_ERROR:
-      return{...state, error: action.payload, messageupdate: null}
+      return{...state, error: action.payload, messageupdate: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case UPDATE_AGENT_INFO_SUCCESS:
-      return{...state, messageupdate: action.payload.message, data: action.payload.agent, error: null}
+      return{...state, messageupdate: action.payload.message, data: action.payload.agent, error: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case UPDATE_AGENT_INFO_ERROR:
-      return{...state, error: action.payload, messageupdate: null}
+      return{...state, error: action.payload, messageupdate: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case ADD_AGENT_INFO_SUCCESS:
-      return{...state, messageupdate: action.payload.message, data: action.payload.agent, error: null}
+      return{...state, messageupdate: action.payload.message, data: action.payload.agent, error: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case ADD_AGENT_INFO_ERROR:
-      return{...state, error: action.payload, messageupdate: null}
+      return{...state, error: action.payload, messageupdate: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case LAST_THREE_WEEKS_SUCCESS:
-      return{...state, lastThreeWeeks: action.payload.data, totalrake:action.payload.totalrake, error: null}
+      return{...state, lastThreeWeeks: action.payload.data, totalrake:action.payload.totalrake, error: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case LAST_THREE_WEEKS_ERROR:
       return{...state, error: action.payload}
     case AGENT_TRANSACTION_HISTORY_SUCCESS:
-      return{...state, transactions: action.payload.data, recordsTotal: action.payload.recordsTotal, recordsFiltered: action.payload.recordsFiltered, error: null, messageupdate: null}
+      return{...state, transactions: action.payload.data, recordsTotal: action.payload.recordsTotal, recordsFiltered: action.payload.recordsFiltered, error: null, messageupdate: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case AGENT_TRANSACTION_HISTORY_ERROR:
-      return{...state, error: action.payload, messageupdate: null}
+      return{...state, error: action.payload, messageupdate: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case SET_AGENT_BALANCE_SUCCESSS:
       return{...state, balance: action.payload}   
     case AGENT_TRANSFER_SUCCESS:
-      return{...state, messageupdate: action.payload.message, data: action.payload.agent, rakebalance: action.payload.rakebalance, balance: action.payload.balance, error: null}
+      return{...state, messageupdate: action.payload.message, data: action.payload.agent, rakebalance: action.payload.rakebalance, balance: action.payload.balance, error: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case AGENT_TRANSFER_ERROR:
-      return{...state, error: action.payload, messageupdate: null}
+      return{...state, error: action.payload, messageupdate: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case AGENT_REQUEST_BALANCE_SUCCESS:
-      return{...state, messageupdate: action.payload.message, data: action.payload.agent, rakebalance: action.payload.rakebalance, balance: action.payload.balance, error: null}
+      return{...state, messageupdate: action.payload.message, data: action.payload.agent, rakebalance: action.payload.rakebalance, balance: action.payload.balance, error: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case AGENT_REQUEST_BALANCE_ERROR:
-      return{...state, error: action.payload, messageupdate: null}   
+      return{...state, error: action.payload, messageupdate: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}   
     case SET_ERROR_SUCCESSS:
-      return{...state, error: action.payload.error, messageupdate: action.payload.message}  
+      return{...state, error: action.payload.error, messageupdate: action.payload.message, responseDeposit: null, responseWithdraw: null, responseConfirm: null}  
     case AGENT_CHANGE_PASSWORD_SUCCESS:
-      return{...state, messageupdate: action.payload.message, data: action.payload.agent, error: null}
+      return{...state, messageupdate: action.payload.message, data: action.payload.agent, error: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case AGENT_CHANGE_PASSWORD_ERROR:
-      return{...state, error: action.payload, messageupdate: null}    
+      return{...state, error: action.payload, messageupdate: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
+    case REQUEST_ADDRESS_SUCCESS:
+      return{...state, messageupdate: action.payload.message, responseDeposit: action.payload.responseDeposit, error: null, responseConfirm: null, responseWithdraw: null}   
+    case REQUEST_ADDRESS_ERROR:
+      return{...state, error: action.payload, messageupdate: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null} 
+    case CONFIRM_TXID_SUCCESS:
+      return{...state, messageupdate: action.payload.message, responseConfirm: action.payload.responseDeposit, responseDeposit: null, responseWithdraw: null, error: null}   
+    case CONFIRM_TXID_ERROR:
+      return{...state, error: action.payload, messageupdate: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
+    case REQUEST_PAYOUT_SUCCESS:
+      return{...state, messageupdate: action.payload.message, responseWithdraw: action.payload.responseWithdraw, responseDeposit: null, responseConfirm: null, error: null}   
+    case REQUEST_PAYOUT_ERROR:
+      return{...state, error: action.payload, messageupdate: null, responseDeposit: null, responseWithdraw: null}
+    case REQUEST_AGENT_BALANCE_SUCCESS:
+      return{...state, balance: action.payload.balance, rakebalance: action.payload.rakebalance, error: null} 
+    case AGENT_PLAYERS_WITHDRAWS_SUCCESS:
+      return{...state, playersWithdraws: action.payload.data, recordsTotal: action.payload.recordsTotal, recordsFiltered: action.payload.recordsFiltered, error: null, messageupdate: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
+    case AGENT_PLAYERS_WITHDRAWS_ERROR:
+      return{...state, error: action.payload, playersWithdraws: null, messageupdate: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
+    case AGENT_PLAYERS_DEPOSITS_SUCCESS:
+      return{...state, playersDeposits: action.payload.data, recordsTotal: action.payload.recordsTotal, recordsFiltered: action.payload.recordsFiltered, error: null, messageupdate: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
+    case AGENT_PLAYERS_DEPOSITS_ERROR:
+      return{...state, error: action.payload, playersDeposits: null, messageupdate: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
+    case GET_AGENT_FIGURES_CASHIER_SUCCESS:
+      return{...state, datawithdraw: action.payload.datawithdraw, datadeposit: action.payload.datadeposit, totalrackwithdraw:action.payload.totalrackwithdraw, totalrackdeposit:action.payload.totalrackdeposit, totalperdaywithdraw: action.payload.totalperdaywithdraw, totalperdaydeposit: action.payload.totalperdaydeposit, error: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     default:
       return state
   }
@@ -312,6 +361,46 @@ export const getFiguresByAgent = (weeknumber,byId,subId) => async  (dispatch, ge
   }
 }
 
+export const getDepositsWithdrawsByAgent = (weeknumber,byId,subId) => async  (dispatch, getState) => {
+  try {
+    moment.updateLocale('en', {
+      week: {
+        dow : 1, // Monday is the first day of the week.
+      }
+    })
+    console.log('ENTROO');
+    const query =  {
+      start_date: moment().subtract(weeknumber, 'weeks').startOf('week').format('YYYY-MM-DD'),
+      end_date: moment().subtract(weeknumber, 'weeks').endOf('week').format('YYYY-MM-DD'),
+      is_datefilter:'1'
+    }
+    var id = null;
+    if(byId){
+      id = subId;      
+    }else{
+      id = getState().agent.agent.id;
+    } 
+    const agent = JSON.stringify(getState().agent.agent);
+    const token = getState().agent.agent.jwt_token;
+    const AuthStr = 'Bearer '.concat(token);
+    const res = await axios.get(`${API_AGENT_URL}/depwithbyagent/${id}?start_date=${query.start_date}&end_date=${query.end_date}&is_datefilter=${query.is_datefilter}`,{ headers: { Authorization: AuthStr, agent: agent }});
+    dispatch({
+      type: GET_AGENT_FIGURES_CASHIER_SUCCESS,
+      payload: {
+        datawithdraw: res.data.datawithdraw,
+        totalrackwithdraw: res.data.totalrackwithdraw,
+        totalperdaywithdraw: res.data.totalperdaywithdraw,
+        datadeposit: res.data.datadeposit,
+        totalrackdeposit: res.data.totalrackdeposit,
+        totalperdaydeposit: res.data.totalperdaydeposit
+      }
+    })
+  } catch (error) {
+    console.log('ERROR ON REQUEST WITHDRAWS, DEPOSIT RESPORT', error);
+    //dispatch(signOut());    
+  }
+}
+
 export const getAgentData = () => async  (dispatch, getState) => {
   try {
     const id = getState().agent.id;    
@@ -346,6 +435,34 @@ export const getAgentData = () => async  (dispatch, getState) => {
   }
 }
 
+export const getAgentBalances = () => async  (dispatch, getState) => {
+  try {
+    const id = getState().agent.id;
+    const agent = JSON.stringify(getState().agent.agent);
+    const token = getState().agent.agent.jwt_token;
+    const AuthStr = 'Bearer '.concat(token);
+    const res = await axios.get(`${API_AGENT_URL}/agent/balances/${id}`,{ headers: { Authorization: AuthStr, agent: agent }});
+    let agenttemp = null;
+    if(res.data.agent){
+      agenttemp = {
+        balance: res.data.agent.balance,
+        rakebalance: res.data.agent.rakebalance
+      }
+    }else{
+      agenttemp = {
+        balance: 0,
+        rakebalance: 0
+      }
+    }
+    dispatch({
+      type: REQUEST_AGENT_BALANCE_SUCCESS,
+      payload: agenttemp
+    })
+  } catch (error) {
+    console.log('ERROR LOADING BALANCES', error);
+  }
+}
+
 export const editAgentData = (data) => async  (dispatch, getState) => {
   try {    
     const id = getState().agent.id;    
@@ -365,6 +482,82 @@ export const editAgentData = (data) => async  (dispatch, getState) => {
     dispatch({
       type: UPDATE_AGENT_INFO_ERROR,
       payload: 'Error updating agent data'
+    })
+  }
+}
+
+export const requestDeposit = (data) => async  (dispatch, getState) => {
+  try {    
+    const id = getState().agent.id;    
+    const agent = JSON.stringify(getState().agent.agent);
+    const token = getState().agent.agent.jwt_token;
+    const AuthStr = 'Bearer '.concat(token);
+    data.agentId = id;
+    console.log(data)    
+    const res = await axios.post(`${API_AGENT_URL}/agent/requestdeposit`, data, { headers: { Authorization: AuthStr, agent: agent }});
+    dispatch({
+      type: REQUEST_ADDRESS_SUCCESS,
+      payload: {
+        responseDeposit: res.data,
+        message: 'Request address successfully'
+      }
+    })
+  } catch (error) {
+    dispatch({
+      type: REQUEST_ADDRESS_ERROR,
+      payload: 'Error on request address'
+    })
+  }
+}
+
+export const confirmTxidHash = (txid) => async  (dispatch, getState) => {
+  try {    
+    const id = getState().agent.id;    
+    const agent = JSON.stringify(getState().agent.agent);
+    const token = getState().agent.agent.jwt_token;
+    const AuthStr = 'Bearer '.concat(token);
+    let data = {
+      agentId: id,
+      txid_hash: txid
+    }
+
+    console.log(data)    
+    const res = await axios.post(`${API_AGENT_URL}/agent/confirmtxidhash`, data, { headers: { Authorization: AuthStr, agent: agent }});
+    dispatch({
+      type: CONFIRM_TXID_SUCCESS,
+      payload: {
+        responseDeposit: res.data,
+        message: 'Transaction confirmed successfully'
+      }
+    })
+  } catch (error) {
+    dispatch({
+      type: CONFIRM_TXID_ERROR,
+      payload: 'Error on confirmation'
+    })
+  }
+}
+
+export const requestPayout = (data) => async  (dispatch, getState) => {
+  try {    
+    const id = getState().agent.id;    
+    const agent = JSON.stringify(getState().agent.agent);
+    const token = getState().agent.agent.jwt_token;
+    const AuthStr = 'Bearer '.concat(token);
+    data.agentId = id;
+    console.log(data)    
+    const res = await axios.post(`${API_AGENT_URL}/agent/requestpayout`, data, { headers: { Authorization: AuthStr, agent: agent }});
+    dispatch({
+      type: REQUEST_PAYOUT_SUCCESS,
+      payload: {
+        responseWithdraw: res.data,
+        message: 'Request payout successfully'
+      }
+    })
+  } catch (error) {
+    dispatch({
+      type: REQUEST_PAYOUT_ERROR,
+      payload: 'Error on request payout'
     })
   }
 }
@@ -525,6 +718,64 @@ export const getAgentTransCashHistory = (pstart,plength) => async  (dispatch, ge
     dispatch({
       type: AGENT_TRANSACTION_HISTORY_ERROR,
       payload: 'Error getting player game history'
+    })
+  }
+}
+
+export const getAgentPlayersWithdraws = (pstart, plength, pstartdate) => async  (dispatch, getState) => {
+  try {
+    const query =  {
+      start: pstart,
+      length: plength,
+      search: '',
+      startdate: pstartdate
+    }
+    const id = getState().agent.id;
+    const agent = JSON.stringify(getState().agent.agent);
+    const token = getState().agent.agent.jwt_token;
+    const AuthStr = 'Bearer '.concat(token);
+    const res = await axios.get(`${API_AGENT_URL}/agent/playerswithdraws/${id}?start=${query.start}&length=${query.length}&search=${query.search}&startdate=${query.startdate}`,{ headers: { Authorization: AuthStr, agent: agent }});
+    dispatch({
+      type: AGENT_PLAYERS_WITHDRAWS_SUCCESS,
+      payload: {
+        data: res.data.data,
+        recordsTotal: res.data.recordsTotal,
+        recordsFiltered: res.data.recordsFiltered
+      }
+    })
+  } catch (error) {
+    dispatch({
+      type: AGENT_PLAYERS_WITHDRAWS_ERROR,
+      payload: 'Error getting player withdraws'
+    })
+  }
+}
+
+export const getAgentPlayersDeposits = (pstart, plength, pstartdate) => async  (dispatch, getState) => {
+  try {
+    const query =  {
+      start: pstart,
+      length: plength,
+      search: '',
+      startdate: pstartdate
+    }
+    const id = getState().agent.id;
+    const agent = JSON.stringify(getState().agent.agent);
+    const token = getState().agent.agent.jwt_token;
+    const AuthStr = 'Bearer '.concat(token);
+    const res = await axios.get(`${API_AGENT_URL}/agent/playersdeposits/${id}?start=${query.start}&length=${query.length}&search=${query.search}&startdate=${query.startdate}`,{ headers: { Authorization: AuthStr, agent: agent }});
+    dispatch({
+      type: AGENT_PLAYERS_DEPOSITS_SUCCESS,
+      payload: {
+        data: res.data.data,
+        recordsTotal: res.data.recordsTotal,
+        recordsFiltered: res.data.recordsFiltered
+      }
+    })
+  } catch (error) {
+    dispatch({
+      type: AGENT_PLAYERS_DEPOSITS_ERROR,
+      payload: 'Error getting player deposits'
     })
   }
 }

@@ -137,8 +137,8 @@ function Players() {
         title="PLAYERS"               
         columns={[
           { title: "PlayerID", field: "uniqId", filtering: false},
-          { title: "Username", field: "username", filtering: false},
-          { title: "Agent", field: "agentName", filtering: false},
+          { title: "Username", field: "username", filtering: true},
+          { title: "Agent", field: "agentName", filtering: true},
           { title: "Balance", field: "chips", filtering: false, render: rowData => 
             <>
             {
@@ -146,7 +146,7 @@ function Players() {
             }
             </>
           },
-          { title: "Status", field: "status", filtering: true},
+          { title: "Status", field: "status", filtering: false},
           { field: '', filtering: false,
             render: row => (
               <PlayerMenuEdit id={row._id} username={row.username} />
