@@ -97,6 +97,22 @@ const useStyles = makeStyles((theme) => ({
       background: "green"
     },  
   },
+  results:{
+    alignContent: 'center',
+    alignItems: 'center',
+  },
+  results_a:{
+    fontSize: '16px',
+    color:'green',
+    fontWeight: 'bold',
+    marginTop: '15px'
+  },
+  results_b:{
+    fontSize: '14px',
+    color:'black',
+    fontWeight: 'bold',
+    marginTop: '15px'
+  }
 }));
 
 const DialogContent = withStyles((theme) => ({
@@ -175,7 +191,7 @@ const CashierWithdrawDlg = () => {
         variant="contained"
         >
           <GetAppIcon />
-        &nbsp;WITHDRAWALS
+        &nbsp;WITHDRAWAL
       </Button>
       <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open} maxWidth="sm" fullWidth={true}>
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
@@ -214,16 +230,16 @@ const CashierWithdrawDlg = () => {
                 {<SimpleDialog open={true} message={responseWithdraw.message} />}
                 <div className={classes.results}>
                   <a className={classes.results_a}>Deposit Address: </a>
-                  {responseWithdraw.result.address}
+                  <a className={classes.results_b}>{responseWithdraw.result.address}</a>
                   <br/>                                      
                   <a className={classes.results_a}>Amount to deposit in $: </a>
-                  {parseFloat(responseWithdraw.result.amount).toFixed(2)}
+                  <a className={classes.results_b}>{parseFloat(responseWithdraw.result.amount).toFixed(2)}</a>
                   <br/>
                   <a className={classes.results_a}>Fee $: </a>
-                  {parseFloat(responseWithdraw.result.fee).toFixed(2)}
+                  <a className={classes.results_b}>{parseFloat(responseWithdraw.result.fee).toFixed(2)}</a>
                   <br/>
                   <a className={classes.results_a}>Crypto amount to deposit:</a> 
-                  {parseFloat(responseWithdraw.result.cryptoAmount).toFixed(8)}
+                  <a className={classes.results_b}>{parseFloat(responseWithdraw.result.cryptoAmount).toFixed(8)}</a>
                 </div>
               </>
             :null}

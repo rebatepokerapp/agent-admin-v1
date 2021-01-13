@@ -115,6 +115,8 @@ export const getPlayerGameHistory = (pstart,plength) => async  (dispatch, getSta
       length:plength,
       search: ''
     }
+    console.log('start', pstart);
+    console.log('length', plength);
     const id = getState().player.player;
     const agent = JSON.stringify(getState().agent.agent);
     const token = getState().agent.agent.jwt_token;
@@ -210,7 +212,8 @@ export const getPlayerData = () => async  (dispatch, getState) => {
         lastname: res.data.player.lastname,
         email: res.data.player.email,
         gender: res.data.player.gender,
-        status: res.data.player.status
+        status: res.data.player.status,
+        returnPercentageRake: res.data.player.returnPercentageRake
       }
     }
 
@@ -323,6 +326,7 @@ export const addPlayerData = (data) => async  (dispatch, getState) => {
     const agent = JSON.stringify(getState().agent.agent);
     const token = getState().agent.agent.jwt_token;
     const AuthStr = 'Bearer '.concat(token);
+    console.log('DATA PLAYER', data);
     const res = await axios.post(`${API_AGENT_URL}/player/addplayer`, data, { headers: { Authorization: AuthStr, agent: agent }});
     dispatch({
       type: ADD_PLAYER_INFO_SUCCESS,

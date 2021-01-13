@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useEffect, useState } from 'react';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import { withRouter } from 'react-router-dom';
@@ -13,6 +13,23 @@ import {useDispatch, useSelector} from 'react-redux'
 import clsx from 'clsx';
 import {addPlayerData, validateEmail, setPlayerMessagesError, validateUsername} from '../redux/PlayerDucks';
 import {getSubsByAgent} from '../redux/AgentDucks';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
+import { green } from '@material-ui/core/colors';
+
+const GreenSwitch = withStyles({
+  switchBase: {
+    color: green[300],
+    '&$checked': {
+      color: green[500],
+    },
+    '&$checked + $track': {
+      backgroundColor: green[500],
+    },
+  },
+  checked: {},
+  track: {},
+})(Switch);
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -79,6 +96,16 @@ const AddPlayer = () => {
 
   const subAgents = [];
 
+  const [stateDeposit, setStateDeposit] = useState(false);
+  const [stateWithdraw, setStateWithdraw] = useState(false);
+
+  const handleChangeDeposit = (event) => {
+    setStateDeposit(event.target.checked);
+  };
+  const handleChangeWithdraw = (event) => {
+    setStateWithdraw(event.target.checked);
+  };
+
   const dispatch = useDispatch();
 
   const maincontainer = clsx(classes.main);
@@ -100,7 +127,7 @@ const AddPlayer = () => {
       e.target.reset();
       setTimeout(() => {
         dispatch(setPlayerMessagesError());      
-      },3000);
+      },6000);
     });   
   }
 
@@ -127,12 +154,13 @@ const AddPlayer = () => {
   const showError = () => (
     <Alert severity={error ? 'warning' : 'success'} style={{display: (error || messageupdate) ? '': 'none'}} id="alertmes">
       <AlertTitle>{error ? 'Warning' : 'Success'}</AlertTitle>
-        {error ? error : messageupdate}<strong>{error ? ' — Check it out!' : ''}</strong>        
+        {error ? error : messageupdate}<strong>{error ? '' : ''}</strong>        
     </Alert>
   );
 
   return (
     <div  className={maincontainer}>
+      {showError()}
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
@@ -162,7 +190,7 @@ const AddPlayer = () => {
                     document.getElementById('alertmes').style.display='none';
                   }
                   dispatch(setPlayerMessagesError());     
-                },3000);
+                },6000);
               }} 
             />
             <input name="firstname" className={classes.input} ref={register} placeholder='Firstname' />
@@ -183,33 +211,15 @@ const AddPlayer = () => {
             </span>
             <input name="email" id="email" className={classes.input} ref={register(
               {
-                required: 'Required',
                 pattern: {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                   message: "Invalid email address"
                 }
               }
               )} 
-              placeholder='Email'
-              onBlur={(e) => {
-                e.preventDefault();
-                var data = {
-                  email: document.getElementById('email').value
-                }
-                console.log(data)
-                dispatch(validateEmail(data)).then(
-                  () => {
-                    console.log('validacion')
-                  }
-                )
-                setTimeout(() => {
-                  if(document.getElementById('alertmes')){
-                    document.getElementById('alertmes').style.display='none';
-                  }
-                  dispatch(setPlayerMessagesError());     
-                },3000);
-              }}
+              placeholder='Email'              
             /> 
+            <input name="returnpercentagerake" className={classes.input} ref={register} placeholder='Return Pecentage Rake' type="number"/>
             <Controller
               className={classes.inputcmb}
               as={ReactSelect}
@@ -232,6 +242,31 @@ const AddPlayer = () => {
               defaultValue= {{value: 'active', label: 'Active'}}
               rules={{ required: true }}
             />
+            <FormControlLabel
+              control={
+                <GreenSwitch
+                  checked={stateDeposit}
+                  onChange={handleChangeDeposit}
+                  name="allowDeposits"
+                  color="primary"
+                  inputRef={register}
+                />
+              }
+              label="Allow Deposits"
+            />
+            <br/>
+            <FormControlLabel
+              control={
+                <GreenSwitch
+                  checked={stateWithdraw}
+                  onChange={handleChangeWithdraw}
+                  name="allowWithdraws"
+                  color="primary"
+                  inputRef={register}
+                />
+              }
+              label="Allow Withdrawals"
+            />
             <Button
               type="submit"
               fullWidth
@@ -240,8 +275,7 @@ const AddPlayer = () => {
             >
               INSERT
             </Button>
-          </form>
-          {showError()}
+          </form>          
         </div>
       </Container>
     </div>

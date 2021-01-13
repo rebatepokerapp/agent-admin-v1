@@ -72,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    color: '#FFA900',
+    color: '#669933',
     padding: '0 8px',
     ...theme.mixins.toolbar,
   },
@@ -83,7 +83,7 @@ const useStyles = makeStyles((theme) => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
     background: 'linear-gradient(45deg, #333333 30%, #000000 90%)',
-    color: '#FFFFFF',
+    color: '#669933',
   },
   appBarShift: {
     marginLeft: drawerWidth,
@@ -183,6 +183,7 @@ export default function Dashboard() {
   const agent = useSelector(store => store.agent.agentsession);
   const balance = useSelector(store => store.agent.balance);
   const rakebalance = useSelector(store => store.agent.rakebalance);
+  const agenttoken = useSelector(store => store.agent.agent);
 
   const copyLink = () => {
     var texto = document.getElementById('accesscod');
@@ -192,9 +193,11 @@ export default function Dashboard() {
       console.log('error copy to clipboard');
     })   
   }
-  setInterval(() => {
-    dispatch(getAgentBalances());    
-  }, 20000);
+  if(agenttoken.jwt_token){
+    setInterval(() => {
+      dispatch(getAgentBalances());    
+    }, 20000);
+  }
 
   const getLink = (code) => {
     return `https://${window.location.href.toString().split('/')[2]}/register.html?accesscode=${code}`;
@@ -238,7 +241,7 @@ export default function Dashboard() {
         </Toolbar>
         {isMobile?<Typography className={classes.balancemobil}>
           {`Rake Balance: $${rakebalance?rakebalance.toFixed(2):0} `}{
-            agent.agent.isTransferAllow === true || agent.agent.isTransferAllow === 'true' ? <TransferChips maxamount={agent.agent.rake_chips} isMobile={isMobile}/> : null
+            agent.isTransferAllow === true || agent.isTransferAllow === 'true' ? <TransferChips maxamount={agent.rake_chips} isMobile={isMobile}/> : null
           }{` Balance: $${balance?balance.toFixed(2):0}`}
         </Typography>:null}        
       </AppBar>

@@ -69,7 +69,7 @@ function SignIn (props) {
   const showError = () => (
     <Alert severity="warning" style={{display: error ? '': 'none'}}>
       <AlertTitle>Warning</AlertTitle>
-        {error} — <strong>check it out!</strong>
+        {error} — <strong>Please review data</strong>
     </Alert>
   )
 

@@ -23,10 +23,8 @@ const BootstrapButton = withStyles({
     textTransform: 'none',
     fontSize: 16,
     padding: '6px 12px',
-    border: '1px solid',
     lineHeight: 1.5,
-    backgroundColor: 'green',
-    borderColor: 'black',
+    backgroundColor: '#669933',
     fontFamily: [
       '-apple-system',
       'BlinkMacSystemFont',
@@ -167,7 +165,7 @@ const TransferChips = ({maxamount,isMobile}) => {
   const showError = () => (
     <Alert severity={error ? 'warning' : 'success'} style={{display: (error || messageupdate) ? '': 'none'}} id="alertmes">
       <AlertTitle>{error ? 'Warning' : 'Success'}</AlertTitle>
-        {error ? error : messageupdate}<strong>{error ? ' — Check it out!' : ''}</strong>        
+        {error ? error : messageupdate}<strong>{error ? '' : ''}</strong>        
     </Alert>
   )
 

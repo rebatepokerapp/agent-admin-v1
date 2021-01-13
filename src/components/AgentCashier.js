@@ -137,11 +137,13 @@ const AgentCashier = () => {
   const dispatch = useDispatch();
 
   const now = moment();
+  let noD = [];
+  let noW = [];
   
   let start = 0;
   let length = 0;
   let startDate = now.startOf('day')
-  let agentid = useSelector(store => store.agent.agentsession);
+  let agent = useSelector(store => store.agent.agentsession);
 
   useEffect(() => {  
     dispatch(getAgentPlayersWithdraws(start,length,startDate));
@@ -153,10 +155,15 @@ const AgentCashier = () => {
     
   const maincontainer = clsx(classes.mainDiv);
 
-  return (
+  return agent?(
     <div  className={maincontainer}>
-      <RequestDeposit />
-      <RequestWithdraw />
+      {agent.allowDeposits?
+        <RequestDeposit />
+      :null}
+      {agent.allowWithdrawals?
+        <RequestWithdraw />
+      :null}
+            
       <DepositWithdrawChart />      
       <MaterialTable
         icons={tableIcons}
@@ -165,7 +172,7 @@ const AgentCashier = () => {
             backgroundColor: '#666666',
             color: '#FFF'
           },
-          search: true,
+          search: false,
           exportButton: true,
           default: "dense",
           paging: true,
@@ -183,7 +190,7 @@ const AgentCashier = () => {
           { title: "Processed", field: "processed", filtering: false},
           { title: "Date", field: "createdAt", filtering: false, render: rowData => moment(rowData.createdAt).format("YYYY/MM/DD hh:mm")},
         ]}
-        data={playersDeposits}        
+        data={playersDeposits?playersDeposits:noD}        
       />
       <MaterialTable
         icons={tableIcons}
@@ -192,7 +199,7 @@ const AgentCashier = () => {
             backgroundColor: '#666666',
             color: '#FFF'
           },
-          search: true,
+          search: false,
           exportButton: true,
           default: "dense",
           paging:true,
@@ -210,10 +217,10 @@ const AgentCashier = () => {
           { title: "Processed", field: "processed", filtering: false},
           { title: "Date", field: "createdAt", filtering: false, render: rowData => moment(rowData.createdAt).format("YYYY/MM/DD hh:mm")},
         ]}
-        data={playersWithdraws}        
+        data={playersWithdraws?playersWithdraws:noW}        
       />      
     </div>            
-  )
+  ):null;
 }
 
 export default AgentCashier

@@ -115,13 +115,6 @@ const AgentProfileDlg = () => {
   const {register, errors, handleSubmit, control} =  useForm(); 
   
   const {register:register2, errors:errors2, handleSubmit:handleSubmit2} =  useForm();
-  
-  const agenttemp = useSelector(store => store.agent.agentsession);
-
-  useEffect(() => {  
-    dispatch(setAgentInfo(agenttemp.id,agenttemp.name))
-    dispatch(getAgentData())    
-  },[agenttemp.id, agenttemp.name, dispatch])  
 
   const agent = useSelector(store => store.agent.agentsession);
 

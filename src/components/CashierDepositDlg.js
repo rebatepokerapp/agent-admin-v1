@@ -11,7 +11,7 @@ import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import QRCode from 'qrcode.react';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import Tooltip from '@material-ui/core/Tooltip';
-import {requestDeposit, confirmTxidHash} from '../redux/AgentDucks';
+import {requestDeposit, confirmTxidHash, setWithdrawDepositNull} from '../redux/AgentDucks';
 import { useForm, Controller } from 'react-hook-form';
 import {useDispatch, useSelector} from 'react-redux'
 import ReactSelect from "react-select";
@@ -72,7 +72,9 @@ const useStyles = makeStyles((theme) => ({
   },
 
   inputcmb: {
-    marginTop: '0px'
+    marginTop: '0px',
+    minWidth: '100%',
+    minHeight: '30px'
   },
 
   submit: {
@@ -100,6 +102,22 @@ const useStyles = makeStyles((theme) => ({
       background: "green"
     },
   },
+  results:{
+    alignContent: 'center',
+    alignItems: 'center',
+  },
+  results_a:{
+    fontSize: '16px',
+    color:'green',
+    fontWeight: 'bold',
+    marginTop: '15px'
+  },
+  results_b:{
+    fontSize: '14px',
+    color:'black',
+    fontWeight: 'bold',
+    marginTop: '15px'
+  }
 }));
 
 const DialogContent = withStyles((theme) => ({
@@ -107,12 +125,6 @@ const DialogContent = withStyles((theme) => ({
     padding: theme.spacing(2),
   },
 }))(MuiDialogContent);
-
-const methodOptions = [
-  {value:"BTC", label:"BITCOIN"},
-  {value:"ETH", label:"ETHEREUM"},
-  {value:"USDC", label:"USDC"}
-]
 
 function SimpleDialog(props) {
   //const classes = useStyles();
@@ -152,9 +164,12 @@ const CashierDepositDlg = () => {
   const responseDeposit = useSelector(store => store.agent.responseDeposit);
   const responseConfirm = useSelector(store => store.agent.responseConfirm);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch();  
 
-  const handleClose = () => {
+  const handleClose = () => {    
+    dispatch(setWithdrawDepositNull()).then(() => {
+      console.log('DESPACHADO');
+    });
     setOpen(false);
   }; 
 
@@ -166,7 +181,10 @@ const CashierDepositDlg = () => {
     e.preventDefault(); 
     console.log('DATA DEPOSIT', data);
     dispatch(requestDeposit(data)).then(() => {
-      console.log('DESPACHADO');
+      if(data.method !== 'BTC'){
+        document.getElementById("divconfirm").style.display = 'block';             
+      }
+      document.getElementById("submitRequest").style.display = 'none';  
     });
   }
 
@@ -199,12 +217,12 @@ const CashierDepositDlg = () => {
         variant="contained"
         >
           <MonetizationOnIcon />
-        &nbsp;DEPOSITS
+        &nbsp;DEPOSIT
       </Button>
       <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open} maxWidth="sm" fullWidth={true}>
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
           <Typography component="h1" variant="h5" className={classes.title}>
-          {`REQUEST DEPOSIT`}
+          {`DEPOSIT REQUEST`}
           </Typography>          
         </DialogTitle>
         <DialogContent dividers>
@@ -213,17 +231,11 @@ const CashierDepositDlg = () => {
               <form className={classes.form} noValidate onSubmit={handleSubmit(onSubmit)}>
                 <p>
                   Select Crypto Currency Type
-                  <Controller
-                    className={classes.inputcmb}
-                    as={ReactSelect}
-                    options={methodOptions}
-                    name="method"
-                    id="method"
-                    isClearable
-                    control={control}
-                    placeholder='Crypto Currency'
-                    rules={{ required: true }}            
-                  />
+                  <select name="method" ref={register} className={classes.inputcmb} placeholder='Crypto Currency' defaultValue="-1">
+                    <option value="BTC" selected>BITCOIN</option>
+                    <option value="ETH">ETHEREUM</option>
+                    <option value="USDC">USDC</option>
+                  </select>
                 </p>
                 <p>
                   Amount to deposit in American Dollars $
@@ -231,10 +243,10 @@ const CashierDepositDlg = () => {
                 </p>
                 {responseDeposit?
                 <>
-                  {<SimpleDialog open={true} message={responseDeposit.message} />}
+                  
                   <div className={classes.results}>
-                    <a className={classes.results_a}>Deposit Address: </a>
-                    {responseDeposit.result.address}                    
+                    <a className={classes.results_a}>Deposit Address: </a>&nbsp;
+                    <a className={classes.results_b}>{responseDeposit.result.address}</a>                    
                     <Tooltip title="Copy Address">
                       <IconButton onClick={() => copyLink(responseDeposit?responseDeposit.result.address:null)} className={classes.toolbarIcon}>
                         <FileCopyIcon />
@@ -244,14 +256,14 @@ const CashierDepositDlg = () => {
                     <QRCode value={responseDeposit.result.address} />                    
                   </div>
                   <div className={classes.results}>
-                    <a className={classes.results_a}>Amount in $: </a>
-                    {parseFloat(responseDeposit.result.amount).toFixed(2)}
+                    <a className={classes.results_a}>Amount in $: </a>&nbsp;
+                    <a className={classes.results_b}>{parseFloat(responseDeposit.result.amount).toFixed(2)}</a>
                     <br/>
-                    <a className={classes.results_a}>Fee $: </a>
-                    {parseFloat(responseDeposit.result.fee).toFixed(2)}
+                    <a className={classes.results_a}>Fee $: </a>&nbsp;
+                    <a className={classes.results_b}>{parseFloat(responseDeposit.result.fee).toFixed(2)}</a>
                     <br/>
-                    <a className={classes.results_a}>Crypto amount to deposit:</a> 
-                    {parseFloat(responseDeposit.result.cryptoAmount).toFixed(8)}
+                    <a className={classes.results_a}>Crypto amount to deposit:</a> &nbsp;
+                    <a className={classes.results_b}>{parseFloat(responseDeposit.result.cryptoAmount).toFixed(8)}</a>
                     <Tooltip title="Copy Amount">
                       <IconButton onClick={() => copyLink(responseDeposit?parseFloat(responseDeposit.result.cryptoAmount).toFixed(8).toString():null)} className={classes.toolbarIcon}>
                         <FileCopyIcon />
@@ -264,25 +276,28 @@ const CashierDepositDlg = () => {
                   type="submit"
                   fullWidth
                   variant="contained"
+                  id="submitRequest"
                   className={classes.submit}
                 >
                   REQUEST DEPOSIT ADDRESS
                 </Button>
-                                        
-                <input name="txid_hash" id="txid_hash"  className={classes.input} placeholder='Transaction Id or Hash' /> 
-                <Button
-                  type="button"
-                  fullWidth
-                  variant="contained"
-                  className={classes.submit}
-                  onClick={() => {updateTransactionId()}}
-                >
-                  SEND TRANSACTION ID
-                </Button> 
-                {responseConfirm?
-                <SimpleDialog open={true} message={responseConfirm.message} />
-                :null
-                }
+                <div id="divconfirm" style={{display:'none'}}>
+                  <input name="txid_hash" id="txid_hash"  className={classes.input} placeholder='Transaction Id or Hash' /> 
+                  <Button
+                    type="button"
+                    fullWidth
+                    variant="contained"
+                    className={classes.submit}
+                    onClick={() => {updateTransactionId()}}
+                  >
+                    SEND TRANSACTION ID
+                  </Button> 
+                  {responseConfirm?
+                  <SimpleDialog open={true} message={responseConfirm.message} />
+                  :null
+                  }
+                </div>                     
+                
               </form>          
             </div>           
           </div> 

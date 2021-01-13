@@ -6,6 +6,7 @@ import PlayerCashTransactionsDlg from './PlayerCashTransactionsDlg';
 import PlayerIpHistoryDlg from './PlayerIpHistoryDlg';
 import PlayerProfileInfoDlg from './PlayerProfileInfoDlg';
 import RequestBalanceDlg from './RequestBalanceDlg';
+import {useSelector} from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
   nav: {
@@ -20,9 +21,11 @@ const useStyles = makeStyles((theme) => ({
   
 }));
 
-const PlayerMenuEdit = ({ id, username }) => {
+const PlayerMenuEdit = ({ id, username, allowDeposits, allowWithdrawals }) => {
 
-  const classes = useStyles(); 
+  const classes = useStyles();
+  
+  let agentSession = useSelector(store => store.agent.agentsession);
 
   const handleClose = (from,id,player) => {    
     if(from === 'GH'){
@@ -48,12 +51,15 @@ const PlayerMenuEdit = ({ id, username }) => {
 
   return (
     <ul className={classes.nav} >  
-      <li className={classes.navli}><PlayerEditFormDlg id={id} username={username} /></li>
+      <li className={classes.navli}><PlayerEditFormDlg id={id} username={username} allowDeposits={allowDeposits} allowWithdrawals={allowWithdrawals} /></li>
       <li className={classes.navli}><PlayerGameHistoryDlg id={id} username={username} /></li>
       <li className={classes.navli}><PlayerCashTransactionsDlg id={id} username={username} /></li>
       <li className={classes.navli}><PlayerIpHistoryDlg id={id} username={username} /></li>
       <li className={classes.navli}><PlayerProfileInfoDlg id={id} username={username} /></li>
-      <li className={classes.navli}><RequestBalanceDlg id={id} username={username} isplayer="true" /></li>
+      {agentSession.allowTranferPlayer?
+        <li className={classes.navli}><RequestBalanceDlg id={id} username={username} isplayer="true" /></li>
+      :''}
+      
     </ul>
   )
 }

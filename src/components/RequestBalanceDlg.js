@@ -60,10 +60,11 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   title: {
-    marginTop: '50px',
-    marginBottom: '30px',
+    marginTop: '20px',
+    marginBottom: '20px',
     color: '#333333',
-    fontWeight: '700',
+    fontWeight: 'bold',
+    textAlign: 'center'
   },
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -166,7 +167,7 @@ const RequestBalanceDlg = ({id,username,isplayer}) => {
   const showError = () => (
     <Alert severity={error ? 'warning' : 'success'} style={{display: (error || messageupdate) ? '': 'none'}} id="alertmes">
       <AlertTitle>{error ? 'Warning' : 'Success'}</AlertTitle>
-        {error ? error : messageupdate}<strong>{error ? ' — Check it out!' : ''}</strong>        
+        {error ? error : messageupdate}<strong>{error ? '' : ''}</strong>        
     </Alert>
   )
 
@@ -178,7 +179,7 @@ const RequestBalanceDlg = ({id,username,isplayer}) => {
         </IconButton>
       </Tooltip>
       <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open} maxWidth="sm" fullWidth={true}>
-        <DialogTitle id="customized-dialog-title" onClose={handleClose}>
+        <DialogTitle id="customized-dialog-title" onClose={handleClose} className={classes.title}>
           {`TRANSFER BALANCE TO ${username.toUpperCase()}`}
         </DialogTitle>
         <DialogContent dividers>

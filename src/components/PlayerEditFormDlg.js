@@ -45,10 +45,11 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   title: {
-    marginTop: '50px',
-    marginBottom: '30px',
+    marginTop: '20px',
+    marginBottom: '20px',
     color: '#333333',
     fontWeight: '700',
+    textAlign: 'center'
   },
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -92,7 +93,7 @@ const DialogContent = withStyles((theme) => ({
   },
 }))(MuiDialogContent);
 
-const PlayerEditFormDlg = ({id,username}) => {
+const PlayerEditFormDlg = ({id,username,allowDeposits,allowWithdrawals}) => {
 
   const classes = useStyles();
 
@@ -100,6 +101,7 @@ const PlayerEditFormDlg = ({id,username}) => {
 
   const handleClose = () => {
     setOpen(false);
+    window.location.replace(`${window.location.href}`);
   }; 
 
   const handleOpen = () => {
@@ -120,7 +122,7 @@ const PlayerEditFormDlg = ({id,username}) => {
           </Typography>          
         </DialogTitle>
         <DialogContent dividers>
-          <PlayerEditForm id={id} username={username}/>
+          <PlayerEditForm id={id} username={username} allowDeposits={allowDeposits} allowWithdrawals={allowWithdrawals} />
         </DialogContent>
       </Dialog>
     </>

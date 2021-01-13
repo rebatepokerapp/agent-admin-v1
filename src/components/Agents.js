@@ -154,7 +154,7 @@ function Agents() {
           {
             title: <AddAgentDlg />,field: '',filtering: false,sorting: false,
             render: row => (
-              <AgentMenuEdit agent={row.username} id={row._id}/>
+              <AgentMenuEdit agent={row.username} id={row._id} isTransferAllow={row.isTransferAllow} allowDeposits={row.allowDeposits} allowWithdrawals={row.allowWithdrawals} allowTranferPlayer={row.allowTranferPlayer} allowTransferAgent={row.allowTransferAgent}/>
             ),
           },
         ]}

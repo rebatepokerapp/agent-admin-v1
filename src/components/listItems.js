@@ -15,37 +15,37 @@ export const mainListItems = (
   <div>
     <ListItem button component="a" href="/app/dashboard">
       <ListItemIcon>
-        <HomeIcon style={{color:'#FFA900'}}/>
+        <HomeIcon style={{color:'#669933'}}/>
       </ListItemIcon>
       <ListItemText primary="Dashboard" />
     </ListItem>
     <ListItem button component="a" href="/app/rakefigures">
       <ListItemIcon>
-        <TrendingUpIcon style={{color:'#FFA900'}}/>
+        <TrendingUpIcon style={{color:'#669933'}}/>
       </ListItemIcon>
       <ListItemText primary="Rake Figures" />
     </ListItem>
     <ListItem button component="a" href="/app/cashhistoryagent">
       <ListItemIcon>
-        <MonetizationOnIcon style={{color:'#FFA900'}}/>
+        <MonetizationOnIcon style={{color:'#669933'}}/>
       </ListItemIcon>
       <ListItemText primary="Cash History" />
     </ListItem>
     <ListItem button component="a" href="/app/agents">
       <ListItemIcon>
-        <WorkIcon style={{color:'#FFA900'}}/>
+        <WorkIcon style={{color:'#669933'}}/>
       </ListItemIcon>
       <ListItemText primary="Agents" />
     </ListItem>
     <ListItem button component="a" href="/app/players">
       <ListItemIcon>
-        <PeopleIcon style={{color:'#FFA900'}}/>
+        <PeopleIcon style={{color:'#669933'}}/>
       </ListItemIcon>
       <ListItemText primary="Players" />
     </ListItem>
     <ListItem button component="a" href="/app/cashier">
       <ListItemIcon>
-        <AccountBalanceIcon style={{color:'#FFA900'}}/>
+        <AccountBalanceIcon style={{color:'#669933'}}/>
       </ListItemIcon>
       <ListItemText primary="Cashier" />
     </ListItem>

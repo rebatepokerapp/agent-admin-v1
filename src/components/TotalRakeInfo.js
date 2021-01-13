@@ -108,7 +108,7 @@ export default function Deposits({ dashboard, totalRake, totalperday }) {
       </div>
       <div className={mainrow}>
         <div className={mainrowitemleft}>
-          Game Played:
+          Game's Played:
         </div>
         <div className={mainrowitemright}>
         {totalGamePlayed}

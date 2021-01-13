@@ -44,10 +44,11 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   title: {
-    marginTop: '50px',
-    marginBottom: '30px',
+    marginTop: '20px',
+    marginBottom: '20px',
     color: '#333333',
     fontWeight: '700',
+    textAlign: 'center'
   },
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -102,6 +103,7 @@ const AddAgentDlg = () => {
 
   const handleClose = () => {
     setOpen(false);
+    window.location.replace(`${window.location.href}`);
   }; 
 
   const handleOpen = () => {

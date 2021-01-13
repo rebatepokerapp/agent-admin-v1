@@ -86,7 +86,9 @@ const AGENT_PLAYERS_WITHDRAWS_SUCCESS = 'AGENT_PLAYERS_WITHDRAWS_SUCCESS'
 const AGENT_PLAYERS_WITHDRAWS_ERROR = 'AGENT_PLAYERS_WITHDRAWS_ERROR'
 const AGENT_PLAYERS_DEPOSITS_SUCCESS = 'AGENT_PLAYERS_DEPOSITS_SUCCESS'
 const AGENT_PLAYERS_DEPOSITS_ERROR = 'AGENT_PLAYERS_DEPOSITS_ERROR'
+const SET_WITHDRAW_DEPOSIT_NULL = 'SET_WITHDRAW_DEPOSIT_NULL'
 const GET_AGENT_FIGURES_CASHIER_SUCCESS = 'GET_AGENT_FIGURES_CASHIER_SUCCESS'
+const SET_AGENT_DATA_NULL = 'SET_AGENT_DATA_NULL'
 
 //Reducer
 //Establece el seteo de los estados de acuerdo a la accion enviada
@@ -95,7 +97,7 @@ export default function agentReducer(state = agentData, action){
     case AGENT_LOGIN_SUCCESS:
       return{...state, agentsession: action.payload.agent, agent: action.payload.agent, rakebalance: action.payload.agent.rake_chips, balance: action.payload.agent.chips, isAuthenticated: true, token: action.payload.token, error: null, id: null, username: null, data: null, players: null, subagents: null, figures: null, totalrake: 0, totalperday: null, lastThreeWeeks: null, messageupdate: null, transactions: null, dashboard: null, menustate: false, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case AGENT_LOGOUT_SUCCESS:      
-      return{...state, agent: null, balance: 0, rakebalance: 0,isAuthenticated: false, token: null, error: null, id: null, username: null, data: null, players: null, subagents: null, figures: null, totalrake: 0, totalperday: null, lastThreeWeeks: null, messageupdate: null, transactions: null, dashboard: null, menustate: false, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
+      return{...state, agentsession: null, agent: null, balance: 0, rakebalance: 0,isAuthenticated: false, token: null, error: null, id: null, username: null, data: null, players: null, subagents: null, figures: null, totalrake: 0, totalperday: null, lastThreeWeeks: null, messageupdate: null, transactions: null, dashboard: null, menustate: false, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case SET_MENU_STATE_SUCCESSS:
       return{...state, menustate: action.payload, error: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case GET_AGENT_PLAYERS_SUCCESS:
@@ -127,10 +129,12 @@ export default function agentReducer(state = agentData, action){
     case GET_AGENT_INFO_ERROR:
       return{...state, error: action.payload, messageupdate: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case UPDATE_AGENT_INFO_SUCCESS:
+      console.log('UPDATE_AGENT_INFO_SUCCESS')
       return{...state, messageupdate: action.payload.message, data: action.payload.agent, error: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case UPDATE_AGENT_INFO_ERROR:
       return{...state, error: action.payload, messageupdate: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case ADD_AGENT_INFO_SUCCESS:
+      console.log('ADD_AGENT_INFO_SUCCESS')
       return{...state, messageupdate: action.payload.message, data: action.payload.agent, error: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case ADD_AGENT_INFO_ERROR:
       return{...state, error: action.payload, messageupdate: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
@@ -149,6 +153,7 @@ export default function agentReducer(state = agentData, action){
     case AGENT_TRANSFER_ERROR:
       return{...state, error: action.payload, messageupdate: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case AGENT_REQUEST_BALANCE_SUCCESS:
+      console.log('AGENT_REQUEST_BALANCE_SUCCESS')
       return{...state, messageupdate: action.payload.message, data: action.payload.agent, rakebalance: action.payload.rakebalance, balance: action.payload.balance, error: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case AGENT_REQUEST_BALANCE_ERROR:
       return{...state, error: action.payload, messageupdate: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}   
@@ -182,6 +187,10 @@ export default function agentReducer(state = agentData, action){
       return{...state, error: action.payload, playersDeposits: null, messageupdate: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case GET_AGENT_FIGURES_CASHIER_SUCCESS:
       return{...state, datawithdraw: action.payload.datawithdraw, datadeposit: action.payload.datadeposit, totalrackwithdraw:action.payload.totalrackwithdraw, totalrackdeposit:action.payload.totalrackdeposit, totalperdaywithdraw: action.payload.totalperdaywithdraw, totalperdaydeposit: action.payload.totalperdaydeposit, error: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
+    case SET_WITHDRAW_DEPOSIT_NULL:
+      return{...state, error: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
+    case SET_AGENT_DATA_NULL:
+      return{...state, error: null, id: null, username: null, data: null}
     default:
       return state
   }
@@ -201,6 +210,20 @@ export const setAgentInfo = (id,agent) => async (dispatch, getState) => {
       id: id,
       username: agent
     }
+  })
+}
+
+export const setWithdrawDepositNull = () => async (dispatch, getState) => {
+  dispatch({
+    type: SET_WITHDRAW_DEPOSIT_NULL,
+    payload: null
+  })
+}
+
+export const setAgentDataNull = () => async (dispatch, getState) => {
+  dispatch({
+    type: SET_AGENT_DATA_NULL,
+    payload: null
   })
 }
 
@@ -337,17 +360,19 @@ export const getFiguresByAgent = (weeknumber,byId,subId) => async  (dispatch, ge
       start_date: moment().subtract(weeknumber, 'weeks').startOf('week').format('YYYY-MM-DD'),
       end_date: moment().subtract(weeknumber, 'weeks').endOf('week').format('YYYY-MM-DD'),
       is_datefilter:'1'
-    }
+    } 
+    console.log('start_date', query.is_datefilter); 
     var id = null;
     if(byId){
       id = subId;      
-    }else{
-      id = getState().agent.agent.id;
-    }  
-    const agent = JSON.stringify(getState().agent.agent);
+    }else{      
+      id = getState().agent.agentsession.id;
+    }     
+    const agent = JSON.stringify(getState().agent.agentsession);
     const token = getState().agent.agent.jwt_token;
     const AuthStr = 'Bearer '.concat(token);
     const res = await axios.get(`${API_AGENT_URL}/figuresbyagent/${id}?start_date=${query.start_date}&end_date=${query.end_date}&is_datefilter=${query.is_datefilter}`,{ headers: { Authorization: AuthStr, agent: agent }});
+    console.log('DATAAAAA', res.data);
     dispatch({
       type: GET_AGENT_FIGURES_SUCCESS,
       payload: {
@@ -368,7 +393,6 @@ export const getDepositsWithdrawsByAgent = (weeknumber,byId,subId) => async  (di
         dow : 1, // Monday is the first day of the week.
       }
     })
-    console.log('ENTROO');
     const query =  {
       start_date: moment().subtract(weeknumber, 'weeks').startOf('week').format('YYYY-MM-DD'),
       end_date: moment().subtract(weeknumber, 'weeks').endOf('week').format('YYYY-MM-DD'),
@@ -404,8 +428,8 @@ export const getDepositsWithdrawsByAgent = (weeknumber,byId,subId) => async  (di
 export const getAgentData = () => async  (dispatch, getState) => {
   try {
     const id = getState().agent.id;    
-    const agent = JSON.stringify(getState().agent.agent);
-    const token = getState().agent.agent.jwt_token;
+    const agent = JSON.stringify(getState().agent.agentsession);
+    const token = getState().agent.agentsession.jwt_token;
     const AuthStr = 'Bearer '.concat(token);
     const res = await axios.get(`${API_AGENT_URL}/agent/edit/${id}`,{ headers: { Authorization: AuthStr, agent: agent }});
     let agenttemp = null;
@@ -419,7 +443,11 @@ export const getAgentData = () => async  (dispatch, getState) => {
         email: res.data.agent.email,
         commission: res.data.agent.commission,
         status: res.data.agent.status,
-        isTransferAllow: res.data.agent.isTransferAllow
+        isTransferAllow: res.data.agent.isTransferAllow,
+        allowDeposits: res.data.agent.allowDeposits,
+        allowWithdrawals: res.data.agent.allowWithdrawals,
+        allowTranferPlayer: res.data.agent.allowTranferPlayer,
+        allowTransferAgent: res.data.agent.allowTransferAgent,
       }
     }
 
@@ -437,9 +465,9 @@ export const getAgentData = () => async  (dispatch, getState) => {
 
 export const getAgentBalances = () => async  (dispatch, getState) => {
   try {
-    const id = getState().agent.id;
-    const agent = JSON.stringify(getState().agent.agent);
-    const token = getState().agent.agent.jwt_token;
+    const id = getState().agent.agentsession.id;
+    const agent = JSON.stringify(getState().agent.agentsession);
+    const token = getState().agent.agentsession.jwt_token;
     const AuthStr = 'Bearer '.concat(token);
     const res = await axios.get(`${API_AGENT_URL}/agent/balances/${id}`,{ headers: { Authorization: AuthStr, agent: agent }});
     let agenttemp = null;
@@ -466,10 +494,9 @@ export const getAgentBalances = () => async  (dispatch, getState) => {
 export const editAgentData = (data) => async  (dispatch, getState) => {
   try {    
     const id = getState().agent.id;    
-    const agent = JSON.stringify(getState().agent.agent);
-    const token = getState().agent.agent.jwt_token;
+    const agent = JSON.stringify(getState().agent.agentsession);
+    const token = getState().agent.agentsession.jwt_token;
     const AuthStr = 'Bearer '.concat(token);
-    console.log(data)
     const res = await axios.post(`${API_AGENT_URL}/agent/edit/${id}`, data, { headers: { Authorization: AuthStr, agent: agent }});
     dispatch({
       type: UPDATE_AGENT_INFO_SUCCESS,
@@ -489,8 +516,8 @@ export const editAgentData = (data) => async  (dispatch, getState) => {
 export const requestDeposit = (data) => async  (dispatch, getState) => {
   try {    
     const id = getState().agent.id;    
-    const agent = JSON.stringify(getState().agent.agent);
-    const token = getState().agent.agent.jwt_token;
+    const agent = JSON.stringify(getState().agent.agentsession);
+    const token = getState().agent.agentsession.jwt_token;
     const AuthStr = 'Bearer '.concat(token);
     data.agentId = id;
     console.log(data)    
@@ -513,8 +540,8 @@ export const requestDeposit = (data) => async  (dispatch, getState) => {
 export const confirmTxidHash = (txid) => async  (dispatch, getState) => {
   try {    
     const id = getState().agent.id;    
-    const agent = JSON.stringify(getState().agent.agent);
-    const token = getState().agent.agent.jwt_token;
+    const agent = JSON.stringify(getState().agent.agentsession);
+    const token = getState().agent.agentsession.jwt_token;
     const AuthStr = 'Bearer '.concat(token);
     let data = {
       agentId: id,
@@ -541,8 +568,8 @@ export const confirmTxidHash = (txid) => async  (dispatch, getState) => {
 export const requestPayout = (data) => async  (dispatch, getState) => {
   try {    
     const id = getState().agent.id;    
-    const agent = JSON.stringify(getState().agent.agent);
-    const token = getState().agent.agent.jwt_token;
+    const agent = JSON.stringify(getState().agent.agentsession);
+    const token = getState().agent.agentsession.jwt_token;
     const AuthStr = 'Bearer '.concat(token);
     data.agentId = id;
     console.log(data)    
@@ -565,8 +592,8 @@ export const requestPayout = (data) => async  (dispatch, getState) => {
 export const agentTransfer = (data) => async  (dispatch, getState) => {
   try {
     const id = getState().agent.agent.id;    
-    const agent = JSON.stringify(getState().agent.agent);
-    const token = getState().agent.agent.jwt_token;
+    const agent = JSON.stringify(getState().agent.agentsession);
+    const token = getState().agent.agentsession.jwt_token;
     const AuthStr = 'Bearer '.concat(token);
     data.agentId = id;
     data.isAdmin = 'no';
@@ -591,8 +618,8 @@ export const agentTransfer = (data) => async  (dispatch, getState) => {
 export const agentChangePassword = (data) => async  (dispatch, getState) => {
   try {
     const id = getState().agent.agent.id;    
-    const agent = JSON.stringify(getState().agent.agent);
-    const token = getState().agent.agent.jwt_token;
+    const agent = JSON.stringify(getState().agent.agentsession);
+    const token = getState().agent.agentsession.jwt_token;
     const AuthStr = 'Bearer '.concat(token);
     data.agentId = id;
     const res = await axios.post(`${API_AGENT_URL}/agent/changepassword`, data, { headers: { Authorization: AuthStr, agent: agent }});
@@ -613,9 +640,10 @@ export const agentChangePassword = (data) => async  (dispatch, getState) => {
 
 export const agentRequestBalance = (data) => async  (dispatch, getState) => {
   try {   
-    const agent = JSON.stringify(getState().agent.agent);
-    const token = getState().agent.agent.jwt_token;
+    const agent = JSON.stringify(getState().agent.agentsession);
+    const token = getState().agent.agentsession.jwt_token;
     const AuthStr = 'Bearer '.concat(token);
+    console.log('agentRequestBalance', data);
     const res = await axios.post(`${API_AGENT_URL}/agent/requestbalance`, data, { headers: { Authorization: AuthStr, agent: agent }});
     dispatch({
       type: AGENT_REQUEST_BALANCE_SUCCESS,
@@ -636,8 +664,8 @@ export const agentRequestBalance = (data) => async  (dispatch, getState) => {
 
 export const addAgentData = (data) => async  (dispatch, getState) => {
   try {   
-    const agent = JSON.stringify(getState().agent.agent);
-    const token = getState().agent.agent.jwt_token;
+    const agent = JSON.stringify(getState().agent.agentsession);
+    const token = getState().agent.agentsession.jwt_token;
     const AuthStr = 'Bearer '.concat(token);
     const res = await axios.post(`${API_AGENT_URL}/agent/addagent`, data, { headers: { Authorization: AuthStr, agent: agent }});
     dispatch({
@@ -674,8 +702,8 @@ export const getFiguresAgentLastThreeWeeks = (byId,subId) => async  (dispatch, g
     }else{
       id = getState().agent.id;
     }    
-    const agent = JSON.stringify(getState().agent.agent);
-    const token = getState().agent.agent.jwt_token;
+    const agent = JSON.stringify(getState().agent.agentsession);
+    const token = getState().agent.agentsession.jwt_token;
     const AuthStr = 'Bearer '.concat(token);
     const res = await axios.get(`${API_AGENT_URL}/figuresbyagentlastthree/${id}?start_date=${query.start_date}&end_date=${query.end_date}&is_datefilter=${query.is_datefilter}`,{ headers: { Authorization: AuthStr, agent: agent }});
 
@@ -702,8 +730,8 @@ export const getAgentTransCashHistory = (pstart,plength) => async  (dispatch, ge
       search: ''
     }
     const id = getState().agent.id;
-    const agent = JSON.stringify(getState().agent.agent);
-    const token = getState().agent.agent.jwt_token;
+    const agent = JSON.stringify(getState().agent.agentsession);
+    const token = getState().agent.agentsession.jwt_token;
     const AuthStr = 'Bearer '.concat(token);
     const res = await axios.get(`${API_AGENT_URL}/agent/agentchipshistory/${id}?start=${query.start}&length=${query.length}&search=${query.search}`,{ headers: { Authorization: AuthStr, agent: agent }});
     dispatch({
@@ -731,8 +759,8 @@ export const getAgentPlayersWithdraws = (pstart, plength, pstartdate) => async  
       startdate: pstartdate
     }
     const id = getState().agent.id;
-    const agent = JSON.stringify(getState().agent.agent);
-    const token = getState().agent.agent.jwt_token;
+    const agent = JSON.stringify(getState().agent.agentsession);
+    const token = getState().agent.agentsession.jwt_token;
     const AuthStr = 'Bearer '.concat(token);
     const res = await axios.get(`${API_AGENT_URL}/agent/playerswithdraws/${id}?start=${query.start}&length=${query.length}&search=${query.search}&startdate=${query.startdate}`,{ headers: { Authorization: AuthStr, agent: agent }});
     dispatch({
@@ -760,8 +788,8 @@ export const getAgentPlayersDeposits = (pstart, plength, pstartdate) => async  (
       startdate: pstartdate
     }
     const id = getState().agent.id;
-    const agent = JSON.stringify(getState().agent.agent);
-    const token = getState().agent.agent.jwt_token;
+    const agent = JSON.stringify(getState().agent.agentsession);
+    const token = getState().agent.agentsession.jwt_token;
     const AuthStr = 'Bearer '.concat(token);
     const res = await axios.get(`${API_AGENT_URL}/agent/playersdeposits/${id}?start=${query.start}&length=${query.length}&search=${query.search}&startdate=${query.startdate}`,{ headers: { Authorization: AuthStr, agent: agent }});
     dispatch({

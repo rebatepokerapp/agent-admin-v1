@@ -1,8 +1,8 @@
-import React,{useEffect} from 'react';
+import React,{useEffect, useState} from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles,withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { withRouter } from 'react-router-dom';
 import Alert from '@material-ui/lab/Alert';
@@ -12,6 +12,23 @@ import {editPlayerData,getPlayerData,setPlayerInfo} from '../redux/PlayerDucks';
 import {useDispatch, useSelector} from 'react-redux'
 
 import { useForm, Controller } from 'react-hook-form';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
+import { green } from '@material-ui/core/colors';
+
+const GreenSwitch = withStyles({
+  switchBase: {
+    color: green[300],
+    '&$checked': {
+      color: green[500],
+    },
+    '&$checked + $track': {
+      backgroundColor: green[500],
+    },
+  },
+  checked: {},
+  track: {},
+})(Switch);
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -67,13 +84,41 @@ const statusOptions = [
   {value:"block", label:"Block"}
 ]
 
-function PlayerEditForm ({id,username}) {
+function PlayerEditForm ({id,username,allowDeposits,allowWithdrawals}) {
 
   var showAlert = false;
+
+  console.log('VALOR DEPOSIT', allowDeposits);
+  console.log('VALOR WITHDRAW', allowWithdrawals);
 
   const classes = useStyles();
 
   const dispatch = useDispatch();
+
+  let allowD = false;
+  let allowW = false;
+
+  if(allowDeposits){
+    if(allowDeposits === true){
+      allowD = true;
+    }
+  }
+
+  if(allowWithdrawals){
+    if(allowWithdrawals === true){
+      allowW = true;
+    }
+  }
+
+  const [stateDeposit, setStateDeposit] = useState(allowD);
+  const [stateWithdraw, setStateWithdraw] = useState(allowW);
+
+  const handleChangeDeposit = (event) => {
+    setStateDeposit(event.target.checked);
+  };
+  const handleChangeWithdraw = (event) => {
+    setStateWithdraw(event.target.checked);
+  };
 
   const {register, handleSubmit, control} =  useForm();  
 
@@ -108,9 +153,11 @@ function PlayerEditForm ({id,username}) {
   const showError = () => (
     <Alert severity={error ? 'warning' : 'success'} style={{display: (error || messageupdate) ? '': 'none'}} id="alertmes">
       <AlertTitle>{error ? 'Warning' : 'Success'}</AlertTitle>
-        {error ? error : messageupdate}<strong>{error ? ' — Check it out!' : ''}</strong>        
+        {error ? error : messageupdate}<strong>{error ? '' : ''}</strong>        
     </Alert>
   )
+
+  console.log('PLAYER EDIT', player)
 
   return player ? (
     <Container component="main" maxWidth="xs">
@@ -120,7 +167,8 @@ function PlayerEditForm ({id,username}) {
           <input name="username" className={classes.input} ref={register} placeholder='Username' defaultValue={player.username} readOnly/>
           <input name="firstname" className={classes.input} ref={register} placeholder='Firstname'defaultValue={player.firstname}/>
           <input name="lastname" className={classes.input} ref={register} placeholder='Lastname'defaultValue={player.lastname}/>
-          <input name="email" className={classes.input} ref={register} placeholder='Email'defaultValue={player.email} readOnly/>          
+          <input name="email" className={classes.input} ref={register} placeholder='Email'defaultValue={player.email} readOnly/>
+          <input name="returnpercentagerake" className={classes.input} ref={register} placeholder='Return Pecentage Rake' defaultValue={player.returnPercentageRake} type="number"/>
           <Controller
             as={ReactSelect}
             options={genderOptions}
@@ -129,13 +177,17 @@ function PlayerEditForm ({id,username}) {
             control={control}
             placeholder='Gender'
             defaultValue={() => {
-              if(player.gender === 'male'){
-                return {value: 'male', label: 'Male'};
-              }else if(player.gender === 'female'){
-                return {value: 'female', label: 'female'};
+              if(player.gender){
+                if(player.gender.toLowerCase() === 'male'){
+                  return {value: 'male', label: 'Male'};
+                }else if(player.gender.toLowerCase() === 'female'){
+                  return {value: 'female', label: 'female'};
+                }else{
+                  return null;
+                }
               }else{
                 return null;
-              }
+              }              
             }}
           />
           <Controller
@@ -154,6 +206,33 @@ function PlayerEditForm ({id,username}) {
               }
             }}
           />
+          <br/> 
+          <FormControlLabel
+            control={
+              <GreenSwitch
+                checked={stateDeposit}
+                onChange={handleChangeDeposit}
+                name="allowDeposits"
+                color="primary"
+                inputRef={register}
+              />
+            }
+            label="Allow Deposits"
+          />
+          <br/>
+          <FormControlLabel
+            control={
+              <GreenSwitch
+                checked={stateWithdraw}
+                onChange={handleChangeWithdraw}
+                name="allowWithdraws"
+                color="primary"
+                inputRef={register}
+              />
+            }
+            label="Allow Withdrawals"
+          />
+          <br/>
           <Button
             type="submit"
             fullWidth

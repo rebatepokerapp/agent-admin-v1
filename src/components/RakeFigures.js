@@ -21,6 +21,7 @@ const RakeFigures = () => {
 
   return (
     <div  className={maincontainer}>
+      <div>&nbsp;</div>
       <FiguresReport />
       <LastThreeWeeks />
     </div>

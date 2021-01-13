@@ -36,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
     color: '#FFFFFF',
     backgroundColor: '#669933',
     fontWeight: '700',
+    minWidth: '155px',
     margin: '5px',
     '&:hover': {
       background: "green"
@@ -87,7 +88,6 @@ const DepositsWithdrawsChart = ({byagentid}) => {
     byId = true;
   }
 
-  console.log('WEEKNUMBER', weeknumber);
   useEffect(() => {
     const fetchData = () => {
       dispatch(getDepositsWithdrawsByAgent(weeknumber,byId,sub))

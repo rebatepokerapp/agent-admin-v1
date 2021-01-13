@@ -9,6 +9,8 @@ import Typography from '@material-ui/core/Typography';
 import EditIcon from '@material-ui/icons/Edit';
 import Tooltip from '@material-ui/core/Tooltip';
 import EditAgentForm from './EditAgentForm';
+import {setAgentDataNull} from '../redux/AgentDucks';
+import {useDispatch} from 'react-redux';
 
 
 const styles = (theme) => ({
@@ -45,10 +47,11 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   title: {
-    marginTop: '50px',
-    marginBottom: '30px',
+    marginTop: '20px',
+    marginBottom: '20px',
     color: '#333333',
     fontWeight: '700',
+    textAlign: 'center'
   },
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -92,18 +95,22 @@ const DialogContent = withStyles((theme) => ({
   },
 }))(MuiDialogContent);
 
-const EditAgentFormDlg = ({id,username}) => {
+const EditAgentFormDlg = ({id,username,isTransferAllow,allowDeposits, allowWithdrawals, allowTranferPlayer, allowTransferAgent}) => {
 
   const classes = useStyles();
+
+  const dispatch = useDispatch();
 
   const [open, setOpen] = useState(false);
 
   const handleClose = () => {
+    dispatch(setAgentDataNull());
     setOpen(false);
+    window.location.replace(`${window.location.href}`);
   }; 
 
-  const handleOpen = () => {
-    setOpen(true);
+  const handleOpen = () => {    
+    setOpen(true);    
   };  
 
   return username ? (
@@ -120,7 +127,7 @@ const EditAgentFormDlg = ({id,username}) => {
           </Typography>          
         </DialogTitle>
         <DialogContent dividers>
-          <EditAgentForm id={id} username={username}/>
+          <EditAgentForm id={id} username={username} isTransferAllow={isTransferAllow} allowDeposits={allowDeposits} allowWithdrawals={allowWithdrawals} allowTranferPlayer={allowTranferPlayer} allowTransferAgent={allowTransferAgent}/>
         </DialogContent>
       </Dialog>
     </>

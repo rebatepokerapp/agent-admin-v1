@@ -149,7 +149,7 @@ function Players() {
           { title: "Status", field: "status", filtering: false},
           { field: '', filtering: false,
             render: row => (
-              <PlayerMenuEdit id={row._id} username={row.username} />
+              <PlayerMenuEdit id={row._id} username={row.username} allowDeposits={row.allowDeposits} allowWithdrawals={row.allowWithdrawals} />
             ),
             title:<AddPlayerDlg/>,
             sorting: false,           

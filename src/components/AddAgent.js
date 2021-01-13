@@ -1,5 +1,5 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React, {useState} from 'react';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import { withRouter } from 'react-router-dom';
@@ -12,6 +12,23 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import {useDispatch, useSelector} from 'react-redux'
 import clsx from 'clsx';
 import {addAgentData} from '../redux/AgentDucks';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
+import { green,grey } from '@material-ui/core/colors';
+
+const GreenSwitch = withStyles({
+  switchBase: {
+    color: grey[300],
+    '&$checked': {
+      color: green[500],
+    },
+    '&$checked + $track': {
+      backgroundColor: green[500],
+    },
+  },
+  checked: {},
+  track: {},
+})(Switch);
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -80,6 +97,28 @@ const AddAgent = () => {
 
   const maincontainer = clsx(classes.main);
 
+  const [stateDeposit, setStateDeposit] = useState(false);
+  const [stateWithdraw, setStateWithdraw] = useState(false);
+  const [stateAllowTP, setStateAllowTP] = useState(false);
+  const [stateAllowTA, setStateAllowTA] = useState(false);
+  const [stateRake, setStateRake] = useState(false);
+
+  const handleChangeDeposit = (event) => {
+    setStateDeposit(event.target.checked);
+  };
+  const handleChangeWithdraw = (event) => {
+    setStateWithdraw(event.target.checked);
+  };
+  const handleChangeAllowTP = (event) => {
+    setStateAllowTP(event.target.checked);
+  };
+  const handleChangeAllowTA = (event) => {
+    setStateAllowTA(event.target.checked);
+  };
+  const handleChangeRake = (event) => {
+    setStateRake(event.target.checked);
+  };
+
   const {register, errors, handleSubmit, control} =  useForm();
 
   const error = useSelector(store => store.agent.error);
@@ -98,7 +137,7 @@ const AddAgent = () => {
   const showError = () => (
     <Alert severity={error ? 'warning' : 'success'} style={{display: (error || messageupdate) ? '': 'none'}} id="alertmes">
       <AlertTitle>{error ? 'Warning' : 'Success'}</AlertTitle>
-        {error ? error : messageupdate}<strong>{error ? ' — Check it out!' : ''}</strong>        
+        {error ? error : messageupdate}<strong>{error ? '' : ''}</strong>        
     </Alert>
   );
 
@@ -157,6 +196,71 @@ const AddAgent = () => {
               defaultValue= {{value: 'active', label: 'Active'}}
               rules={{ required: true }}
             />
+            <FormControlLabel
+              control={
+                <GreenSwitch
+                  checked={stateRake}
+                  onChange={handleChangeRake}
+                  name="allowRake"
+                  color="primary"
+                  inputRef={register}
+                />
+              }
+              label="Allow Rake to Balance Transfers"
+            />
+            <br/>
+            <FormControlLabel
+              control={
+                <GreenSwitch
+                  checked={stateDeposit}
+                  onChange={handleChangeDeposit}
+                  name="allowDeposits"
+                  color="primary"
+                  inputRef={register}
+                />
+              }
+              label="Allow Deposits"
+            />
+            <br/>
+            <FormControlLabel
+              control={
+                <GreenSwitch
+                  checked={stateWithdraw}
+                  onChange={handleChangeWithdraw}
+                  name="allowWithdraws"
+                  color="primary"
+                  inputRef={register}
+                />
+              }
+              label="Allow Withdrawals"
+            />
+            <br/>
+            <FormControlLabel
+              control={
+                <GreenSwitch
+                  checked={stateAllowTP}
+                  onChange={handleChangeAllowTP}
+                  name="allowTransferPlayer"
+                  color="primary"
+                  inputRef={register}
+                />
+              }
+              label="Allow Balance Transfers to Players"
+            />
+            <br/>
+            <FormControlLabel
+              control={
+                <GreenSwitch
+                  checked={stateAllowTA}
+                  onChange={handleChangeAllowTA}
+                  name="allowTransferAgent"
+                  color="primary"
+                  inputRef={register}
+                />
+              }
+              label="Allow Balance Transfers to Agents"
+            />
+            <br/>
             <Button
               type="submit"
               fullWidth

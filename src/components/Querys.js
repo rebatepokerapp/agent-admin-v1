@@ -81,14 +81,8 @@ db.allUsersTransactionHistory.aggregate(
       var Host = req.get('Host');
       var Origin = req.get('Origin');
     
-      console.log('ENTRO WHITE LIST', Host);
-      console.log('ENTRO WHITE LIST ORIGIN', Origin);
-    
-      console.log('REQUESTTTTTTTTT ', req.headers);
-    
       whitelist.forEach(function(val, key){
         if (Host.indexOf(val) > -1){
-          console.log('PERMITIO WHITE LIST');
           res.setHeader('Access-Control-Allow-Origin', Origin);
         }
       })
@@ -772,7 +766,7 @@ db.auth('pokerdbuser', 'repssba21te89p1k')
 
 //mongo --host=localhost:27017 -u "pokerdbuser" -p "repssba21te89p1k" --authenticationDatabase "rebatepokerdb"
 
-
+db.allUsersTransactionHistory.distinct("gameNumber",{rackToId:'5f644361809d49ab26bf7883'})
 
 db.merchant.insert({
   id : 1,

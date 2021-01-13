@@ -31,20 +31,27 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 'large'
   },
   button: {
-    backgroundColor: '#2e2e2e',
-    color: '#FFA900',
-    margin: '5px'
+    color: '#FFFFFF',
+    backgroundColor: '#669933',
+    fontWeight: '700',
+    margin: '5px',
+    minWidth: '155px',
+    '&:hover': {
+      background: "green"
+    },
   },
   title: {
-    margin: '5px',
-    marginLeft: '10px',
+    marginLeft: '20px',
     color: 'green',
-    marginTop: '10px',
+    marginTop: '20px',
     fontSize: '24px',
-  }
+    minHeight: '50px',
+  },
 }));
 
 const FiguresReport = ({byagentid}) => {
+
+  console.log('BY AGENT ID', byagentid);
 
   const classes = useStyles();
 
@@ -177,7 +184,7 @@ const FiguresReport = ({byagentid}) => {
   }
 
   return figuresList ? (
-    <React.Fragment>
+    <div>
       <div className={classes.title}>{`RAKE FIGURES ${month}`}</div>
       <TableContainer>
         <Table size="small">
@@ -276,31 +283,31 @@ const FiguresReport = ({byagentid}) => {
                   color="primary"
                   size="small"
                   className={classes.button}
-                  startIcon={<NavigateBeforeIcon style={{ color: '#FFA900' }}/>}
+                  startIcon={<NavigateBeforeIcon style={{ color: 'white' }}/>}
                   onClick={() => {
                     handleChangePage(-1)
                   }}
                 >
-                  Last
+                  Previous Week
                 </Button>
                 <Button
                   variant="outlined"
                   color="primary"
                   size="small"
                   className={classes.button}
-                  startIcon={<NavigateNextIcon style={{ color: '#FFA900' }}/>}
+                  startIcon={<NavigateNextIcon style={{ color: 'white' }}/>}
                   onClick={() => {
                     handleChangePage(1)
                   }}
                 >
-                  Next
+                  Next Week
                 </Button>
                 </TableCell>
               </TableRow>
           </TableBody>
         </Table>
       </TableContainer>      
-    </React.Fragment>
+    </div>
   ) : null;
 }
 
