@@ -145,10 +145,15 @@ function PlayerEditForm ({id,username,allowDeposits,allowWithdrawals,setChanges}
     });
     player.name = data.name;
     player.lastname = data.lastname; 
+    player.email = data.email;
+    player.returnPercentageRake = data.returnpercentagerake;
+    player.status = data.status.value;
+    allowDeposits = data.allowDeposits;
+    allowWithdrawals = data.allowWithdraws;
     setChanges(true);
     setTimeout(() => {
       document.getElementById('alertmes').style.display='none';
-    },3000);   
+    },6000);   
   }
 
   const showError = () => (
@@ -169,28 +174,7 @@ function PlayerEditForm ({id,username,allowDeposits,allowWithdrawals,setChanges}
           <input name="firstname" className={classes.input} ref={register} placeholder='Firstname'defaultValue={player.firstname}/>
           <input name="lastname" className={classes.input} ref={register} placeholder='Lastname'defaultValue={player.lastname}/>
           <input name="email" className={classes.input} ref={register} placeholder='Email'defaultValue={player.email} readOnly/>
-          <input name="returnpercentagerake" className={classes.input} ref={register} placeholder='Return Pecentage Rake' defaultValue={player.returnPercentageRake} type="number"/>
-          <Controller
-            as={ReactSelect}
-            options={genderOptions}
-            name="gender"
-            isClearable
-            control={control}
-            placeholder='Gender'
-            defaultValue={() => {
-              if(player.gender){
-                if(player.gender.toLowerCase() === 'male'){
-                  return {value: 'male', label: 'Male'};
-                }else if(player.gender.toLowerCase() === 'female'){
-                  return {value: 'female', label: 'female'};
-                }else{
-                  return null;
-                }
-              }else{
-                return null;
-              }              
-            }}
-          />
+          <input name="returnpercentagerake" className={classes.input} ref={register} placeholder='Rake Back Percentage' defaultValue={player.returnPercentageRake} type="number"/>          
           <Controller
             className={classes.inputcmb}
             as={ReactSelect}

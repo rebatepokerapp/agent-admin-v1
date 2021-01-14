@@ -146,7 +146,7 @@ function EditAgentForm ({id,username,isTransferAllow,allowDeposits,allowWithdraw
       if(document.getElementById('alertmes')){
         document.getElementById('alertmes').style.display='none';
       }      
-    },3000);   
+    },6000);   
   }
 
   const showError = () => (

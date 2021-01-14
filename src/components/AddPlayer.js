@@ -220,7 +220,7 @@ const AddPlayer = ({setChanges}) => {
               )} 
               placeholder='Email'              
             /> 
-            <input name="returnpercentagerake" className={classes.input} ref={register} placeholder='Return Pecentage Rake' type="number"/>
+            <input name="returnpercentagerake" className={classes.input} ref={register} placeholder='Rake Back Percentage' type="number"/>
             <Controller
               className={classes.inputcmb}
               as={ReactSelect}
