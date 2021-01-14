@@ -84,7 +84,7 @@ const statusOptions = [
   {value:"block", label:"Block"}
 ]
 
-function PlayerEditForm ({id,username,allowDeposits,allowWithdrawals}) {
+function PlayerEditForm ({id,username,allowDeposits,allowWithdrawals,setChanges}) {
 
   var showAlert = false;
 
@@ -145,6 +145,7 @@ function PlayerEditForm ({id,username,allowDeposits,allowWithdrawals}) {
     });
     player.name = data.name;
     player.lastname = data.lastname; 
+    setChanges(true);
     setTimeout(() => {
       document.getElementById('alertmes').style.display='none';
     },3000);   

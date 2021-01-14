@@ -52,7 +52,7 @@ const AgentMenuEdit = ({ id, agent, isTransferAllow, allowDeposits, allowWithdra
 
   return agentSession?(
     <ul className={classes.nav} >  
-      <li nowrap className={classes.navli}><EditAgentFormDlg id={id} username={agent} isTransferAllow={isTransferAllow} allowDeposits={allowDeposits} allowWithdrawals={allowWithdrawals} allowTranferPlayer={allowTranferPlayer} allowTransferAgent={allowTransferAgent} /></li>
+      <li className={classes.navli}><EditAgentFormDlg id={id} username={agent} isTransferAllow={isTransferAllow} allowDeposits={allowDeposits} allowWithdrawals={allowWithdrawals} allowTranferPlayer={allowTranferPlayer} allowTransferAgent={allowTransferAgent} /></li>
       {agentSession.allowTransferAgent?
         <li className={classes.navli}><RequestBalanceDlg id={id} username={agent} isplayer="false" /></li>
       :''}      

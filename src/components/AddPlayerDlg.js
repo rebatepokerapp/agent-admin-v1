@@ -48,7 +48,8 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '20px',
     color: '#333333',
     fontWeight: '700',
-    textAlign:'center'
+    textAlign:'center',
+    fontSize: '24px'
   },
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -100,10 +101,13 @@ const AddPlayerDlg = () => {
   const classes = useStyles();
 
   const [open, setOpen] = React.useState(false);
+  const [changes, setChanges] = React.useState(false);
 
   const handleClose = () => {
     setOpen(false);
-    window.location.replace(`${window.location.href}`);
+    if(changes){
+      window.location.replace(`${window.location.href}`);
+    }    
   }; 
 
   const handleOpen = () => {
@@ -123,12 +127,12 @@ const AddPlayerDlg = () => {
       </Button>
       <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open} maxWidth="sm" fullWidth={true}>
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-          <Typography component="h1" variant="h5" className={classes.title}>
+          <Typography className={classes.title}>
             ADD PLAYER
           </Typography>          
         </DialogTitle>
         <DialogContent dividers>
-          <AddPlayer/>
+          <AddPlayer setChanges={setChanges}/>
         </DialogContent>
       </Dialog>
     </>

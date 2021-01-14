@@ -120,11 +120,12 @@ const FiguresReport = ({byagentid}) => {
   const agentHeader = (agentName, i) => {
     if(agentName.toString().trim() !== actualAgent.toString().trim()){
       actualAgent = agentName;
-      let ind = indx+1;
+      let ind = indx*i;
+      let ind2 = (indx*2)+1;
       return(
         <>
           <TableRow key={ind}>
-            <TableCell align="center" className={classes.header} colSpan={10}>{agentName.toString().toUpperCase()}</TableCell>
+            <TableCell align="center" className={classes.header} colSpan={10} key={ind2}>{agentName.toString().toUpperCase()}</TableCell>
           </TableRow>
         </>
       )

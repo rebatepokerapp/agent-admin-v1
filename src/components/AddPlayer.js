@@ -91,7 +91,7 @@ const statusOptions = [
   {value:"block", label:"Block"}
 ]
 
-const AddPlayer = () => {
+const AddPlayer = ({setChanges}) => {
   const classes = useStyles();
 
   const subAgents = [];
@@ -123,7 +123,8 @@ const AddPlayer = () => {
       if(messageupdate === 'Player inserted'){
         console.log(messageupdate);
         window.location.href='/app/players';
-      }      
+      } 
+      setChanges(true);
       e.target.reset();
       setTimeout(() => {
         dispatch(setPlayerMessagesError());      

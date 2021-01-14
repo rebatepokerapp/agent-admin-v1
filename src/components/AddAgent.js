@@ -90,7 +90,7 @@ const statusOptions = [
   {value:"block", label:"Block"}
 ]
 
-const AddAgent = () => {
+const AddAgent = ({setChanges}) => {
   const classes = useStyles();
 
   const dispatch = useDispatch();
@@ -128,6 +128,7 @@ const AddAgent = () => {
     e.preventDefault();    
     dispatch(addAgentData(data)).then(() => {
       e.target.reset();
+      setChanges(true);
       if(messageupdate === 'Agent inserted'){
         window.location.href='/app/agents';
       }      

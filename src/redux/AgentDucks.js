@@ -700,7 +700,7 @@ export const getFiguresAgentLastThreeWeeks = (byId,subId) => async  (dispatch, g
     if(byId){
       id = subId;      
     }else{
-      id = getState().agent.id;
+      id = getState().agent.agentsession.id;
     }    
     const agent = JSON.stringify(getState().agent.agentsession);
     const token = getState().agent.agentsession.jwt_token;

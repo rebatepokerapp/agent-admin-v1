@@ -32,9 +32,14 @@ const LastThreeWeeks = ({byagentid}) => {
     fetchData();
   }, [dispatch, byId, sub])
 
-  const thisweek = moment(todaydate).week();
+  const thisweek = moment(todaydate).isoWeek();
+
+  console.log('TODAY DATE', todaydate);
+  console.log('THIS WEEK', thisweek);
 
   const figuresbyweek = useSelector(store => store.agent.lastThreeWeeks);
+
+  console.log('FIGURES BY WEEK', figuresbyweek);
 
   const data = [
     {
@@ -166,8 +171,8 @@ const LastThreeWeeks = ({byagentid}) => {
           <YAxis />
           <Tooltip />
           <Legend />
-          <Area type="monotone" dataKey="lastweek" fill="#8884d8" stroke="#8884d8" />
           <Bar dataKey="thisweek" barSize={20} fill="#413ea0" />
+          <Area type="monotone" dataKey="lastweek" fill="#8884d8" stroke="#8884d8" />          
           <Line type="monotone" dataKey="twoweeksbefore" stroke="#ff7300" />
         </ComposedChart>
       </ResponsiveContainer>

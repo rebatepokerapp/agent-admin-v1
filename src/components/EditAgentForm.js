@@ -81,7 +81,7 @@ const statusOptions = [
   {value:"block", label:"Block"}
 ]
 
-function EditAgentForm ({id,username,isTransferAllow,allowDeposits,allowWithdrawals,allowTranferPlayer,allowTransferAgent}) {
+function EditAgentForm ({id,username,isTransferAllow,allowDeposits,allowWithdrawals,allowTranferPlayer,allowTransferAgent,setChanges}) {
 
   const classes = useStyles(); 
 
@@ -130,6 +130,7 @@ function EditAgentForm ({id,username,isTransferAllow,allowDeposits,allowWithdraw
         document.getElementById('alertmes').style.display='';
       }      
     });
+    setChanges(true);
     agent.firstname = data.fisrtname;
     agent.lastname = data.lastname;
     agent.username = data.username;
