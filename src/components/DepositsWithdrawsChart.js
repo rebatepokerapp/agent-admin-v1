@@ -3,7 +3,7 @@ import {getDepositsWithdrawsByAgent} from '../redux/AgentDucks';
 import {useDispatch, useSelector} from 'react-redux';
 import moment from 'moment';
 import {
-  ResponsiveContainer, ComposedChart, Line, Area, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+  ResponsiveContainer, ComposedChart, Line, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
 } from 'recharts';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -64,14 +64,6 @@ const DepositsWithdrawsChart = ({byagentid}) => {
     }
   });
 
-  let monday = 0;
-  let tuesday = 0;
-  let wednesday = 0;
-  let thursday = 0;
-  let friday = 0;
-  let saturday = 0;
-  let sunday = 0;
-
   let mondaydesc = '';
   let tuesdaydesc = '';
   let wednesdaydesc = '';
@@ -93,7 +85,7 @@ const DepositsWithdrawsChart = ({byagentid}) => {
       dispatch(getDepositsWithdrawsByAgent(weeknumber,byId,sub))
     }
     fetchData();
-  }, [dispatch, byId, sub])  
+  }, [dispatch, weeknumber, byId, sub])  
 
   const deposits = useSelector(store => store.agent.datadeposit);
   const withdraws = useSelector(store => store.agent.datawithdraw);

@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
-import Box from '@material-ui/core/Box';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
@@ -15,7 +14,6 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { mainListItems, secondaryListItems } from './listItems';
 import AgentMenu from './AgentIcon';
-import Copyright from './Copyright';
 import MainDash from './MainDash';
 
 import Agents from './Agents';
@@ -183,7 +181,6 @@ export default function Dashboard() {
   const agent = useSelector(store => store.agent.agentsession);
   const balance = useSelector(store => store.agent.balance);
   const rakebalance = useSelector(store => store.agent.rakebalance);
-  const agenttoken = useSelector(store => store.agent.agent);
 
   const copyLink = () => {
     var texto = document.getElementById('accesscod');
@@ -193,7 +190,7 @@ export default function Dashboard() {
       console.log('error copy to clipboard');
     })   
   }
-  if(agenttoken.jwt_token){
+  if(agent){
     setInterval(() => {
       dispatch(getAgentBalances());    
     }, 20000);
@@ -228,7 +225,7 @@ export default function Dashboard() {
           {
           agent.role !== 'master' ? 
             (<><Typography component="h1" variant="h6" color="inherit" noWrap className={classes.access}>
-              {`Access Code: ${agent.agent.accessCode}`}<input type="text" className={classes.textcode} value={getLink(agent.accessCode)} id="accesscod" readOnly></input>            
+              {`Access Code: ${agent.accessCode}`}<input type="text" className={classes.textcode} value={getLink(agent.accessCode)} id="accesscod" readOnly></input>            
             </Typography>
             <IconButton onClick={() => copyLink()} className={classes.toolbarIcon}>
               <FileCopyIcon />

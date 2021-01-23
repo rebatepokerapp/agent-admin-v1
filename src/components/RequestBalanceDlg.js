@@ -7,23 +7,16 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import {useDispatch,useSelector} from 'react-redux'
-import { useForm, Controller } from 'react-hook-form';
-import {agentTransfer} from '../redux/AgentDucks';
+import { useForm } from 'react-hook-form';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
-import ReactSelect from "react-select";
 import Button from '@material-ui/core/Button';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import GpsFixedIcon from '@material-ui/icons/GpsFixed';
-import MenuItem from '@material-ui/core/MenuItem';
 import { RHFInput } from "react-hook-form-input";
 import NumberFormat from "react-number-format";
 import TextField from '@material-ui/core/TextField';
 import {agentRequestBalance,setErrorMessage} from '../redux/AgentDucks';
 import LocalAtmIcon from '@material-ui/icons/LocalAtm';
 import Tooltip from '@material-ui/core/Tooltip';
-import { Visibility } from '@material-ui/icons';
 
 
 const styles = (theme) => ({
@@ -111,22 +104,6 @@ const DialogContent = withStyles((theme) => ({
   },
 }))(MuiDialogContent);
 
-const statusOptions = [
-  {value:"active", label:"Active"},
-  {value:"block", label:"Block"}
-]
-
-const StyledMenuItem = withStyles((theme) => ({
-  root: {
-    '&:focus': {
-      backgroundColor: '#669933',
-      '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
-        color: '#FFFFFF',
-      },
-    },
-  },
-}))(MenuItem);
-
 const RequestBalanceDlg = ({id,username,isplayer}) => {
 
   const [open, setOpen] = React.useState(false);
@@ -139,7 +116,7 @@ const RequestBalanceDlg = ({id,username,isplayer}) => {
     setOpen(true);
   };
 
-  const {register, unregister, errors, handleSubmit, control, setValue} =  useForm(); 
+  const {register, unregister, errors, handleSubmit, setValue} =  useForm(); 
 
   const classes = useStyles();
   const dispatch = useDispatch();

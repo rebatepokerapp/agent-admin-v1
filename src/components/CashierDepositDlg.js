@@ -12,9 +12,8 @@ import QRCode from 'qrcode.react';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import Tooltip from '@material-ui/core/Tooltip';
 import {requestDeposit, confirmTxidHash, setWithdrawDepositNull} from '../redux/AgentDucks';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import {useDispatch, useSelector} from 'react-redux'
-import ReactSelect from "react-select";
 import DialogActions from '@material-ui/core/DialogActions';
 
 const styles = (theme) => ({
@@ -51,10 +50,12 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   title: {
-    marginTop: '50px',
-    marginBottom: '30px',
+    marginTop: '20px',
+    marginBottom: '20px',
     color: '#333333',
     fontWeight: '700',
+    textAlign: 'center',
+    fontSize: '24px'
   },
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -136,8 +137,6 @@ function SimpleDialog(props) {
     setOpenDlg(false);
   };
 
-  console.log('LLAMADO', open);
-
   return (
     <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={opendlg}>
       <DialogTitle id="simple-dialog-title">Agent Admin Message</DialogTitle>
@@ -159,7 +158,7 @@ const CashierDepositDlg = () => {
 
   const [open, setOpen] = useState(false);
 
-  const {register, errors, handleSubmit, control} =  useForm();
+  const {register, errors, handleSubmit} =  useForm();
 
   const responseDeposit = useSelector(store => store.agent.responseDeposit);
   const responseConfirm = useSelector(store => store.agent.responseConfirm);
@@ -168,7 +167,7 @@ const CashierDepositDlg = () => {
 
   const handleClose = () => {    
     dispatch(setWithdrawDepositNull()).then(() => {
-      console.log('DESPACHADO');
+      
     });
     setOpen(false);
   }; 
@@ -197,14 +196,16 @@ const CashierDepositDlg = () => {
   }
 
   const updateTransactionId = () => {
-    let txid_hash = document.getElementById("txid_hash");
-    if(txid_hash){      
-      dispatch(confirmTxidHash(txid_hash.value)).then(() => {
+    let txid_hash = document.getElementById("txid_hash").value;
+    if(txid_hash.toString().length > 0){      
+      dispatch(confirmTxidHash(txid_hash)).then(() => {
         console.log('Trsansaction Id Updated');
         document.getElementById("txid_hash").value=''
         document.getElementById("amount").value=''
-        document.getElementById("method").selectedIndex=0
       });
+    }else{
+      alert("Please insert a transaction id or hash before.");
+      document.getElementById("txid_hash").focus();
     }    
   } 
 
@@ -221,7 +222,7 @@ const CashierDepositDlg = () => {
       </Button>
       <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open} maxWidth="sm" fullWidth={true}>
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-          <Typography component="h1" variant="h5" className={classes.title}>
+          <Typography className={classes.title}>
           {`DEPOSIT REQUEST`}
           </Typography>          
         </DialogTitle>
@@ -231,22 +232,29 @@ const CashierDepositDlg = () => {
               <form className={classes.form} noValidate onSubmit={handleSubmit(onSubmit)}>
                 <p>
                   Select Crypto Currency Type
-                  <select name="method" ref={register} className={classes.inputcmb} placeholder='Crypto Currency' defaultValue="-1">
-                    <option value="BTC" selected>BITCOIN</option>
+                  <select name="method" ref={register} className={classes.inputcmb} placeholder='Crypto Currency' defaultValue="BTC">
+                    <option value="BTC">BITCOIN</option>
                     <option value="ETH">ETHEREUM</option>
                     <option value="USDC">USDC</option>
                   </select>
                 </p>
-                <p>
+                <p>                  
                   Amount to deposit in American Dollars $
-                  <input name="amount" id="amount" className={classes.input} ref={register} placeholder='Amount' /> 
+                  <input name="amount" id="amount" className={classes.input} ref={register(
+                    {
+                      required: {value: true, message: 'Amount is required'}
+                    }
+                  )} placeholder='Amount' /> 
+                  <span className={classes.alerttext}>
+                      {errors?.amount?.message}
+                  </span>
                 </p>
                 {responseDeposit?
                 <>
                   
                   <div className={classes.results}>
-                    <a className={classes.results_a}>Deposit Address: </a>&nbsp;
-                    <a className={classes.results_b}>{responseDeposit.result.address}</a>                    
+                    <div className={classes.results_a}>Deposit Address: </div>&nbsp;
+                    <div className={classes.results_b}>{responseDeposit.result.address}</div>                    
                     <Tooltip title="Copy Address">
                       <IconButton onClick={() => copyLink(responseDeposit?responseDeposit.result.address:null)} className={classes.toolbarIcon}>
                         <FileCopyIcon />
@@ -256,14 +264,14 @@ const CashierDepositDlg = () => {
                     <QRCode value={responseDeposit.result.address} />                    
                   </div>
                   <div className={classes.results}>
-                    <a className={classes.results_a}>Amount in $: </a>&nbsp;
-                    <a className={classes.results_b}>{parseFloat(responseDeposit.result.amount).toFixed(2)}</a>
+                    <div className={classes.results_a}>Amount in $: </div>&nbsp;
+                    <div className={classes.results_b}>{parseFloat(responseDeposit.result.amount).toFixed(2)}</div>
                     <br/>
-                    <a className={classes.results_a}>Fee $: </a>&nbsp;
-                    <a className={classes.results_b}>{parseFloat(responseDeposit.result.fee).toFixed(2)}</a>
+                    <div className={classes.results_a}>Fee $: </div>&nbsp;
+                    <div className={classes.results_b}>{parseFloat(responseDeposit.result.fee).toFixed(2)}</div>
                     <br/>
-                    <a className={classes.results_a}>Crypto amount to deposit:</a> &nbsp;
-                    <a className={classes.results_b}>{parseFloat(responseDeposit.result.cryptoAmount).toFixed(8)}</a>
+                    <div className={classes.results_a}>Crypto amount to deposit:</div> &nbsp;
+                    <div className={classes.results_b}>{parseFloat(responseDeposit.result.cryptoAmount).toFixed(8)}</div>
                     <Tooltip title="Copy Amount">
                       <IconButton onClick={() => copyLink(responseDeposit?parseFloat(responseDeposit.result.cryptoAmount).toFixed(8).toString():null)} className={classes.toolbarIcon}>
                         <FileCopyIcon />

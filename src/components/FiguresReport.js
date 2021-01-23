@@ -51,8 +51,6 @@ const useStyles = makeStyles((theme) => ({
 
 const FiguresReport = ({byagentid}) => {
 
-  console.log('BY AGENT ID', byagentid);
-
   const classes = useStyles();
 
   let monday = 0;

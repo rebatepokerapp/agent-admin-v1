@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import MaterialTable from "material-table";
 import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
 import { forwardRef } from 'react';
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
@@ -18,7 +17,6 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {getSubsByAgent} from '../redux/AgentDucks';
@@ -92,11 +90,6 @@ function Agents() {
   }, [dispatch])
 
   const subsList = useSelector(store => store.agent.subagents);
-
-  const faddAgent = () => {
-    var urlred = `/app/addagent`
-    window.location.href=urlred;
-  }
 
   const copyLink = (id) => {
     var texto = document.getElementById(id);

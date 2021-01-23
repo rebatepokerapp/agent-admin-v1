@@ -22,10 +22,7 @@ import PlayerMenuEdit from './PlayerMenuEdit';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {getPlayersByAgent} from '../redux/AgentDucks';
-import { makeStyles } from '@material-ui/core/styles';
 
-import Button from '@material-ui/core/Button';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import AddPlayerDlg from './AddPlayerDlg';
 
 
@@ -49,40 +46,8 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
-const useStyles = makeStyles((theme) => ({
-  seeMore: {
-    marginTop: theme.spacing(3),
-  },
-  total: {
-    fontWeight: '700',
-  },
-  header: {
-    backgroundColor: '#2e2e2e',
-    color: '#FFA900',
-    fontSize: 'large'
-  },
-  celtotal: {
-    backgroundColor: '#2e2e2e',
-    color: '#FFA900',
-    fontSize: 'large'
-  },
-  button: {
-    backgroundColor: '#2e2e2e',
-    color: '#FFA900',
-    margin: '5px'
-  },
-  buttonAdd:{
-    color: '#FFFFFF',
-    backgroundColor: '#669933',
-    fontWeight: '700',
-    margin: '5px',    
-  },
-}));
-
 //Funcion que pinta la lista de players por agente
 function Players() {
-
-  const classes = useStyles();
 
   const dispatch = useDispatch();
   
@@ -95,14 +60,8 @@ function Players() {
   }, [dispatch])
 
   const playersList = useSelector(store => store.agent.players);
-
   //let actualAgent = '';
   //var indx = 100000;
-
-  const faddPlayer = () => {
-    var urlred = `/app/addplayer`
-    window.location.href=urlred;
-  }
 
   /*const agentHeader = (agentName, i) => {
     if(agentName.toString().trim() !== actualAgent.toString().trim()){

@@ -1,5 +1,4 @@
 import React, {useEffect} from 'react';
-import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 import RequestDeposit from './CashierDepositDlg';
 import RequestWithdraw from './CashierWithdrawDlg';
@@ -148,7 +147,7 @@ const AgentCashier = () => {
   useEffect(() => {  
     dispatch(getAgentPlayersWithdraws(start,length,startDate));
     dispatch(getAgentPlayersDeposits(start,length,startDate));   
-  },[dispatch])
+  },[dispatch,start,length,startDate])
 
   const playersWithdraws = useSelector(store => store.agent.playersWithdraws);
   const playersDeposits = useSelector(store => store.agent.playersDeposits);

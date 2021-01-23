@@ -7,11 +7,10 @@ import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import ReactSelect from "react-select";
 import { useForm, Controller } from 'react-hook-form';
-import Typography from '@material-ui/core/Typography';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import {useDispatch, useSelector} from 'react-redux'
 import clsx from 'clsx';
-import {addPlayerData, validateEmail, setPlayerMessagesError, validateUsername} from '../redux/PlayerDucks';
+import {addPlayerData, setPlayerMessagesError, validateUsername} from '../redux/PlayerDucks';
 import {getSubsByAgent} from '../redux/AgentDucks';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
@@ -118,10 +117,8 @@ const AddPlayer = ({setChanges}) => {
 
   const onSubmit = (data, e) => {
     e.preventDefault();    
-    dispatch(addPlayerData(data)).then(() => { 
-      console.log(messageupdate);     
+    dispatch(addPlayerData(data)).then(() => {    
       if(messageupdate === 'Player inserted'){
-        console.log(messageupdate);
         window.location.href='/app/players';
       } 
       setChanges(true);
@@ -180,10 +177,9 @@ const AddPlayer = ({setChanges}) => {
                 var data = {
                   username: document.getElementById('username').value
                 }
-                console.log(data)
                 dispatch(validateUsername(data)).then(
                   (res) => {
-                    console.log('validacion')
+                    console.log('OK')
                   }
                 )
                 setTimeout(() => {

@@ -1,5 +1,4 @@
 import React, { useEffect,useState } from 'react'
-import { useParams } from 'react-router-dom'
 import { forwardRef } from 'react';
 import MaterialTable from "material-table";
 import AddBox from '@material-ui/icons/AddBox';
@@ -70,7 +69,6 @@ const PlayerIpLoginHistory = ({id,username}) => {
 
   const ipplayerloginhistorylist = useSelector(store => store.player.iplist);
   const recordsTotal = useSelector(store => store.player.recordsTotal);
-  const recordsFiltered = useSelector(store => store.player.recordsFiltered);
 
   return ipplayerloginhistorylist ? (
 

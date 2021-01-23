@@ -18,7 +18,6 @@ import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import {useDispatch, useSelector} from 'react-redux';
 import { setPlayerInfo, getPlayerGameHistory } from '../redux/PlayerDucks';
-import { useParams } from 'react-router-dom';
 import PlayerGameHistoryDetail from './PlayerGameHistoryDetail';
 import moment from 'moment';
 import TablePagination from '@material-ui/core/TablePagination';
@@ -73,7 +72,6 @@ const PlayerGameHistory = ({id,username}) => {
 
   const gamehistorylist = useSelector(store => store.player.gamehistory);
   const recordsTotal = useSelector(store => store.player.recordsTotal);
-  const recordsFiltered = useSelector(store => store.player.recordsFiltered);
   
   return gamehistorylist ? (
 

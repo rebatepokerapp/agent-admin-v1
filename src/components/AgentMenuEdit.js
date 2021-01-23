@@ -27,29 +27,6 @@ const AgentMenuEdit = ({ id, agent, isTransferAllow, allowDeposits, allowWithdra
 
   let agentSession = useSelector(store => store.agent.agentsession);
 
-  var urlred = '';
-
-  const handleClose = (from,id,player) => {    
-    if(from === 'EA'){
-      console.log('acaaaaaaaaaaaa')
-    } else if(from === 'RH') {
-      urlred = `/app/rakehistory/${id}&${agent}`
-      window.location.href=urlred;
-    } else if(from === 'CH') {
-      urlred = `/app/cashhistory/${id}&${agent}`
-      window.location.href=urlred;
-    } else if(from === 'TC') {
-      urlred = `/app/transferchips/${id}&${agent}`
-      window.location.href=urlred;
-    } else if(from === 'RC') {
-      urlred = `/app/requestcash/${id}&${agent}`
-      window.location.href=urlred;
-    } else if(from === 'CN') {
-      urlred = `/app/chipsnotes/${id}&${agent}`
-      window.location.href=urlred;
-    }       
-  };  
-
   return agentSession?(
     <ul className={classes.nav} >  
       <li className={classes.navli}><EditAgentFormDlg id={id} username={agent} isTransferAllow={isTransferAllow} allowDeposits={allowDeposits} allowWithdrawals={allowWithdrawals} allowTranferPlayer={allowTranferPlayer} allowTransferAgent={allowTransferAgent} /></li>

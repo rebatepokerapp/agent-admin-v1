@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
 import { forwardRef } from 'react';
 import MaterialTable from "material-table";
 import AddBox from '@material-ui/icons/AddBox';
@@ -74,7 +73,8 @@ const AgentCashTransactionHistory = ({id,username}) => {
   const transcashhistorylist = useSelector(store => store.agent.transactions);
 
   const recordsTotal = useSelector(store => store.agent.recordsTotal);
-  const recordsFiltered = useSelector(store => store.agent.recordsFiltered);
+
+  //console.log('TRANSACTIONS', transcashhistorylist);
   
   return transcashhistorylist && agusername ? (
 
@@ -99,8 +99,8 @@ const AgentCashTransactionHistory = ({id,username}) => {
           { title: "Description", field: "remark", filtering: false, render: rowData => rowData.remark ? rowData.remark.toUpperCase() :''},
           { title: "Before Balance", field: "beforeBalance", filtering: false, render: rowData => rowData.beforeBalance ? parseFloat(rowData.beforeBalance).toFixed(2) :0},
           { title: "After Balance", field: "afterBalance", filtering: false, render: rowData => rowData.afterBalance ? parseFloat(rowData.afterBalance).toFixed(2) : 0},
-          { title: "In", field: "chips", filtering: false, render: rowData => rowData.category === 'credit' ? rowData.chips : '-', cellStyle: {color:'green'}},
-          { title: "Out", field: "chips", filtering: false, render: rowData => rowData.category === 'debit' ? rowData.chips : '-', cellStyle: {color:'red'}},
+          { title: "In", field: "chips", filtering: false, render: rowData => rowData.category === 'credit' ? rowData.chips.toString().length>0?rowData.chips:rowData.cash : '-', cellStyle: {color:'green'}},
+          { title: "Out", field: "chips", filtering: false, render: rowData => rowData.category === 'debit' ? rowData.chips.toString().length>0?rowData.chips:rowData.cash : '-', cellStyle: {color:'red'}},
           { title: "Status", field: "status", filtering: false},
           { title: "Date", field: "createdAt", filtering: true, render: rowData => moment(rowData.createdAt).format("YYYY/MM/DD hh:mm")},
         ]}

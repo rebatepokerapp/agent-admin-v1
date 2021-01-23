@@ -25,29 +25,7 @@ const PlayerMenuEdit = ({ id, username, allowDeposits, allowWithdrawals }) => {
 
   const classes = useStyles();
   
-  let agentSession = useSelector(store => store.agent.agentsession);
-
-  const handleClose = (from,id,player) => {    
-    if(from === 'GH'){
-      var urlred = `/app/gameHistory/${id}&${player}`
-      window.location.href=urlred;
-    } else if(from === 'CT') {
-      urlred = `/app/cashtransactionhistory/${id}&${player}`
-      window.location.href=urlred;
-    } else if(from === 'PO') {
-      urlred = `/app/playeroptions/${id}&${player}`
-      window.location.href=urlred;
-    } else if(from === 'TC') {
-      urlred = `/app/playertransferchips/${id}&${player}`
-      window.location.href=urlred;
-    } else if(from === 'IP') {
-      urlred = `/app/playeriphistory/${id}&${player}`
-      window.location.href=urlred;
-    } else if(from === 'PA') {
-      urlred = `/app/playerprofile/${id}&${player}`
-      window.location.href=urlred;
-    }       
-  };  
+  let agentSession = useSelector(store => store.agent.agentsession); 
 
   return (
     <ul className={classes.nav} >  

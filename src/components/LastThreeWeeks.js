@@ -34,12 +34,7 @@ const LastThreeWeeks = ({byagentid}) => {
 
   const thisweek = moment(todaydate).isoWeek();
 
-  console.log('TODAY DATE', todaydate);
-  console.log('THIS WEEK', thisweek);
-
   const figuresbyweek = useSelector(store => store.agent.lastThreeWeeks);
-
-  console.log('FIGURES BY WEEK', figuresbyweek);
 
   const data = [
     {

@@ -13,6 +13,7 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import moment from 'moment';
+import { useSelector} from 'react-redux'
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -106,10 +107,20 @@ const useStyles = makeStyles((theme) => ({
   },
   rdistributiondetail: {
     fontSize: '12px',
+  },
+  rdistributiondetailTotal: {
+    fontSize: '12px',
+    fontWeight: 'bold',
+    border:'0px',
+    backgroundColor:'#666666',
+    color:'white',
   }
 }));
 
 const PlayerGameHistoryDetail = ({gameHistoryDetail, key}) => {
+
+  const agent = useSelector(store => store.agent.agentsession);
+  let totalColumns = 0;
 
   const diffMinutes = (date1,date2) => {
     var hora_inicio = Date.parse(date2);
@@ -121,6 +132,8 @@ const PlayerGameHistoryDetail = ({gameHistoryDetail, key}) => {
     
     return diffMins; 
   }
+
+  console.log('OBJETO HISTORY', gameHistoryDetail);
 
   const classes = useStyles();
   /*const maincontainer = clsx(classes.main); 
@@ -140,7 +153,7 @@ const PlayerGameHistoryDetail = ({gameHistoryDetail, key}) => {
     var totalRackOfTheGame = 0;
     let remaining_Chips = 0;
     let RackDeductions = [];
-    let AgentsRole = [];
+    let AgentsRole = [];    
 
     if(!gameHistoryDetail.rakeCap.length){
       gameHistoryDetail.roundBets.forEach( bet =>{ 
@@ -293,7 +306,7 @@ const PlayerGameHistoryDetail = ({gameHistoryDetail, key}) => {
         <TableBody>
           <TableRow key={1000}>
             <TableCell align="left">              
-              <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+              <Typography component="h1" variant="h6" color="inherit" className={classes.title}>
                 <img src={`/card/cardsIcon.png`} alt="" />{` ${gameHistoryDetail.gameNumber}`}
               </Typography>            
             </TableCell>
@@ -365,7 +378,7 @@ const PlayerGameHistoryDetail = ({gameHistoryDetail, key}) => {
           ) )}
           <TableRow key={1003}>
             <TableCell align="left" colSpan={4}>
-              <Typography noWrap className={classes.boldletter}>
+              <Typography className={classes.boldletter}>
                 BOARD
               </Typography>
               {gameHistoryDetail.board.map( bc => (
@@ -379,7 +392,7 @@ const PlayerGameHistoryDetail = ({gameHistoryDetail, key}) => {
         <TableHead>
           <TableRow key={1004}>
             <TableCell align="left" colSpan={4}>
-              <Typography noWrap className={classes.boldletter}>
+              <Typography className={classes.boldletter}>
                 WINNER
               </Typography>
             </TableCell>
@@ -426,12 +439,12 @@ const PlayerGameHistoryDetail = ({gameHistoryDetail, key}) => {
                 <TableCell align="left" className={classes.tablecelltext}>Action</TableCell>
                 <TableCell align="left" className={classes.tablecelltext}>Remaining</TableCell>
                 <TableCell align="left" className={classes.tablecelltext}>Round</TableCell>
-                <TableCell align="left" className={classes.tablecelltext} noWrap>Board Cards</TableCell>
+                <TableCell align="left" className={classes.tablecelltext}>Board Cards</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {gameHistoryDetail.history.map( (player, indic) => (
-                <TableRow key={indic} noWrap>            
+                <TableRow key={indic}>            
                   <TableCell align="left">{player.playerName}</TableCell>
                   <TableCell align="left">{player.betAmount.toFixed(2)}</TableCell>
                   <TableCell align="left">{player.totalBetAmount !== '-' ? player.totalBetAmount.toFixed(2) : player.totalBetAmount}</TableCell>
@@ -449,9 +462,9 @@ const PlayerGameHistoryDetail = ({gameHistoryDetail, key}) => {
                     }</TableCell>
                   <TableCell align="left">{player.remaining}</TableCell>
                   <TableCell align="left">{player.gameRound}</TableCell>
-                  <TableCell align="left" noWrap>
+                  <TableCell align="left">
                     {player.boardCard.length > 0 ? player.boardCard.map( card => (
-                      <img src={`/card/${card}.png`} width="50px" height="70px" alt="" className={classes.imgboard} noWrap/>
+                      <img src={`/card/${card}.png`} width="50px" height="70px" alt="" className={classes.imgboard}/>
                     )):''}
                   </TableCell>
                 </TableRow>
@@ -526,51 +539,145 @@ const PlayerGameHistoryDetail = ({gameHistoryDetail, key}) => {
                   }
                 </TableCell>
                 {gameHistoryDetail.AgentsRole.map(
-                  agents => (
-                    <TableCell align="left" className={classes.tablecelltext}>{agents.role}</TableCell>
-                  )
+                  (agents,indc) => {
+                    totalColumns = totalColumns + 1;
+                    console.log('agents.role',agents.role);
+                    console.log('agent.role',agent.role);
+                    console.log('indc',indc);
+                    if(agent.role==="master"){
+                      return(<TableCell align="left" className={classes.tablecelltext}>{agents.role}</TableCell>);
+                    }else if(agent.role === "agent"){
+                      if(agents.role === agent.role && agents.level === (indc+1)){
+                        return(<TableCell align="left" className={classes.tablecelltext}>{agents.role}</TableCell>);
+                      }else{
+                        return(<TableCell align="left" className={classes.tablecelltext}>{agents.role}</TableCell>);
+                      }
+                    }else{
+                      return(<TableCell align="left" className={classes.tablecelltext}>{agents.role}</TableCell>);
+                    }                    
+                  }
                 )}                      
               </TableRow>
             </TableHead>
             <TableBody>
-              {gameHistoryDetail.RackDeductions.map( (rack, indxc) => (
-                <TableRow key={indxc}>            
-                  <TableCell align="left" className={classes.rdistributiondetail}>{rack.playerName}</TableCell>
-                  <TableCell align="left" className={classes.rdistributiondetail}>{isNaN(rack.bets) ? '' : parseFloat(rack.bets).toFixed(2) }</TableCell>
-                  <TableCell align="left" className={classes.rdistributiondetail}>{rack.agentRake.length > 0 && !isNaN(rack.plrRake) ? parseFloat(rack.plrRake).toFixed(2) : '' }</TableCell>                        
-                  {
-                    gameHistoryDetail.AgentsRole.map( agents => {                     
-                      let indice = 0;
-                      let existe = false;
-                      for (let index = 0; index < rack.agentRake.length; index++) {
-                        if(agents.role === rack.agentRake[index].role){
-                          indice = index;
-                          existe = true;
-                        }
-                      }
-                      if(existe === true && rack.agentRake.length > 0){
-                        return (                                  
-                          <TableCell align="left" className={classes.rdistributiondetail}>
-                            {`${rack.agentRake.length > 0 && !isNaN(rack.agentRake[indice].rackTo) ? parseFloat(rack.agentRake[indice].rackTo).toFixed(2) : '0'} - (${rack.agentRake.length > 0 ? rack.agentRake[indice].rackPercent : '0'}%) - (${rack.agentRake.length > 0 ? rack.agentRake[indice].name : ''})`}
-                          </TableCell>
-                        );
-                      }else{
-                        return (                                  
-                          <TableCell align="left">
-                            &nbsp;
-                          </TableCell>
-                        );
-                      }                            
-                    })
-                  }                        
-                </TableRow>
-              ) )}
+              {gameHistoryDetail.RackDeductions.map( (rack, indxc) => {
+
+                if(agent.role==="master"){
+                  return(
+                    <TableRow key={indxc}>            
+                      <TableCell align="left" className={classes.rdistributiondetail}>{rack.playerName}</TableCell>
+                      <TableCell align="left" className={classes.rdistributiondetail}>{isNaN(rack.bets) ? '' : parseFloat(rack.bets).toFixed(2) }</TableCell>
+                      <TableCell align="left" className={classes.rdistributiondetail}>{rack.agentRake.length > 0 && !isNaN(rack.plrRake) ? parseFloat(rack.plrRake).toFixed(2) : '' }</TableCell>                        
+                      {                    
+                        gameHistoryDetail.AgentsRole.map( agents => {                                           
+                          let indice = 0;
+                          let existe = false;
+                          for (let index = 0; index < rack.agentRake.length; index++) {
+                            if(agents.role === rack.agentRake[index].role){
+                              indice = index;
+                              existe = true;
+                            }
+                          }
+                          if(existe === true && rack.agentRake.length > 0){
+                            return (                                  
+                              <TableCell align="left" className={classes.rdistributiondetail}>
+                                {`${rack.agentRake.length > 0 && !isNaN(rack.agentRake[indice].rackTo) ? parseFloat(rack.agentRake[indice].rackTo).toFixed(2) : '0'} - (${rack.agentRake.length > 0 ? rack.agentRake[indice].rackPercent : '0'}%) - (${rack.agentRake.length > 0 ? rack.agentRake[indice].name : ''})`}
+                              </TableCell>
+                            );
+                          }else{
+                            return (                                  
+                              <TableCell align="left">
+                                &nbsp;
+                              </TableCell>
+                            );
+                          }                            
+                        })
+                      }                        
+                    </TableRow>
+                  )
+                }else if(agent.role==="agent"){
+                  if(rack.agentRake[0].name===agent.email){
+                    return(
+                      <TableRow key={indxc}>            
+                        <TableCell align="left" className={classes.rdistributiondetail}>{rack.playerName}</TableCell>
+                        <TableCell align="left" className={classes.rdistributiondetail}>{isNaN(rack.bets) ? '' : parseFloat(rack.bets).toFixed(2) }</TableCell>
+                        <TableCell align="left" className={classes.rdistributiondetail}>{rack.agentRake.length > 0 && !isNaN(rack.plrRake) ? parseFloat(rack.plrRake).toFixed(2) : '' }</TableCell>                        
+                        {                    
+                          gameHistoryDetail.AgentsRole.map( (agents, indce) => { 
+                            if(agents.role === agent.role && agents.level === (indce+1)){
+                              let indice = 0;
+                              let existe = false;
+                              for (let index = 0; index < rack.agentRake.length; index++) {
+                                if(agents.role === rack.agentRake[index].role){
+                                  indice = index;
+                                  existe = true;
+                                }
+                              }
+                              if(existe === true && rack.agentRake.length > 0){
+                                return (                                  
+                                  <TableCell align="left" className={classes.rdistributiondetail}>
+                                    {`${rack.agentRake.length > 0 && !isNaN(rack.agentRake[indice].rackTo) ? parseFloat(rack.agentRake[indice].rackTo).toFixed(2) : '0'} - (${rack.agentRake.length > 0 ? rack.agentRake[indice].rackPercent : '0'}%) - (${rack.agentRake.length > 0 ? rack.agentRake[indice].name : ''})`}
+                                  </TableCell>
+                                );
+                              }else{
+                                return (                                  
+                                  <TableCell align="left">
+                                    &nbsp;
+                                  </TableCell>
+                                );
+                              }
+                            }                                                                                                
+                          })
+                        }                        
+                      </TableRow>
+                    )
+                  }                  
+                }else{
+                  return(
+                    <TableRow key={indxc}>            
+                      <TableCell align="left" className={classes.rdistributiondetail}>{rack.playerName}</TableCell>
+                      <TableCell align="left" className={classes.rdistributiondetail}>{isNaN(rack.bets) ? '' : parseFloat(rack.bets).toFixed(2) }</TableCell>
+                      <TableCell align="left" className={classes.rdistributiondetail}>{rack.agentRake.length > 0 && !isNaN(rack.plrRake) ? parseFloat(rack.plrRake).toFixed(2) : '' }</TableCell>                        
+                      {                    
+                        gameHistoryDetail.AgentsRole.map( agents => {                                           
+                          let indice = 0;
+                          let existe = false;
+                          for (let index = 0; index < rack.agentRake.length; index++) {
+                            if(agents.role === rack.agentRake[index].role){
+                              indice = index;
+                              existe = true;
+                            }
+                          }
+                          if(existe === true && rack.agentRake.length > 0){
+                            return (                                  
+                              <TableCell align="left" className={classes.rdistributiondetail}>
+                                {`${rack.agentRake.length > 0 && !isNaN(rack.agentRake[indice].rackTo) ? parseFloat(rack.agentRake[indice].rackTo).toFixed(2) : '0'} - (${rack.agentRake.length > 0 ? rack.agentRake[indice].rackPercent : '0'}%) - (${rack.agentRake.length > 0 ? rack.agentRake[indice].name : ''})`}
+                              </TableCell>
+                            );
+                          }else{
+                            return (                                  
+                              <TableCell align="left">
+                                &nbsp;
+                              </TableCell>
+                            );
+                          }                            
+                        })
+                      }                        
+                    </TableRow>
+                  )
+                }
+                
+              } )}
+
+              {agent.role!=="agent"?
               <TableRow key={1009}>
-                <TableCell align="left" className={classes.rdistributiondetail}>&nbsp;</TableCell>
-                <TableCell align="left" className={classes.rdistributiondetail}>{gameHistoryDetail.totalBet.toFixed(2)}</TableCell>
-                <TableCell align="left" className={classes.rdistributiondetail}>{gameHistoryDetail.totalRakes.toFixed(2)}</TableCell>
-                <TableCell align="left" className={classes.rdistributiondetail}>&nbsp;</TableCell>
-              </TableRow>          
+                <TableCell align="left" className={classes.rdistributiondetailTotal}>&nbsp;</TableCell>
+                <TableCell align="left" className={classes.rdistributiondetailTotal}>{gameHistoryDetail.totalBet.toFixed(2)}</TableCell>
+                <TableCell align="left" className={classes.rdistributiondetailTotal}>{gameHistoryDetail.totalRakes.toFixed(2)}</TableCell>
+                <TableCell align="left" className={classes.rdistributiondetailTotal} colSpan={totalColumns}>&nbsp;</TableCell>
+              </TableRow>
+              :''}
+                        
             </TableBody>
           </Table>
         </AccordionDetails>

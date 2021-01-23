@@ -7,7 +7,7 @@ import MuiDialogContent from '@material-ui/core/DialogContent';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { RHFInput } from "react-hook-form-input";
 import NumberFormat from "react-number-format";
 import {useDispatch,useSelector} from 'react-redux'
@@ -133,7 +133,7 @@ const DialogContent = withStyles((theme) => ({
 
 const TransferChips = ({maxamount,isMobile}) => {
 
-  const {register, unregister, errors, handleSubmit, control, setValue} =  useForm(); 
+  const {register, unregister, errors, handleSubmit, setValue} =  useForm(); 
 
   const classes = useStyles();
   const dispatch = useDispatch();

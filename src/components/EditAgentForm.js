@@ -1,7 +1,6 @@
-import React,{useEffect, useState, useLayoutEffect} from 'react';
+import React,{useState, useLayoutEffect} from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Typography from '@material-ui/core/Typography';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { withRouter } from 'react-router-dom';
@@ -94,12 +93,6 @@ function EditAgentForm ({id,username,isTransferAllow,allowDeposits,allowWithdraw
   const error = useSelector(store => store.agent.error);
   const messageupdate = useSelector(store => store.agent.messageupdate);
 
-  console.log('allowDeposits', allowDeposits);
-  console.log('allowWithdrawals', allowWithdrawals);
-  console.log('allowTranferPlayer', allowTranferPlayer);
-  console.log('allowTransferAgent', allowTransferAgent);
-
-
   const [state, setState] = useState(isTransferAllow);
   const [stateDeposit, setStateDeposit] = useState(allowDeposits);
   const [stateWithdraw, setStateWithdraw] = useState(allowWithdrawals);
@@ -159,7 +152,7 @@ function EditAgentForm ({id,username,isTransferAllow,allowDeposits,allowWithdraw
   useLayoutEffect(() => {  
     dispatch(setAgentInfo(id,username));
     dispatch(getAgentData());
-  },[])
+  },[dispatch,id,username])
 
   return agent ? (
     <Container component="main" maxWidth="xs">

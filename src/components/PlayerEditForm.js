@@ -1,7 +1,6 @@
 import React,{useEffect, useState} from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Typography from '@material-ui/core/Typography';
 import { makeStyles,withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { withRouter } from 'react-router-dom';
@@ -74,22 +73,12 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-const genderOptions = [
-  {value:"male", label:"Male"},
-  {value:"female", label:"Female"}
-]
-
 const statusOptions = [
   {value:"active", label:"Active"},
   {value:"block", label:"Block"}
 ]
 
 function PlayerEditForm ({id,username,allowDeposits,allowWithdrawals,setChanges}) {
-
-  var showAlert = false;
-
-  console.log('VALOR DEPOSIT', allowDeposits);
-  console.log('VALOR WITHDRAW', allowWithdrawals);
 
   const classes = useStyles();
 
@@ -131,12 +120,6 @@ function PlayerEditForm ({id,username,allowDeposits,allowWithdrawals,setChanges}
 
   const error = useSelector(store => store.player.error);
   const messageupdate = useSelector(store => store.player.messageupdate);
-
-  if(error || messageupdate){
-    showAlert = true;
-  }else{
-    showAlert = false;
-  }
 
   const onSubmit = (data, e) => {
     e.preventDefault();    

@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react';
-import { useParams } from 'react-router-dom'
-import {useDispatch, useSelector} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux';
 import {getPlayerProfile,setPlayerInfo} from '../redux/PlayerDucks';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';

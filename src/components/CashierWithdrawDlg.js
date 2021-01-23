@@ -48,10 +48,12 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   title: {
-    marginTop: '50px',
-    marginBottom: '30px',
+    marginTop: '20px',
+    marginBottom: '20px',
     color: '#333333',
     fontWeight: '700',
+    textAlign: 'center',
+    fontSize: '24px'
   },
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -195,8 +197,8 @@ const CashierWithdrawDlg = () => {
       </Button>
       <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open} maxWidth="sm" fullWidth={true}>
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-          <Typography component="h1" variant="h5" className={classes.title}>
-          {`REQUEST WITHDRAW`}
+          <Typography className={classes.title}>
+          {`REQUEST WITHDRAWAL`}
           </Typography>          
         </DialogTitle>
         <DialogContent dividers>
@@ -210,11 +212,28 @@ const CashierWithdrawDlg = () => {
                 isClearable
                 control={control2}
                 placeholder='Crypto Currency'
-                rules={{ required: true }}            
+                rules={{ required: true, message: 'Please select a crypto currency' }}            
               />
-              <input name="amount" className={classes.input} ref={register2} placeholder='Amount' /> 
+               <span className={classes.alerttext}>
+                {errors2?.method?.message}
+              </span>
+              <input name="amount" className={classes.input} ref={register2({
+                      required: {value: true, message: 'Amount is required'}
+                    })} 
+                placeholder='Amount' 
+              /> 
+              <span className={classes.alerttext}>
+                {errors2?.amount?.message}
+              </span>
 
-              <input name="address" className={classes.input} ref={register2} placeholder='Address'/>
+              <input name="address" className={classes.input} ref={register2({
+                      required: {value: true, message: 'Address is required'}
+                    })} 
+                placeholder='Address'
+              />
+              <span className={classes.alerttext}>
+                {errors2?.address?.message}
+              </span>
                             
               <Button
                 type="submit"
@@ -229,17 +248,17 @@ const CashierWithdrawDlg = () => {
               <>
                 {<SimpleDialog open={true} message={responseWithdraw.message} />}
                 <div className={classes.results}>
-                  <a className={classes.results_a}>Deposit Address: </a>
-                  <a className={classes.results_b}>{responseWithdraw.result.address}</a>
+                  <div className={classes.results_a}>Deposit Address: </div>
+                  <div className={classes.results_b}>{responseWithdraw.result.address}</div>
                   <br/>                                      
-                  <a className={classes.results_a}>Amount to deposit in $: </a>
-                  <a className={classes.results_b}>{parseFloat(responseWithdraw.result.amount).toFixed(2)}</a>
+                  <div className={classes.results_a}>Amount to deposit in $: </div>
+                  <div className={classes.results_b}>{parseFloat(responseWithdraw.result.amount).toFixed(2)}</div>
                   <br/>
-                  <a className={classes.results_a}>Fee $: </a>
-                  <a className={classes.results_b}>{parseFloat(responseWithdraw.result.fee).toFixed(2)}</a>
+                  <div className={classes.results_a}>Fee $: </div>
+                  <div className={classes.results_b}>{parseFloat(responseWithdraw.result.fee).toFixed(2)}</div>
                   <br/>
-                  <a className={classes.results_a}>Crypto amount to deposit:</a> 
-                  <a className={classes.results_b}>{parseFloat(responseWithdraw.result.cryptoAmount).toFixed(8)}</a>
+                  <div className={classes.results_a}>Crypto amount to deposit:</div> 
+                  <div className={classes.results_b}>{parseFloat(responseWithdraw.result.cryptoAmount).toFixed(8)}</div>
                 </div>
               </>
             :null}

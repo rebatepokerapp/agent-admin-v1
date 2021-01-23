@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from 'react';
+import React, {useState} from 'react';
 import { withStyles,makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
@@ -6,17 +6,14 @@ import MuiDialogContent from '@material-ui/core/DialogContent';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
-import EditIcon from '@material-ui/icons/Edit';
-import Tooltip from '@material-ui/core/Tooltip';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import {useDispatch, useSelector} from 'react-redux'
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import ReactSelect from "react-select";
 import Button from '@material-ui/core/Button';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
-import {setMenuState,getAgentData,setAgentInfo,setErrorMessage,agentChangePassword,editAgentData} from '../redux/AgentDucks';
+import {setMenuState,setErrorMessage,agentChangePassword,editAgentData} from '../redux/AgentDucks';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -56,10 +53,12 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   title: {
-    marginTop: '50px',
-    marginBottom: '30px',
+    marginTop: '20px',
+    marginBottom: '20px',
     color: '#333333',
     fontWeight: '700',
+    textAlign: 'center',
+    fontSize: '24px'
   },
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -103,16 +102,11 @@ const DialogContent = withStyles((theme) => ({
   },
 }))(MuiDialogContent);
 
-const statusOptions = [
-  {value:"active", label:"Active"},
-  {value:"block", label:"Block"}
-]
-
 const AgentProfileDlg = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const {register, errors, handleSubmit, control} =  useForm(); 
+  const {register, errors, handleSubmit} =  useForm(); 
   
   const {register:register2, errors:errors2, handleSubmit:handleSubmit2} =  useForm();
 
@@ -194,7 +188,7 @@ const AgentProfileDlg = () => {
       </MenuItem>
       <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open} maxWidth="sm" fullWidth={true}>
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-          <Typography component="h1" variant="h5" className={classes.title}>
+          <Typography className={classes.title}>
           {`PROFILE ${agent.username.toUpperCase()}`}
           </Typography>          
         </DialogTitle>

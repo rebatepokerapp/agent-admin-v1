@@ -121,7 +121,7 @@ export default function agentReducer(state = agentData, action){
     case GET_AGENT_FIGURES_ERROR:
       return{...state, error: action.payload}
     case SET_AGENT_INFO_SUCCESSS:
-      return{...state, id: action.payload.id, username: action.payload.username, data: null, error: null, messageupdate: null, figures: null, lastThreeWeeks: null, messageupdate: null, transactions: null, responseConfirm: null}
+      return{...state, id: action.payload.id, username: action.payload.username, data: null, error: null, figures: null, lastThreeWeeks: null, messageupdate: null, transactions: null, responseConfirm: null}
     case SET_AGENT_INFO_ERROR:
       return{...state, error: action.payload, messageupdate: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case GET_AGENT_INFO_SUCCESS:
@@ -357,22 +357,20 @@ export const getFiguresByAgent = (weeknumber,byId,subId) => async  (dispatch, ge
       }
     })
     const query =  {
-      start_date: moment().subtract(weeknumber, 'weeks').startOf('week').format('YYYY-MM-DD'),
-      end_date: moment().subtract(weeknumber, 'weeks').endOf('week').format('YYYY-MM-DD'),
+      start_date: moment().subtract(weeknumber, 'weeks').startOf('week').subtract(6,'hour').format('YYYY-MM-DDTHH:mm:ssZ'),
+      end_date: moment().subtract(weeknumber, 'weeks').endOf('week').subtract(6,'hour').format('YYYY-MM-DDTHH:mm:ssZ'),
       is_datefilter:'1'
-    } 
-    console.log('start_date', query.is_datefilter); 
+    }  
     var id = null;
     if(byId){
       id = subId;      
     }else{      
       id = getState().agent.agentsession.id;
-    }     
+    }   
     const agent = JSON.stringify(getState().agent.agentsession);
     const token = getState().agent.agent.jwt_token;
     const AuthStr = 'Bearer '.concat(token);
     const res = await axios.get(`${API_AGENT_URL}/figuresbyagent/${id}?start_date=${query.start_date}&end_date=${query.end_date}&is_datefilter=${query.is_datefilter}`,{ headers: { Authorization: AuthStr, agent: agent }});
-    console.log('DATAAAAA', res.data);
     dispatch({
       type: GET_AGENT_FIGURES_SUCCESS,
       payload: {
@@ -394,8 +392,8 @@ export const getDepositsWithdrawsByAgent = (weeknumber,byId,subId) => async  (di
       }
     })
     const query =  {
-      start_date: moment().subtract(weeknumber, 'weeks').startOf('week').format('YYYY-MM-DD'),
-      end_date: moment().subtract(weeknumber, 'weeks').endOf('week').format('YYYY-MM-DD'),
+      start_date: moment().subtract(weeknumber, 'weeks').startOf('week').subtract(6,'hour').format('YYYY-MM-DDTHH:mm:ssZ'),
+      end_date: moment().subtract(weeknumber, 'weeks').endOf('week').subtract(6,'hour').format('YYYY-MM-DDTHH:mm:ssZ'),
       is_datefilter:'1'
     }
     var id = null;
@@ -498,13 +496,20 @@ export const editAgentData = (data) => async  (dispatch, getState) => {
     const token = getState().agent.agentsession.jwt_token;
     const AuthStr = 'Bearer '.concat(token);
     const res = await axios.post(`${API_AGENT_URL}/agent/edit/${id}`, data, { headers: { Authorization: AuthStr, agent: agent }});
-    dispatch({
-      type: UPDATE_AGENT_INFO_SUCCESS,
-      payload: {
-        agent: res.data.agent,
-        message: 'Agent data updated'
-      }
-    })
+    if(res.data.error){
+      dispatch({
+        type: UPDATE_AGENT_INFO_ERROR,
+        payload: res.data.error,
+      })
+    }else{
+      dispatch({
+        type: UPDATE_AGENT_INFO_SUCCESS,
+        payload: {
+          agent: res.data.agent,
+          message: 'Agent data updated'
+        }
+      })
+    }    
   } catch (error) {
     dispatch({
       type: UPDATE_AGENT_INFO_ERROR,
@@ -515,7 +520,7 @@ export const editAgentData = (data) => async  (dispatch, getState) => {
 
 export const requestDeposit = (data) => async  (dispatch, getState) => {
   try {    
-    const id = getState().agent.id;    
+    const id = getState().agent.agentsession.id;    
     const agent = JSON.stringify(getState().agent.agentsession);
     const token = getState().agent.agentsession.jwt_token;
     const AuthStr = 'Bearer '.concat(token);
@@ -567,7 +572,7 @@ export const confirmTxidHash = (txid) => async  (dispatch, getState) => {
 
 export const requestPayout = (data) => async  (dispatch, getState) => {
   try {    
-    const id = getState().agent.id;    
+    const id = getState().agent.agentsession.id;    
     const agent = JSON.stringify(getState().agent.agentsession);
     const token = getState().agent.agentsession.jwt_token;
     const AuthStr = 'Bearer '.concat(token);
@@ -668,13 +673,20 @@ export const addAgentData = (data) => async  (dispatch, getState) => {
     const token = getState().agent.agentsession.jwt_token;
     const AuthStr = 'Bearer '.concat(token);
     const res = await axios.post(`${API_AGENT_URL}/agent/addagent`, data, { headers: { Authorization: AuthStr, agent: agent }});
-    dispatch({
-      type: ADD_AGENT_INFO_SUCCESS,
-      payload: {
-        agent:res.data.agent,
-        message: 'Agent inserted'
-      }
-    })
+    if(res.data.error){
+      dispatch({
+        type: ADD_AGENT_INFO_ERROR,
+        payload: res.data.error,
+      })
+    }else{
+      dispatch({
+        type: ADD_AGENT_INFO_SUCCESS,
+        payload: {
+          agent:res.data.agent,
+          message: 'Agent inserted'
+        }
+      })
+    }    
   } catch (error) {
     dispatch({
       type: ADD_AGENT_INFO_ERROR,
@@ -691,8 +703,8 @@ export const getFiguresAgentLastThreeWeeks = (byId,subId) => async  (dispatch, g
       }
     })
     const query =  {
-      start_date: moment().subtract(2, 'weeks').startOf('week').format('YYYY-MM-DD'),
-      end_date: moment().subtract(0, 'weeks').endOf('week').format('YYYY-MM-DD'),
+      start_date: moment().subtract(2, 'weeks').startOf('week').subtract(6,'hour').format('YYYY-MM-DDTHH:mm:ssZ'),
+      end_date: moment().subtract(0, 'weeks').endOf('week').subtract(6,'hour').format('YYYY-MM-DDTHH:mm:ssZ'),
       is_datefilter:'1'
     }
     
@@ -758,7 +770,8 @@ export const getAgentPlayersWithdraws = (pstart, plength, pstartdate) => async  
       search: '',
       startdate: pstartdate
     }
-    const id = getState().agent.id;
+    
+    const id = getState().agent.agentsession.id;
     const agent = JSON.stringify(getState().agent.agentsession);
     const token = getState().agent.agentsession.jwt_token;
     const AuthStr = 'Bearer '.concat(token);
@@ -787,7 +800,7 @@ export const getAgentPlayersDeposits = (pstart, plength, pstartdate) => async  (
       search: '',
       startdate: pstartdate
     }
-    const id = getState().agent.id;
+    const id = getState().agent.agentsession.id;
     const agent = JSON.stringify(getState().agent.agentsession);
     const token = getState().agent.agentsession.jwt_token;
     const AuthStr = 'Bearer '.concat(token);
