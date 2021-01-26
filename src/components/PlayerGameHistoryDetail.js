@@ -133,8 +133,6 @@ const PlayerGameHistoryDetail = ({gameHistoryDetail, key}) => {
     return diffMins; 
   }
 
-  console.log('OBJETO HISTORY', gameHistoryDetail);
-
   const classes = useStyles();
   /*const maincontainer = clsx(classes.main); 
   const mainheader = clsx(classes.header); 
@@ -297,8 +295,6 @@ const PlayerGameHistoryDetail = ({gameHistoryDetail, key}) => {
   }
 
   setPotValue();
-
-  console.log('Detail',gameHistoryDetail)
 
   return (
     <TableContainer className={classes.containersty}>
@@ -541,9 +537,6 @@ const PlayerGameHistoryDetail = ({gameHistoryDetail, key}) => {
                 {gameHistoryDetail.AgentsRole.map(
                   (agents,indc) => {
                     totalColumns = totalColumns + 1;
-                    console.log('agents.role',agents.role);
-                    console.log('agent.role',agent.role);
-                    console.log('indc',indc);
                     if(agent.role==="master"){
                       return(<TableCell align="left" className={classes.tablecelltext}>{agents.role}</TableCell>);
                     }else if(agent.role === "agent"){

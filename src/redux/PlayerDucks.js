@@ -115,8 +115,6 @@ export const getPlayerGameHistory = (pstart,plength) => async  (dispatch, getSta
       length:plength,
       search: ''
     }
-    console.log('start', pstart);
-    console.log('length', plength);
     const id = getState().player.player;
     const agent = JSON.stringify(getState().agent.agent);
     const token = getState().agent.agent.jwt_token;

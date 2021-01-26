@@ -192,7 +192,9 @@ export default function Dashboard() {
   }
   if(agent){
     setInterval(() => {
-      dispatch(getAgentBalances());    
+      if(agent.id){
+        dispatch(getAgentBalances()); 
+      }         
     }, 20000);
   }
 

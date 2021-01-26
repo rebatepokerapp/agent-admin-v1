@@ -146,8 +146,6 @@ function PlayerEditForm ({id,username,allowDeposits,allowWithdrawals,setChanges}
     </Alert>
   )
 
-  console.log('PLAYER EDIT', player)
-
   return player ? (
     <Container component="main" maxWidth="xs">
       <CssBaseline />

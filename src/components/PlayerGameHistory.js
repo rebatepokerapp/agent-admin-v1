@@ -44,9 +44,6 @@ const tableIcons = {
 
 const PlayerGameHistory = ({id,username}) => { 
 
-  console.log('ID', id);
-  console.log('USERNAME', username);
-
   const dispatch = useDispatch();
 
   let start = 0;
