@@ -38,8 +38,13 @@ const agentData = {
   totalrackwithdraw: null,
   totalrackdeposit: null,
   totalperdaywithdraw: null,
-  totalperdaydeposit: null
-
+  totalperdaydeposit: null,
+  messages: null,
+  sentmessages: null,
+  agentsmessages: null,
+  recordsTotalSent: 0,
+  recordsFilteredSent: 0,
+  unreadmessages: 0,  
 }
 
 const AGENT_LOGIN_SUCCESS = 'AGENT_LOGIN_SUCCESS';
@@ -89,13 +94,25 @@ const AGENT_PLAYERS_DEPOSITS_ERROR = 'AGENT_PLAYERS_DEPOSITS_ERROR'
 const SET_WITHDRAW_DEPOSIT_NULL = 'SET_WITHDRAW_DEPOSIT_NULL'
 const GET_AGENT_FIGURES_CASHIER_SUCCESS = 'GET_AGENT_FIGURES_CASHIER_SUCCESS'
 const SET_AGENT_DATA_NULL = 'SET_AGENT_DATA_NULL'
+const AGENT_MESSAGES = 'AGENT_MESSAGES'
+const AGENT_MESSAGES_ERROR = 'AGENT_MESSAGES_ERROR'
+const SEND_AGENT_MESSAGE_ERROR = 'SEND_AGENT_MESSAGE_ERROR'
+const SEND_AGENT_MESSAGE = 'SEND_AGENT_MESSAGE'
+const GET_AGENTS_MESSAGES = 'GET_AGENTS_MESSAGES'
+const GET_AGENTS_MESSAGES_ERROR = 'GET_AGENTS_MESSAGES_ERROR'
+const DELETE_AGENT_MESSAGE = 'DELETE_AGENT_MESSAGE'
+const DELETE_AGENT_MESSAGE_ERROR = 'DELETE_AGENT_MESSAGE_ERROR'
+const AGENT_MESSAGES_SENT = 'AGENT_MESSAGES_SENT'
+const AGENT_MESSAGES_SENT_ERROR = 'AGENT_MESSAGES_SENT_ERROR'
+const SET_UNREAD_MESSAGES_SUCCESSS = 'SET_UNREAD_MESSAGES_SUCCESSS'
 
 //Reducer
 //Establece el seteo de los estados de acuerdo a la accion enviada
 export default function agentReducer(state = agentData, action){
   switch(action.type){
     case AGENT_LOGIN_SUCCESS:
-      return{...state, agentsession: action.payload.agent, agent: action.payload.agent, rakebalance: action.payload.agent.rake_chips, balance: action.payload.agent.chips, isAuthenticated: true, token: action.payload.token, error: null, id: null, username: null, data: null, players: null, subagents: null, figures: null, totalrake: 0, totalperday: null, lastThreeWeeks: null, messageupdate: null, transactions: null, dashboard: null, menustate: false, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
+      console.log('action.payload.unread', action.payload.unread);
+      return{...state, agentsession: action.payload.agent, agent: action.payload.agent, unreadmessages: action.payload.unread, rakebalance: action.payload.agent.rake_chips, balance: action.payload.agent.chips, isAuthenticated: true, token: action.payload.token, error: null, id: null, username: null, data: null, players: null, subagents: null, figures: null, totalrake: 0, totalperday: null, lastThreeWeeks: null, messageupdate: null, transactions: null, dashboard: null, menustate: false, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case AGENT_LOGOUT_SUCCESS:      
       return{...state, agentsession: null, agent: null, balance: 0, rakebalance: 0,isAuthenticated: false, token: null, error: null, id: null, username: null, data: null, players: null, subagents: null, figures: null, totalrake: 0, totalperday: null, lastThreeWeeks: null, messageupdate: null, transactions: null, dashboard: null, menustate: false, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case SET_MENU_STATE_SUCCESSS:
@@ -129,12 +146,10 @@ export default function agentReducer(state = agentData, action){
     case GET_AGENT_INFO_ERROR:
       return{...state, error: action.payload, messageupdate: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case UPDATE_AGENT_INFO_SUCCESS:
-      console.log('UPDATE_AGENT_INFO_SUCCESS')
       return{...state, messageupdate: action.payload.message, data: action.payload.agent, error: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case UPDATE_AGENT_INFO_ERROR:
       return{...state, error: action.payload, messageupdate: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case ADD_AGENT_INFO_SUCCESS:
-      console.log('ADD_AGENT_INFO_SUCCESS')
       return{...state, messageupdate: action.payload.message, data: action.payload.agent, error: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case ADD_AGENT_INFO_ERROR:
       return{...state, error: action.payload, messageupdate: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
@@ -153,7 +168,6 @@ export default function agentReducer(state = agentData, action){
     case AGENT_TRANSFER_ERROR:
       return{...state, error: action.payload, messageupdate: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case AGENT_REQUEST_BALANCE_SUCCESS:
-      console.log('AGENT_REQUEST_BALANCE_SUCCESS')
       return{...state, messageupdate: action.payload.message, data: action.payload.agent, rakebalance: action.payload.rakebalance, balance: action.payload.balance, error: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case AGENT_REQUEST_BALANCE_ERROR:
       return{...state, error: action.payload, messageupdate: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}   
@@ -191,6 +205,34 @@ export default function agentReducer(state = agentData, action){
       return{...state, error: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
     case SET_AGENT_DATA_NULL:
       return{...state, error: null, id: null, username: null, data: null}
+
+    case AGENT_MESSAGES:
+      return{...state, error: null, messages: action.payload.data, recordsTotal: action.payload.recordsTotal, recordsFiltered: action.payload.recordsFiltered}
+    case AGENT_MESSAGES_ERROR:
+      return{...state, error: action.payload, messages: null, messageupdate: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
+
+    case SEND_AGENT_MESSAGE:
+      return{...state, messageupdate: action.payload.message, sentmessages: action.payload.messages, error: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
+    case SEND_AGENT_MESSAGE_ERROR:
+      return{...state, error: action.payload, messageupdate: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
+
+    case GET_AGENTS_MESSAGES:
+      return{...state, agentsmessages: action.payload, error: null, messageupdate: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
+    case GET_AGENTS_MESSAGES_ERROR:
+      return{...state, error: action.payload}
+
+      case DELETE_AGENT_MESSAGE:
+        return{...state, messages: action.payload.messages, recordsTotal: action.payload.recordsTotal, recordsFiltered: action.payload.recordsFiltered, error: null, messageupdate: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
+      case DELETE_AGENT_MESSAGE_ERROR:
+        return{...state, error: action.payload}
+
+    case AGENT_MESSAGES_SENT:
+      return{...state, error: null, sentmessages: action.payload.data, recordsTotalSent: action.payload.recordsTotal, recordsFilteredSent: action.payload.recordsFiltered}
+    case AGENT_MESSAGES_SENT_ERROR:
+      return{...state, error: action.payload, messageupdate: null, responseDeposit: null, responseWithdraw: null, responseConfirm: null}
+    case SET_UNREAD_MESSAGES_SUCCESSS:
+      return{...state, unreadmessages: action.payload}
+
     default:
       return state
   }
@@ -200,6 +242,13 @@ export const setMenuState = (state) => async (dispatch, getState) => {
   dispatch({
     type: SET_MENU_STATE_SUCCESSS,
     payload: state
+  })
+}
+
+export const setUnreadMessages = (total) => async (dispatch, getState) => {
+  dispatch({
+    type: SET_UNREAD_MESSAGES_SUCCESSS,
+    payload: total
   })
 }
 
@@ -255,7 +304,8 @@ export const signIn = (user) => async  (dispatch, getState) => {
       payload: {
         agent: res.data.agent,
         isAuthenticated: true,
-        token: res.data.token
+        token: res.data.token,
+        unread: res.data.unreadmessages,
       }
     })    
   } catch (error) {
@@ -345,6 +395,88 @@ export const getSubsByAgent = () => async  (dispatch, getState) => {
     dispatch({
       type: GET_AGENT_SUBS_ERROR,
       payload: 'Error getting sub agents by agent'
+    })
+  }
+}
+
+export const getAgentsForMessages = () => async  (dispatch, getState) => {
+  try {
+    const query =  {
+      start: 0,
+      length: 20,
+      search:''
+    }
+    const { id } = getState().agent.agent;
+    const agent = JSON.stringify(getState().agent.agent);
+    const token = getState().agent.agent.jwt_token;
+    const AuthStr = 'Bearer '.concat(token);
+    const res = await axios.get(`${API_AGENT_URL}/agentsformessages/${id}?start=${query.start}&length=${query.length}&search=${query.search}`,{ headers: { Authorization: AuthStr, agent: agent }});
+    dispatch({
+      type: GET_AGENTS_MESSAGES,
+      payload: res.data.data
+    })
+  } catch (error) {
+    dispatch({
+      type: GET_AGENTS_MESSAGES_ERROR,
+      payload: 'Error getting agents for messages'
+    })
+  }
+}
+
+export const getAgentMessages = (pstart,plength) => async  (dispatch, getState) => {
+  try {
+    const query =  {
+      start: pstart,
+      length:plength,
+      search: ''
+    }
+    const id = getState().agent.agentsession.id;
+    const agent = JSON.stringify(getState().agent.agent);
+    const token = getState().agent.agent.jwt_token;
+    const AuthStr = 'Bearer '.concat(token);
+    const res = await axios.get(`${API_AGENT_URL}/agent/messages/${id}?start=${query.start}&length=${query.length}&search=${query.search}`,{ headers: { Authorization: AuthStr, agent: agent }});
+
+    dispatch({
+      type: AGENT_MESSAGES,
+      payload: {
+        data: res.data.data,
+        recordsTotal: res.data.recordsTotal,
+        recordsFiltered: res.data.recordsFiltered
+      }
+    })
+  } catch (error) {
+    dispatch({
+      type: AGENT_MESSAGES_ERROR,
+      payload: 'Error getting agent messages'
+    })
+  }
+}
+
+export const getAgentSentMessages = (pstart,plength) => async  (dispatch, getState) => {
+  try {
+    const query =  {
+      start: pstart,
+      length:plength,
+      search: ''
+    }
+    const id = getState().agent.agentsession.id;
+    const agent = JSON.stringify(getState().agent.agent);
+    const token = getState().agent.agent.jwt_token;
+    const AuthStr = 'Bearer '.concat(token);
+    const res = await axios.get(`${API_AGENT_URL}/agent/sentmessages/${id}?start=${query.start}&length=${query.length}&search=${query.search}`,{ headers: { Authorization: AuthStr, agent: agent }});
+
+    dispatch({
+      type: AGENT_MESSAGES_SENT,
+      payload: {
+        data: res.data.data,
+        recordsTotal: res.data.recordsTotal,
+        recordsFiltered: res.data.recordsFiltered
+      }
+    })
+  } catch (error) {
+    dispatch({
+      type: AGENT_MESSAGES_SENT_ERROR,
+      payload: 'Error getting agent sent messages'
     })
   }
 }
@@ -463,27 +595,29 @@ export const getAgentData = () => async  (dispatch, getState) => {
 
 export const getAgentBalances = () => async  (dispatch, getState) => {
   try {
-    const id = getState().agent.agentsession.id;
-    const agent = JSON.stringify(getState().agent.agentsession);
-    const token = getState().agent.agentsession.jwt_token;
-    const AuthStr = 'Bearer '.concat(token);
-    const res = await axios.get(`${API_AGENT_URL}/agent/balances/${id}`,{ headers: { Authorization: AuthStr, agent: agent }});
-    let agenttemp = null;
-    if(res.data.agent){
-      agenttemp = {
-        balance: res.data.agent.balance,
-        rakebalance: res.data.agent.rakebalance
+    if(getState().agent.agentsession){
+      const id = getState().agent.agentsession.id;
+      const agent = JSON.stringify(getState().agent.agentsession);
+      const token = getState().agent.agentsession.jwt_token;
+      const AuthStr = 'Bearer '.concat(token);
+      const res = await axios.get(`${API_AGENT_URL}/agent/balances/${id}`,{ headers: { Authorization: AuthStr, agent: agent }});
+      let agenttemp = null;
+      if(res.data.agent){
+        agenttemp = {
+          balance: res.data.agent.balance,
+          rakebalance: res.data.agent.rakebalance
+        }
+      }else{
+        agenttemp = {
+          balance: 0,
+          rakebalance: 0
+        }
       }
-    }else{
-      agenttemp = {
-        balance: 0,
-        rakebalance: 0
-      }
-    }
-    dispatch({
-      type: REQUEST_AGENT_BALANCE_SUCCESS,
-      payload: agenttemp
-    })
+      dispatch({
+        type: REQUEST_AGENT_BALANCE_SUCCESS,
+        payload: agenttemp
+      })
+    }    
   } catch (error) {
     console.log('ERROR LOADING BALANCES', error);
   }
@@ -513,6 +647,67 @@ export const editAgentData = (data) => async  (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: UPDATE_AGENT_INFO_ERROR,
+      payload: 'Error updating agent data'
+    })
+  }
+}
+
+export const deleteAgentMessage = (message) => async  (dispatch, getState) => {
+  try {    
+    const id = getState().agent.agentsession.id;
+    message.agentId = id;    
+    const agent = JSON.stringify(getState().agent.agentsession);
+    const token = getState().agent.agentsession.jwt_token;
+    const AuthStr = 'Bearer '.concat(token);
+    const res = await axios.post(`${API_AGENT_URL}/deletemessage`, message, { headers: { Authorization: AuthStr, agent: agent }});
+    if(res.data.error){
+      dispatch({
+        type: DELETE_AGENT_MESSAGE_ERROR,
+        payload: res.data.error,
+      })
+    }else{
+      dispatch({
+        type: DELETE_AGENT_MESSAGE,
+        payload: {
+          messages: res.data.messages,
+          recordsTotal: res.data.recordsTotal,
+          recordsFiltered: res.data.recordsFiltered,
+          message: 'Message deleted successfully.'
+        }
+      })
+    }    
+  } catch (error) {
+    dispatch({
+      type: DELETE_AGENT_MESSAGE_ERROR,
+      payload: 'Error deleting message'
+    })
+  }
+}
+
+export const sendAgentMessage = (data) => async  (dispatch, getState) => {
+  try {    
+    const id = getState().agent.agentsession.id;    
+    const agent = JSON.stringify(getState().agent.agentsession);
+    const token = getState().agent.agentsession.jwt_token;
+    const AuthStr = 'Bearer '.concat(token);
+    const res = await axios.post(`${API_AGENT_URL}/agent/sendmessage/${id}`, data, { headers: { Authorization: AuthStr, agent: agent }});
+    if(res.data.error){
+      dispatch({
+        type: SEND_AGENT_MESSAGE_ERROR,
+        payload: res.data.error,
+      })
+    }else{
+      dispatch({
+        type: SEND_AGENT_MESSAGE,
+        payload: {
+          sentmessages: res.data.messages,
+          message: 'Message sent.'
+        }
+      })
+    }    
+  } catch (error) {
+    dispatch({
+      type: SEND_AGENT_MESSAGE_ERROR,
       payload: 'Error updating agent data'
     })
   }

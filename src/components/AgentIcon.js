@@ -12,6 +12,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { signOut,setMenuState } from "../redux/AgentDucks";
 import {useDispatch,useSelector} from 'react-redux';
 import AgentProfileDlg from './AgentProfileDlg';
+import { Badge, Typography, Button } from "./Wrappers";
 
 const useStyles = makeStyles((theme) => ({
     topIcon: {
@@ -49,22 +50,34 @@ export default function AgentMenu({agent}) {
 
   const dispatch = useDispatch()
 
-  const handleClick = (event) => {
+  const handleClick = (event) => {    
     setAnchorEl(event.currentTarget);
     dispatch(setMenuState(!menustate))
   };
 
   const handleClose = () => {
-    setAnchorEl(null);
     dispatch(setMenuState(false))
   };
 
+  const goMessages = () => {    
+    window.location.href='/app/messages';
+  }
+
   const menustate = useSelector(store => store.agent.menustate);
+  const unreadmessages = useSelector(store => store.agent.unreadmessages);
+
+  console.log('unreadmessages',unreadmessages);
+  console.log('menustate',menustate);
 
   return (
     <div>
       <IconButton className={classes.topIcon} aria-controls="customized-menu" aria-haspopup="true" onClick={handleClick}>
-          <PersonIcon />
+        <Badge
+          badgeContent={unreadmessages>0?unreadmessages:null}
+          color="warning"
+        >
+          <PersonIcon/>
+        </Badge>
       </IconButton>
       <Menu
         id="customized-menu"
@@ -75,9 +88,14 @@ export default function AgentMenu({agent}) {
       >
         <MenuItem>
           <ListItemIcon>
-            <MessageIcon className={classes.menuIcon}/>
+            <Badge
+              badgeContent={unreadmessages>0?unreadmessages:null}
+              color="warning"
+            >
+              <MessageIcon className={classes.menuIcon}/>
+            </Badge>            
           </ListItemIcon>
-          <ListItemText primary="Messages" />
+          <ListItemText onClick={() => goMessages()} primary="Messages" />
         </MenuItem>
         <AgentProfileDlg />
         <Divider />

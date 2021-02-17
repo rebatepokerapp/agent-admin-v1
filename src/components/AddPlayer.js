@@ -166,6 +166,7 @@ const AddPlayer = ({setChanges}) => {
             <span className={classes.alerttext}>
                 {errors?.username?.message}
             </span>
+            <label class="" for="username">Username:</label>
             <input name="username" id="username" className={classes.input} ref={register(
                 {
                   required: {value: true, message: 'Username is required'}
@@ -190,22 +191,26 @@ const AddPlayer = ({setChanges}) => {
                 },6000);
               }} 
             />
+            <label class="" for="firstname">Firstname:</label>
             <input name="firstname" className={classes.input} ref={register} placeholder='Firstname' />
+            <label class="" for="lastname">Lastname:</label>
             <input name="lastname" className={classes.input} ref={register} placeholder='Lastname' />
             <span className={classes.alerttext}>
                 {errors?.password?.message}
             </span>
+            <label class="" for="password">Password:</label>
             <input name="password" className={classes.input} ref={register(
               {
                 required: {value: true, message: 'Password is required'}
               }
             )} placeholder='Password' type='password' />
             <span className={classes.alerttext}>
-                {errors?.commission?.message}
+                {errors?.password?.message}
             </span>
             <span className={classes.alerttext}>
                 {errors?.email?.message}
             </span>
+            <label class="" for="email">Email:</label>
             <input name="email" id="email" className={classes.input} ref={register(
               {
                 pattern: {
@@ -216,13 +221,14 @@ const AddPlayer = ({setChanges}) => {
               )} 
               placeholder='Email'              
             /> 
+            <label class="" for="returnpercentagerake">Rake back percentage:</label>
             <input name="returnpercentagerake" className={classes.input} ref={register} placeholder='Rake Back Percentage' type="number"/>
+            <label class="" for="parentId">Parent Agent:</label>
             <Controller
               className={classes.inputcmb}
               as={ReactSelect}
               options={subAgents}
-              name="parentId"
-              isClearable
+              name="parentId"              
               control={control}
               placeholder='Parent Agent'
               defaultValue={null} 
@@ -232,8 +238,7 @@ const AddPlayer = ({setChanges}) => {
               className={classes.inputcmb}
               as={ReactSelect}
               options={statusOptions}
-              name="status"
-              isClearable
+              name="status"              
               control={control}
               placeholder='Status' 
               defaultValue= {{value: 'active', label: 'Active'}}

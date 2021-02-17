@@ -96,6 +96,8 @@ const AddAgent = ({setChanges}) => {
 
   const maincontainer = clsx(classes.main);
 
+  let agentSession = useSelector(store => store.agent.agentsession);
+
   const [stateDeposit, setStateDeposit] = useState(false);
   const [stateWithdraw, setStateWithdraw] = useState(false);
   const [stateAllowTP, setStateAllowTP] = useState(false);
@@ -150,17 +152,21 @@ const AddAgent = ({setChanges}) => {
             <span className={classes.alerttext}>
                 {errors?.username?.message}
             </span>
-            <input name="username" className={classes.input} ref={register(
+            <label class="" for="username">Username:</label>
+            <input name="username" id="username" className={classes.input} ref={register(
               {
                 required: {value: true, message: 'Username is required'}
               }
             )} placeholder='Username' />
-            <input name="firstname" className={classes.input} ref={register} placeholder='Firstname' />
-            <input name="lastname" className={classes.input} ref={register} placeholder='Lastname' />
+            <label class="" for="firstname">Firstname:</label>
+            <input name="firstname" id="firstname" className={classes.input} ref={register} placeholder='Firstname' />
+            <label class="" for="lastname">Lastname:</label>
+            <input name="lastname" id="lastname" className={classes.input} ref={register} placeholder='Lastname' />
             <span className={classes.alerttext}>
                 {errors?.password?.message}
             </span>
-            <input name="password" className={classes.input} ref={register(
+            <label class="" for="password">Password:</label> 
+            <input name="password" id="password" className={classes.input} ref={register(
               {
                 required: {value: true, message: 'Password is required'}
               }
@@ -168,7 +174,8 @@ const AddAgent = ({setChanges}) => {
             <span className={classes.alerttext}>
                 {errors?.commission?.message}
             </span>
-            <input name="commission" className={classes.input} ref={register(
+            <label class="" for="commission">{`Commission must be lower or equal to ${agentSession.commission}%`}</label>
+            <input name="commission" id="commission" className={classes.input} ref={register(
               {
                 required: {value: true, message: 'Commission is required'}
               }
@@ -176,7 +183,8 @@ const AddAgent = ({setChanges}) => {
             <span className={classes.alerttext}>
                 {errors?.email?.message}
             </span>
-            <input name="email" className={classes.input} ref={register(
+            <label class="" for="email">Email:</label>
+            <input name="email" id="email" className={classes.input} ref={register(
               {
                 required: 'Required',
                 pattern: {
@@ -184,13 +192,14 @@ const AddAgent = ({setChanges}) => {
                   message: "Invalid email address"
                 }
               }
-            )} placeholder='Email' />                    
+            )} placeholder='Email' /> 
+            <label class="" for="status">Status:</label>                   
             <Controller
               className={classes.inputcmb}
               as={ReactSelect}
               options={statusOptions}
               name="status"
-              isClearable
+              id="status"              
               control={control}
               placeholder='Status' 
               defaultValue= {{value: 'active', label: 'Active'}}

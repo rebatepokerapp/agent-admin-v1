@@ -88,6 +88,8 @@ function EditAgentForm ({id,username,isTransferAllow,allowDeposits,allowWithdraw
 
   const agent = useSelector(store => store.agent.data);
 
+  let agentSession = useSelector(store => store.agent.agentsession);
+
   const {register, errors, handleSubmit, control} =  useForm();  
 
   const error = useSelector(store => store.agent.error);
@@ -159,12 +161,16 @@ function EditAgentForm ({id,username,isTransferAllow,allowDeposits,allowWithdraw
       <CssBaseline />
       <div className={classes.paper}>
         <form className={classes.form} noValidate onSubmit={handleSubmit(onSubmit)}>
+          <label class="" for="username">Username:</label>
           <input name="username" className={classes.input} ref={register} placeholder='Username' defaultValue={agent.username} readOnly/>
+          <label class="" for="firstname">Firstname:</label>
           <input name="firstname" className={classes.input} ref={register} placeholder='Firstname'defaultValue={agent.firstname}/>
+          <label class="" for="lastname">Lastname:</label>
           <input name="lastname" className={classes.input} ref={register} placeholder='Lastname'defaultValue={agent.lastname}/>
           <span className={classes.alerttext}>
               {errors?.commission?.message}
           </span>
+          <label class="" for="commission">{`Commission must be lower or equal to ${agentSession.commission}%`}</label>
           <input name="commission" className={classes.input} ref={register(
             {
               required: {value: true, message: 'Commission is required'}
@@ -173,6 +179,7 @@ function EditAgentForm ({id,username,isTransferAllow,allowDeposits,allowWithdraw
           <span className={classes.alerttext}>
               {errors?.email?.message}
           </span>
+          <label class="" for="email">Email:</label>
           <input name="email" className={classes.input} ref={register(
             {
               required: 'Required',
@@ -251,8 +258,7 @@ function EditAgentForm ({id,username,isTransferAllow,allowDeposits,allowWithdraw
             className={classes.inputcmb}
             as={ReactSelect}
             options={statusOptions}
-            name="status"
-            isClearable
+            name="status"          
             control={control}
             placeholder='Status'
             rules={{ required: true }}

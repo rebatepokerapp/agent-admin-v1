@@ -131,7 +131,12 @@ const RequestBalanceDlg = ({id,username,isplayer}) => {
       if(document.getElementById('alertmes')){
         document.getElementById('alertmes').style.display='';
       }     
-    });     
+    });  
+    setTimeout(() => {
+      if(document.getElementById('alertmes')){
+        document.getElementById('alertmes').style.display='none';
+      }      
+    },2000);   
     setTimeout(() => {
       handleClose()      
     },3000);
@@ -150,7 +155,7 @@ const RequestBalanceDlg = ({id,username,isplayer}) => {
 
   return (
     <>
-      <Tooltip title="Request Balance" aria-label="requestbalance">
+      <Tooltip title="Transfer Balance" aria-label="requestbalance">
         <IconButton className={classes.classbutton} aria-label="requestbalance" onClick={handleOpen}>
           <LocalAtmIcon />
         </IconButton>

@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
+import { APP_SOCKET_SERVER } from '../config';
+import socketIOClient, { Socket } from "socket.io-client";
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -38,8 +40,9 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 import AgentCashHistory from './AgentCashHistory';
 import TransferChips from './TransferChips';
 import {isMobile} from 'react-device-detect';
-import {getAgentBalances} from '../redux/AgentDucks';
+import {getAgentBalances,setUnreadMessages} from '../redux/AgentDucks';
 import {useDispatch, useSelector} from 'react-redux'
+import Messages from './Messages';
 
 
 import {
@@ -54,6 +57,7 @@ const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
+    marginRight: '100px',
   },
   topIcon: {
     display: 'flex',
@@ -162,6 +166,9 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 'bold',
     marginBottom: '10px',
     textAlign: 'center',
+  },
+  agticon:{
+    marginRight: '100px'
   }
 }));
 
@@ -176,7 +183,7 @@ export default function Dashboard() {
   };
   const handleDrawerClose = () => {
     setOpen(false);
-  }; 
+  };   
 
   const agent = useSelector(store => store.agent.agentsession);
   const balance = useSelector(store => store.agent.balance);
@@ -197,6 +204,20 @@ export default function Dashboard() {
       }         
     }, 20000);
   }
+
+  useEffect(() => {
+    const socket = socketIOClient(APP_SOCKET_SERVER);
+    socket.on('connect', function(){
+      console.log('SOCKET CONECTADO');
+    });
+    console.log('SOCKET SERVER', socket);
+    socket.on("newagentmessage", data => {
+      console.log('SE RECIBIO EL SOCKET');
+      if(data.id.toString()===agent.id.toString()){
+        dispatch(setUnreadMessages(data.count))
+      }      
+    });
+  }, []);
 
   const getLink = (code) => {
     return `https://${window.location.href.toString().split('/')[2]}/register.html?accesscode=${code}`;
@@ -236,7 +257,7 @@ export default function Dashboard() {
           ''
           }
           
-          <AgentMenu agent={agent} />
+          <AgentMenu agent={agent} className={classes.agticon}/>
         </Toolbar>
         {isMobile?<Typography className={classes.balancemobil}>
           {`Rake Balance: $${rakebalance?rakebalance.toFixed(2):0} `}{
@@ -288,6 +309,7 @@ export default function Dashboard() {
               <Route path="/app/cashhistoryagent" component={AgentCashHistory} />  
               <Route path="/app/cashhistory/:id" component={AgentCashTransactionHistory} />                                      
               <Route path="/app/cashier" component={agentCashier} /> 
+              <Route path="/app/messages" component={Messages} />
             </Switch>
           </Router>
           {/*<Box pt={4}>

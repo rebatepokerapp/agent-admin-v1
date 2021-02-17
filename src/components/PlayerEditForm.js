@@ -151,17 +151,21 @@ function PlayerEditForm ({id,username,allowDeposits,allowWithdrawals,setChanges}
       <CssBaseline />
       <div className={classes.paper}>
         <form className={classes.form} noValidate onSubmit={handleSubmit(onSubmit)}>
+          <label class="" for="username">Username:</label>
           <input name="username" className={classes.input} ref={register} placeholder='Username' defaultValue={player.username} readOnly/>
+          <label class="" for="firstname">Firstname:</label>
           <input name="firstname" className={classes.input} ref={register} placeholder='Firstname'defaultValue={player.firstname}/>
+          <label class="" for="lastname">Lastname:</label>
           <input name="lastname" className={classes.input} ref={register} placeholder='Lastname'defaultValue={player.lastname}/>
+          <label class="" for="email">Email:</label>
           <input name="email" className={classes.input} ref={register} placeholder='Email'defaultValue={player.email} readOnly/>
+          <label class="" for="returnpercentagerake">Rake back percentage:</label>
           <input name="returnpercentagerake" className={classes.input} ref={register} placeholder='Rake Back Percentage' defaultValue={player.returnPercentageRake} type="number"/>          
           <Controller
             className={classes.inputcmb}
             as={ReactSelect}
             options={statusOptions}
-            name="status"
-            isClearable
+            name="status"    
             control={control}
             placeholder='Status'
             defaultValue={() => {
