@@ -670,6 +670,18 @@ db.agent.aggregate(
   }
 ]).pretty()
 
+db.depositRequest.aggregate(
+  [
+    {
+      '$match': {
+        processed: true,
+        depositStatus: 'processed',
+        createdAt: { '$gte': '2021-01-01 20:22', '$lt': '2021-02-09 20:22' },
+      }
+    },
+    { '$group': { _id: null, total: { $sum:  "$currencyApply"  } } }
+  ]).pretty()
+
 db.createUser(
   {
     user: "root",
@@ -784,6 +796,10 @@ db.merchant.insert({
 //mongod --dbpath /var/lib/mongo2 --replSet rebatepkdbrep --port 27018 --fork --logpath=/var/lib/mongo2/fork/mongo.log
 //mongod --dbpath /var/lib/mongo3 --replSet rebatepkdbrep --port 27019 --fork --logpath=/var/lib/mongo3/fork/mongo.log
 
+//mongo --port 27017 --eval 'db.adminCommand("shutdown")'
+//mongo --port 27018 --eval 'db.adminCommand("shutdown")'
+//mongo --port 27019 --eval 'db.adminCommand("shutdown")'
+
 db.sngTournaments.find({
   players: { '$in': [ '5f64441055b016ad5086c093' ] },
   'tournamentLosers.playerId': '5f64441055b016ad5086c093'
@@ -836,3 +852,67 @@ db.regularPricePool.aggregate(
     isDelete: false,
     isCashGame: true
 }).pretty()
+
+
+db.player.insert(
+  {
+    "appid" : "",
+    "latitude" : 0,
+    "longitude" : 0,
+    "username" : "playtimeP10",
+    "firstname" : "",
+    "lastname" : "",
+    "profilePic" : 0,
+    "isFb" : false,
+    "profilePicId" : 0,
+    "fbProfileUrl" : "",
+    "email" : "playtimep10@playtime.com",
+    "password" : "$2a$08$CM60ZBWnkMhZqZrEonzW1.p5lTCuDR2TaQVem3q6N/VlUJ7puN50G",
+    "mobile" : null,
+    "gender" : "",
+    "returnPercentageRake" : 0,
+    "rake_chips" : 0,
+    "activationCode" : "",
+    "status" : "active",
+    "sessionId" : "",
+    "socketId" : "1234",
+    "rating" : 0,
+    "isBot" : false,
+    "isCash" : true,
+    "isLatest" : "0",
+    "platform_os" : "other",
+    "accountNumber" : "",
+    "HTMLToken" : null,
+    "allowDeposits" : true,
+    "allowWithdrawals" : true,
+    "loginToken" : null,
+    "identifiertoken" : "",
+    "updatedAt" : ISODate("2021-01-25T18:21:38.948Z"),
+    "createdAt" : ISODate("2021-01-25T18:21:38.948Z"),
+    "device_id" : "abcd",
+    "chips" : 0,
+    "agentRole" : "agent",
+    "agentId" : "6019c1f9fc1365106188e36b",
+    "statistics" : {
+            "cashgame" : {
+                    "noOfPlayedGames" : 0,
+                    "totalWonGame" : 0,
+                    "totalLoseGame" : 0
+            },
+            "sng" : {
+                    "noOfPlayedGames" : 0,
+                    "totalWonGame" : 0,
+                    "totalLoseGame" : 0
+            },
+            "tournament" : {
+                    "noOfPlayedGames" : 0,
+                    "totalWonGame" : 0,
+                    "totalLoseGame" : 0
+            }
+    },
+    "uniqId" : "SP1169"
+}
+)
+
+
+//bitcoind -testnet -datadir=/root/.bitcoin -conf=/root/.bitcoin/bitcoin.conf
